@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <!-- ================================================================
+       Boda de Abril & Pablo — Invitación FINAL (GitHub Pages)
+       * Entrega en 3 partes (pegar en orden en el MISMO index.html)
+       * Mismos nombres de archivos de tu repo (marcha_nupcial.mp3, eternamente.mp3,
+         fondo_floral.jpg, fondo_floral1.png, ..., momento1.jpg, etc.)
+       * Audio:
+         - Autoplay inmediato de marcha_nupcial.mp3 al abrir (si el navegador lo permite)
+         - Al hacer clic en el anillo: pausa marcha → crossfade 2s a eternamente.mp3
+       * Efecto libro (flip 3D) + scroll vertical suave
+       * Cursor mágico (corazones blanco/azul/plata/verde)
+       * Contadores flip (mini en portada, grande en Itinerario)
+       * Lightbox con navegación anterior/siguiente
+       * Compatible móvil/tablet/escritorio
+       ================================================================ -->
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Boda de Abril & Pablo 💍</title>
+
+  <!-- Fuentes: Waltograph SOLO para “Sí, ¡acepto!” + Playfair/Quicksand para el resto -->
+  <link href="https://fonts.cdnfonts.com/css/waltograph" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ========================= VARIABLES ========================= */
+    :root{
+      --bg-cream:#F8F5F0;
+      --deep:#2B2A2F;
+      --glass:rgba(255,255,255,0.86);
+      --glass-strong:rgba(255,255,255,0.95);
+      --rose:#d6a79b;
+      --accent:#66c9ff;
+      --accent2:#4a8fe7;
+      --wa:#25D366;
+      --shadow:0 18px 50px rgba(0,0,0,.12);
+      --ease:cubic-bezier(.2,.9,.2,1);
+
+      /* Dress code chips */
+      --chip-celeste:#a8dadc;
+      --chip-beige:#efe5d0;
+      --chip-verde:#a8e6cf;
+      --chip-gris:#c5ced6;
+      --chip-rosa:#f7b6b1;
+
+      --menu-bg: rgba(255,255,255,.92);
+      --menu-shadow: 0 12px 28px rgba(0,0,0,.12);
+
+      /* Botón musical flotante con la paleta de corazones */
+      --music-grad: linear-gradient(135deg, #ffffff 0%, #9fd7ff 28%, #cfcfcf 64%, #a7ffcf 100%);
+    }
+
+    /* ========================= BASE ========================= */
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg-cream);color:var(--deep);font-family:Quicksand,system-ui,Arial;-webkit-font-smoothing:antialiased}
+    html{scroll-behavior:smooth}
+    img{max-width:100%;height:auto;display:block}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer;outline:none}
+    .center{text-align:center}
+
+    /* ========================= LAYOUT SECCIONES (flipbook) ========================= */
+    .viewport{height:100vh;overflow:hidden;position:relative;background:var(--bg-cream)}
+    .sections{height:100%;width:100%;position:relative;perspective:1200px;}
+
+    .section{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      padding:26px;
+      background-size:cover; background-position:center; background-attachment:fixed; /* parallax simple */
+      opacity:0; transform:rotateY(90deg) translateZ(-200px); transform-origin:center;
+      transition:transform .9s var(--ease), opacity .6s ease; backface-visibility:hidden;
+      will-change:transform,opacity;
+    }
+    .section.active{opacity:1; transform:rotateY(0) translateZ(0)}
+    .section.prev  {opacity:0; transform:rotateY(-90deg) translateZ(-200px)}
+    .section.next  {opacity:0; transform:rotateY( 90deg) translateZ(-200px)}
+    .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.6)); pointer-events:none}
+
+    /* ========================= FONDOS POR PÁGINA ========================= */
+    /* Mapeo EXACTO pedido:
+       Portada: fondo_floral.jpg
+       P1: fondo_floral1.png (Familias)
+       P2: fondo_floral2.jpg (Página de transición)
+       P3: fondo_floral3.jpg (Foto + verso Mateo 19:6)
+       P4: fondo_floral4.png (Itinerario + contador grande)
+       P5: fondo_floral5.jpg (Galería novios)
+       P6: fondo_floral6.jpg (RSVP + Deseos)
+       P7: fondo_floral7.jpg (Galería colaborativa + momento9.jpg)
+       P8: fondo_floral9.jpg (Momento8 + frase)
+       P9: fondo_floral8.png (Final: WhatsApp + Calendario + momento5.jpg)
+    */
+    .bg-portada {background-image:url('fondo_floral.jpg')}
+    .bg-p1      {background-image:url('fondo_floral1.png')}
+    .bg-p2      {background-image:url('fondo_floral2.jpg')}
+    .bg-p3      {background-image:url('fondo_floral3.jpg')}
+    .bg-p4      {background-image:url('fondo_floral4.png')}
+    .bg-p5      {background-image:url('fondo_floral5.jpg')}
+    .bg-p6      {background-image:url('fondo_floral6.jpg')}
+    .bg-p7      {background-image:url('fondo_floral7.jpg')}
+    .bg-p8      {background-image:url('fondo_floral9.jpg')}
+    .bg-p9      {background-image:url('fondo_floral8.png')}
+
+    /* ========================= CARD ========================= */
+    .card{
+      position:relative; z-index:2;
+      max-width:980px; width:100%;
+      background:var(--glass); backdrop-filter: blur(6px);
+      border-radius:16px; padding:28px; box-shadow:var(--shadow);
+    }
+
+    /* ========================= TIPOGRAFÍA ========================= */
+    h1,h2,h3,h4{font-family:'Playfair Display',serif;margin:0 0 8px}
+    .title-top{font-size:46px; letter-spacing:.6px; text-align:center}
+    .title-acepto{
+      font-family:'Waltograph',cursive; /* SOLO esta línea usa Waltograph */
+      font-size:42px; margin-top:6px; text-align:center;
+      background:linear-gradient(135deg,#fff,#f7e8c5 45%,#e3c792 70%,#fff);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow:0 0 18px rgba(255,255,255,.45), 0 0 6px rgba(230,186,120,.45);
+      animation: glowGold 2.8s ease-in-out infinite;
+    }
+    @keyframes glowGold{
+      0%,100%{ text-shadow:0 0 12px rgba(255,255,255,.35), 0 0 4px rgba(230,186,120,.35) }
+      50%{    text-shadow:0 0 22px rgba(255,255,255,.55), 0 0 10px rgba(230,186,120,.55) }
+    }
+    .verse{
+      font-family:'Playfair Display',serif; font-style:italic; margin-top:14px; font-size:16px;
+      background:linear-gradient(90deg,#b98f5a,#d6a79b);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-align:center;
+    }
+    .note{color:#555; font-size:14px}
+
+    /* ========================= BOTONES MÁGICOS ========================= */
+    .btns{margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+    .magicBtn{
+      padding:10px 14px; border-radius:12px; border:0;
+      background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; font-weight:700;
+      box-shadow:0 10px 30px rgba(74,143,231,.18); transition:filter .2s, transform .2s, box-shadow .2s;
+    }
+    .magicBtn:hover{filter:brightness(1.05); transform:translateY(-1px); box-shadow:0 12px 36px rgba(74,143,231,.26)}
+
+    /* ========================= ANILLO ========================= */
+    .ring-button{background:transparent; border:0; padding:0; cursor:pointer; display:block; margin:12px auto; position:relative}
+    .ring-svg{width:220px; height:220px; display:block}
+    .ring-rotate{animation:ringSpin 14s linear infinite; transform-origin:110px 110px}
+    @keyframes ringSpin{to{transform:rotate(360deg)}}
+    .ring-spark{position:absolute; left:50%; top:35%; width:140px; height:140px; transform:translate(-50%,-50%); pointer-events:none; border-radius:50%; opacity:0}
+    .ring-button.clicked .ring-spark{animation:spark 900ms ease-out forwards}
+    @keyframes spark{0%{opacity:0; transform:translate(-50%,-50%) scale(.6)} 30%{opacity:1; transform:translate(-50%,-50%) scale(1.05)} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.6)}}
+    .ring-instruction{font-size:13px;color:#333;margin-top:6px;text-align:center}
+
+    /* ========================= CONTADOR MINI (PORTADA) ========================= */
+    .mini-flip{display:flex; gap:10px; justify-content:center; margin-top:12px; align-items:center}
+    .flip-mini{width:72px; height:72px; perspective:800px; position:relative}
+    .flip-mini .face{
+      position:absolute; left:0; top:0; width:100%; height:50%;
+      overflow:hidden; border-radius:12px; background:var(--glass-strong);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:22px; font-family:'Playfair Display',serif;
+      box-shadow:0 10px 26px rgba(0,0,0,.08);
+    }
+    .flip-mini .top{border-bottom-left-radius:0;border-bottom-right-radius:0;transform-origin:bottom}
+    .flip-mini .bottom{top:50%;border-top-left-radius:0;border-top-right-radius:0;transform-origin:top}
+    .flip-mini.animate .top{animation:flipTop .7s forwards}
+    .flip-mini.animate .bottom{animation:flipBottom .7s forwards}
+
+    /* ========================= CONTADOR GRANDE ========================= */
+    .flip-grid{display:flex; gap:12px; justify-content:center; align-items:center; margin-top:18px; flex-wrap:wrap}
+    .flip{width:100px; height:96px; perspective:900px; position:relative}
+    .flip .panel{
+      position:absolute; left:0; top:0; width:100%; height:100%; border-radius:12px;
+      background:var(--glass-strong); display:flex; align-items:center; justify-content:center;
+      font-family:'Playfair Display',serif; font-size:28px; box-shadow:0 10px 30px rgba(0,0,0,.08);
+    }
+    .flip .top{border-bottom-left-radius:0;border-bottom-right-radius:0;transform-origin:bottom;z-index:2}
+    .flip .bottom{top:50%;border-top-left-radius:0;border-top-right-radius:0;transform-origin:top;z-index:1}
+    .flip.animate .top{animation:flipTop .7s forwards}
+    .flip.animate .bottom{animation:flipBottom .7s forwards}
+    .flip .label{font-size:12px; color:#333; margin-top:8px; text-align:center}
+    @keyframes flipTop{0%{transform:rotateX(0)}100%{transform:rotateX(-180deg)}}
+    @keyframes flipBottom{0%{transform:rotateX(180deg)}100%{transform:rotateX(0)}}
+
+    /* ========================= FAMILIAS ========================= */
+    .parents-grid{display:flex; gap:20px; align-items:stretch; justify-content:space-between; margin-top:16px}
+    .parent-col{flex:1; min-width:220px; display:flex; align-items:center; justify-content:center}
+    .parent-names{font-family:'Playfair Display',serif; font-size:22px; line-height:1.25; text-align:center}
+    .couple-names{font-family:'Playfair Display',serif; font-size:28px; margin-top:18px; text-align:center}
+
+    /* ========================= FOTO + VERSO ========================= */
+    .photo-romantic{
+      width:420px; max-width:92%; border-radius:16px; box-shadow:0 16px 42px rgba(0,0,0,.16);
+      object-fit:cover; transition:transform .45s var(--ease), opacity .45s var(--ease);
+    }
+    .photo-romantic:hover{transform:scale(1.03)}
+    .verse-big{font-family:'Playfair Display',serif; font-size:18px; margin-top:12px; text-align:center}
+
+    /* ========================= ITINERARIO ========================= */
+    .itinerary{display:flex; flex-direction:column; gap:14px; margin-top:12px}
+    .it-item{
+      display:flex; gap:12px; align-items:flex-start; padding:14px; border-radius:12px;
+      background:var(--glass-strong); box-shadow:0 10px 28px rgba(0,0,0,.08);
+      opacity:0; transform:translateY(14px); transition:opacity .6s, transform .6s;
+    }
+    .it-item.show{opacity:1; transform:translateY(0)}
+    .it-icon{width:56px; height:56px; border-radius:10px; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center; font-size:22px}
+    .it-info strong{display:block}
+    .map-link{display:inline-block; margin-top:6px; color:#2b87e6; text-decoration:underline}
+    .palette{display:flex; gap:8px; margin-top:8px}
+    .chip{width:22px; height:22px; border-radius:6px}
+
+    /* ========================= GALERÍA ========================= */
+    .gallery-grid{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:12px}
+    .gallery-grid img{
+      width:260px; height:176px; object-fit:cover; border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.12); cursor:pointer; transition:transform .35s, opacity .35s;
+    }
+    .gallery-grid img:hover{transform:scale(1.03); opacity:.96}
+    .gallery-controls{margin-top:12px; text-align:center}
+
+    /* ========================= COLABORATIVA / FINALES ========================= */
+    .collab-photo{
+      width:100%; max-width:860px; border-radius:14px; box-shadow:0 14px 40px rgba(0,0,0,.14);
+      object-fit:cover; transition:transform .45s var(--ease);
+    }
+    .collab-photo:hover{transform:scale(1.02)}
+    .final-title{font-family:'Playfair Display',serif; font-size:26px; text-align:center}
+    .final-sub{margin-top:8px; color:#666; text-align:center}
+    .wa-row{display:flex; gap:12px; justify-content:center; margin-top:14px; flex-wrap:wrap}
+    .wa-btn{
+      display:inline-flex; gap:8px; align-items:center; padding:10px 14px; border-radius:999px;
+      background:var(--wa); color:#fff; text-decoration:none; font-weight:700; box-shadow:0 10px 30px rgba(0,0,0,.12)
+    }
+    .wa-svg{width:18px; height:18px; display:inline-block; vertical-align:middle; fill:#fff}
+
+    /* ========================= LIGHTBOX ========================= */
+    .lb{position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:3000}
+    .lb.open{display:flex}
+    .lb img{max-width:94%; max-height:86%; border-radius:10px; box-shadow:0 20px 60px rgba(0,0,0,.6); transition:opacity .45s ease, transform .45s ease}
+    .close-lb{position:fixed; right:18px; top:18px; background:rgba(255,255,255,.92); border-radius:999px; padding:8px; border:0; cursor:pointer}
+    .lb-nav{position:fixed; left:6px; right:6px; top:50%; display:flex; justify-content:space-between; pointer-events:none}
+    .lb-nav button{pointer-events:all; background:rgba(255,255,255,.92); border-radius:999px; padding:10px 12px; border:0; cursor:pointer}
+
+    /* ========================= FLECHAS ========================= */
+    .nav{position:fixed; top:50%; left:0; right:0; display:flex; justify-content:space-between; pointer-events:none; z-index:990; transform:translateY(-50%)}
+    .nav button{pointer-events:all; background:rgba(255,255,255,.95); border:0; padding:10px 12px; border-radius:999px; font-size:28px; cursor:pointer; margin:8px; box-shadow:0 10px 30px rgba(0,0,0,.12)}
+
+    /* ========================= MENÚ LATERAL ========================= */
+    .side-menu{
+      position:fixed; right:18px; top:50%; transform:translateY(-50%);
+      background:var(--menu-bg); border-radius:16px; box-shadow: var(--menu-shadow);
+      padding:10px 8px; z-index: 995; backdrop-filter: blur(6px);
+    }
+    .side-menu a{
+      display:flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:12px; margin:6px 0;
+      font-weight:700; color:#233; transition: background .2s, transform .2s; white-space: nowrap;
+    }
+    .side-menu a:hover{ background: rgba(35,117,255,.08); transform: translateX(-1px); }
+    .side-menu a.active{ background: rgba(35,117,255,.16); }
+    .side-menu .icon{ width:18px; text-align:center }
+    .menu-toggle{
+      position:fixed; right:18px; bottom:18px;
+      width:48px; height:48px; border-radius:50%;
+      background: linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; border:0; box-shadow: var(--menu-shadow);
+      z-index: 996;
+    }
+    .side-menu.compact{ display:none; }
+    .side-menu.open{ display:block; }
+
+    /* ========================= BOTÓN MUSICAL FLOTANTE (fallback) ========================= */
+    #musicRetry{
+      position:fixed; right:16px; bottom:16px; z-index:3500;
+      width:48px; height:48px; border-radius:50%;
+      display:none; align-items:center; justify-content:center;
+      background: var(--music-grad);
+      color:#1d4033; font-size:22px; box-shadow:0 10px 32px rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.6);
+      animation: pulseGlow 2.4s ease-in-out infinite;
+    }
+    #musicRetry[aria-hidden="false"]{ display:flex; }
+    #musicRetry:hover{ filter:brightness(1.06) }
+    #musicRetry::after{
+      content: attr(aria-label);
+      position:absolute; right:56px; bottom:12px; white-space:nowrap;
+      background:rgba(0,0,0,.65); color:#fff; font-size:12px; padding:6px 8px; border-radius:8px;
+      transform:translateY(4px); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+    }
+    #musicRetry:hover::after{ opacity:1; transform:translateY(0) }
+    @keyframes pulseGlow{
+      0%,100%{ box-shadow:0 10px 32px rgba(0,0,0,.18), 0 0 0 0 rgba(103,210,204,.22) }
+      50%{ box-shadow:0 12px 40px rgba(0,0,0,.24), 0 0 0 12px rgba(103,210,204,.04) }
+    }
+
+    /* ========================= RESPONSIVE ========================= */
+    @media (max-width:900px){
+      .title-top{font-size:36px}
+      .title-acepto{font-size:28px}
+      .ring-svg{width:160px;height:160px}
+      .parent-names{font-size:20px}
+      .couple-names{font-size:24px}
+      .photo-romantic{width:300px}
+      .gallery-grid img{width:44vw;height:32vw}
+      .flip{width:84px;height:78px}
+      .flip-mini{width:64px;height:64px}
+      .card{padding:16px;border-radius:12px}
+    }
+    @media (max-width: 880px){
+      .side-menu.compact{ display:block; }
+      .side-menu{ display:none; right:12px; top:auto; bottom:78px; transform:none; }
+    }
+
+    /* ========================= CURSOR MÁGICO ========================= */
+    .magicHeart{
+      position:fixed; pointer-events:none; z-index:99999;
+      width:22px; height:22px; opacity:0;
+      transform:translate(-50%,-50%) scale(1);
+      animation:heartFade 1500ms ease-out forwards;
+      filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
+    }
+    @keyframes heartFade{
+      0%  {opacity:.88; transform:translate(-50%,-50%) scale(1)}
+      70% {opacity:.55; transform:translate(-50%,-120%) scale(.82)}
+      100%{opacity:0;   transform:translate(-50%,-160%) scale(.68)}
+    }
+
+    /* ========================= GESTO INVISIBLE PARA DESBLOQUEAR AUDIO ========================= */
+    #tapUnlock{
+      position:fixed; inset:0; z-index:5000;
+      background:transparent; display:none; /* se muestra si el autoplay falla */
+    }
+  </style>
+</head>
+<body>
+  <!-- ========================= AUDIOS ========================= -->
+  <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop></audio>
+  <audio id="eternamente" src="eternamente.mp3" preload="auto"></audio>
+
+  <!-- Gesto invisible para desbloquear audio en móviles si el autoplay falla -->
+  <div id="tapUnlock" aria-hidden="true"></div>
+
+  <div class="viewport">
+    <div class="sections" id="sections">
+      <!-- ========== PORTADA (fondo_floral.jpg) ========== -->
+      <section id="sec-portada" class="section bg-portada active" aria-label="Portada" data-name="portada">
+        <div class="overlay"></div>
+        <div class="card center">
+          <h1 class="title-top">Abril &amp; Pablo</h1>
+          <div class="title-acepto">Sí, ¡acepto!</div>
+
+          <!-- Anillo -->
+          <button class="ring-button" id="ringBtn" aria-label="Anillo: abrir invitación">
+            <div class="ring-spark"></div>
+            <svg class="ring-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <radialGradient id="ringMetal" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#e9eef2"/>
+                  <stop offset="60%" stop-color="#c9ccd0"/>
+                  <stop offset="100%" stop-color="var(--rose)"/>
+                </radialGradient>
+                <radialGradient id="blueGem" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#dff6ff"/>
+                  <stop offset="60%" stop-color="#66c9ff"/>
+                  <stop offset="100%" stop-color="#004c99"/>
+                </radialGradient>
+              </defs>
+              <g class="ring-rotate">
+                <ellipse cx="100" cy="100" rx="40" ry="12" stroke="url(#ringMetal)" stroke-width="12" fill="none"/>
+                <path d="M100 58 L110 70 L100 86 L90 70 Z" fill="url(#blueGem)" stroke="#fff" stroke-opacity="0.4" stroke-width="0.6">
+                  <animateTransform attributeName="transform" type="scale" values="1;1.05;1" dur="2.6s" repeatCount="indefinite"/>
+                </path>
+                <circle cx="100" cy="60" r="2" fill="#fff" opacity="0.9">
+                  <animate attributeName="r" values="2;4;2" dur="1.6s" repeatCount="indefinite"/>
+                </circle>
+              </g>
+            </svg>
+          </button>
+          <div class="ring-instruction"><em>Da clic en el anillo para abrir</em></div>
+
+          <!-- Contador mini (números flip) -->
+          <div class="mini-flip" id="miniFlip">
+            <div class="flip-mini" data-k="d"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini" data-k="h"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini" data-k="m"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini" data-k="s"><div class="face top">00</div><div class="face bottom">00</div></div>
+          </div>
+
+          <!-- Versículo portada -->
+          <p class="verse">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></p>
+
+          <!-- Botones mágicos -->
+          <div class="btns">
+            <button class="magicBtn" data-target="sec-familias">Nuestras familias</button>
+            <button class="magicBtn" data-target="sec-itinerario">Itinerario</button>
+            <button class="magicBtn" data-target="sec-galeria">Galería</button>
+            <button class="magicBtn" data-target="sec-rsvp">Confirmar asistencia</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== PÁGINA 1 — FAMILIAS (fondo_floral1.png) ========== -->
+      <section id="sec-familias" class="section bg-p1" aria-label="Familias" data-name="familias">
+        <div class="overlay"></div>
+        <div class="card center">
+          <h2>Padres de los novios</h2>
+          <div class="parents-grid" style="margin-top:16px">
+            <div class="parent-col">
+              <div class="parent-names">
+                Padres de la novia<br />
+                <strong>Eva Aguilar Rendón</strong><br />
+                <strong>Pedro Pérez Hernández</strong>
+              </div>
+            </div>
+            <div class="parent-col">
+              <div class="parent-names">
+                Padres del novio<br />
+                <strong>Saray Hernández Santana</strong><br />
+                <strong>Pablo Tinoco Carranza <span title="finado">✝</span></strong>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:18px;font-family:'Playfair Display',serif;font-size:18px">
+            Tienen el honor de compartir la dicha que enlaza a sus amados hijos.
+          </div>
+          <div class="couple-names">Abril Pérez Aguilar &amp; Pablo Eliel Tinoco Hernández</div>
+        </div>
+      </section>
+
+      <!-- ========== PÁGINA 2 — TRANSICIÓN (fondo_floral2.jpg) ==========
+           (Página de respiro visual, sin foto; la foto 1 va en la PÁGINA 3) -->
+      <section id="sec-transicion" class="section bg-p2" aria-label="Transición" data-name="transicion">
+        <div class="overlay"></div>
+        <div class="card center">
+          <h2>Con cariño…</h2>
+          <p class="verse" style="margin-top:10px">
+            Nos llena de alegría compartir este día contigo.
+          </p>
+        </div>
+      </section>
+
+      <!-- (AQUÍ seguirá la PÁGINA 3 con foto1.jpg + Mateo 19:6 en la Parte 2) -->
+<!-- INICIO PARTE 2 -->
+
+      <!-- ========== PÁGINA 3 — FOTO + FRASE BÍBLICA (fondo_floral3.jpg) ========== -->
+      <section id="sec-verse" class="section bg-p3" aria-label="Versículo" data-name="versiculo">
+        <div class="overlay"></div>
+        <div class="card center">
+          <img src="foto1.jpg" alt="Foto romántica" class="photo-romantic" />
+          <p class="verse-big">“Así que no son ya más dos, sino una sola carne; por tanto, lo que Dios juntó, no lo separe el hombre.”<br><strong>Mateo 19:6</strong></p>
+        </div>
+      </section>
+
+      <!-- ========== PÁGINA 4 — ITINERARIO (fondo_floral4.png) ========== -->
+      <section id="sec-itinerario" class="section bg-p4" aria-label="Itinerario" data-name="itinerario">
+        <div class="overlay"></div>
+        <div class="card center">
+          <h2>Itinerario del Gran Día</h2>
+          <div class="itinerary">
+            <div class="it-item"><div class="it-icon">💒</div>
+              <div class="it-info">
+                <strong>Ceremonia Religiosa</strong>
+                28 de diciembre de 2025 — 2:00 PM<br>
+                Iglesia Cristiana Palabra de Vida AD<br>
+                Rodeo #35, Gabriel Tepepa, Tlaquiltenango, Morelos.<br>
+                <a href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6" class="map-link" target="_blank">Ver ubicación</a>
+              </div>
+            </div>
+
+            <div class="it-item"><div class="it-icon">🌿</div>
+              <div class="it-info">
+                <strong>Recepción</strong>
+                4:00 PM en “Jardín Los Abuelos”<br>
+                Insurgentes #819, Gabriel Tepepa, Tlaquiltenango, Morelos.<br>
+                <a href="https://maps.app.goo.gl/B2W65gnaMnyodGh56" class="map-link" target="_blank">Ver ubicación</a>
+              </div>
+            </div>
+
+            <div class="it-item"><div class="it-icon">👗</div>
+              <div class="it-info">
+                <strong>Código de vestimenta</strong><br>
+                Formal — Tonos recomendados: Celeste, beige, verde, gris, rosa.<br>
+                <em>Dejemos el blanco para la novia 💕</em>
+                <div class="palette">
+                  <div class="chip" style="background:var(--chip-celeste)"></div>
+                  <div class="chip" style="background:var(--chip-beige)"></div>
+                  <div class="chip" style="background:var(--chip-verde)"></div>
+                  <div class="chip" style="background:var(--chip-gris)"></div>
+                  <div class="chip" style="background:var(--chip-rosa)"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contador grande -->
+          <div class="flip-grid" id="flipGrid">
+            <div class="flip" data-k="d"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Días</div></div>
+            <div class="flip" data-k="h"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Horas</div></div>
+            <div class="flip" data-k="m"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Min</div></div>
+            <div class="flip" data-k="s"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Seg</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== PÁGINA 5 — GALERÍA NOVIOS (fondo_floral5.jpg) ========== -->
+      <section id="sec-galeria" class="section bg-p5" aria-label="Galería" data-name="galeria">
+        <div class="overlay"></div>
+        <div class="card center">
+          <h2>Galería de momentos</h2>
+          <div class="gallery-grid" id="gallery">
+            <img src="momento1.jpg" alt="Momento 1">
+            <img src="momento2.jpg" alt="Momento 2">
+            <img src="momento3.jpg" alt="Momento 3">
+            <img src="momento4.jpg" alt="Momento 4">
+            <img src="momento5.jpg" alt="Momento 5">
+            <img src="momento6.jpg" alt="Momento 6">
+            <img src="momento7.jpg" alt="Momento 7">
+          </div>
+          <p class="note">Toca una foto para ampliar</p>
+        </div>
+      </section>
+
+      <!-- ========== PÁGINA 6 — CONFIRMAR ASISTENCIA + DESEOS (fondo_floral6.jpg) ========== -->
+      <section id="sec-rsvp" class="section bg-p6" aria-label="Confirmar asistencia" data-name="rsvp">
+        <div class="overlay"></div>
+        <div class="card center">
+          <h2>Confirmar asistencia</h2>
+          <p>Por favor confirma tu presencia en nuestro gran día 💍</p>
+          <a href="https://script.google.com/macros/s/AKfycbyDEgVJzj-vGvwxFE1eqTmKb4pO4__lXB9gX8gMKGc2yGhlzR15AFPY8vQMvnjoNs01Vg/exec" class="magicBtn" target="_blank">Confirmar asistencia</a>
+
+          <h3 style="margin-top:22px">Comparte tus buenos deseos</h3>
+          <p>Déjanos un mensaje especial y se guardará automáticamente 💖</p>
+          <a href="https://script.google.com/macros/s/AKfycbwY2G6aHz1-W9Sk3CUspgJYNf2EhEchr_gNk4mvaZS4wXn7sKIfIV3Qy-Wje2UCKdgC/exec" class="magicBtn" target="_blank">Dejar buenos deseos</a>
+        </div>
+      </section>
+
+      <!-- (la Parte 3 continúa desde aquí: páginas 7–9, galería colaborativa, cierre y scripts JS) -->
+<!-- FIN PARTE 2 -->
+<!-- INICIO PARTE 3 -->
+
+      <!-- ========== PÁGINA 7 — GALERÍA COLABORATIVA (fondo_floral7.jpg) ========== -->
+      <section id="sec-colaborativa" class="section bg-p7" aria-label="Galería colaborativa" data-name="colaborativa">
+        <div class="overlay"></div>
+        <div class="card center">
+          <h2>Galería de invitados 📸</h2>
+          <p>Comparte tus fotos o videos y forma parte de nuestra historia 💕</p>
+          <img src="momento9.jpg" alt="Galería colaborativa" class="collab-photo" />
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=header" class="magicBtn" target="_blank">Subir mis fotos</a>
+        </div>
+      </section>
+
+      <!-- ========== PÁGINA 8 — FRASE ROMÁNTICA (fondo_floral9.jpg) ========== -->
+      <section id="sec-romantica" class="section bg-p8" aria-label="Frase romántica" data-name="romantica">
+        <div class="overlay"></div>
+        <div class="card center">
+          <img src="momento8.jpg" alt="Momento romántico" class="collab-photo" />
+          <p class="verse-big">"Tu amor es lo que he anhelado y el regalo que Dios me ha dado."</p>
+        </div>
+      </section>
+
+      <!-- ========== PÁGINA 9 — CIERRE (fondo_floral8.png) ========== -->
+      <section id="sec-final" class="section bg-p9" aria-label="Final" data-name="final">
+        <div class="overlay"></div>
+        <div class="card center">
+          <img src="momento5.jpg" alt="Foto final" class="collab-photo" />
+          <h2 class="final-title">Con amor eterno</h2>
+          <div class="final-sub">Abril & Pablo</div>
+          <p class="note">Gracias por ser parte de nuestro día especial 💖</p>
+
+          <div class="wa-row">
+            <a href="https://wa.me/5217774914500" target="_blank" class="wa-btn">
+              <svg class="wa-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M16 .396C7.165.396.002 7.559.002 16.394c0 2.879.747 5.686 2.167 8.171L0 32l7.633-2.096A15.872 15.872 0 0 0 16 32c8.836 0 16-7.163 16-16 0-8.836-7.164-15.999-16-15.999zM16 29.333c-2.64 0-5.222-.716-7.483-2.07l-.536-.319-4.531 1.244 1.211-4.605-.35-.567A13.291 13.291 0 0 1 2.667 16C2.667 8.648 8.649 2.667 16 2.667c7.351 0 13.333 5.981 13.333 13.333 0 7.351-5.982 13.333-13.333 13.333zm7.517-9.408c-.413-.206-2.446-1.206-2.825-1.345-.379-.14-.655-.206-.931.206-.275.413-1.069 1.345-1.312 1.62-.243.275-.482.31-.895.104-.413-.206-1.743-.642-3.32-2.044-1.228-1.095-2.056-2.447-2.3-2.86-.243-.413-.026-.636.18-.842.185-.184.413-.482.62-.724.206-.241.275-.413.413-.689.138-.275.069-.517-.035-.724-.104-.206-.931-2.24-1.275-3.067-.334-.804-.675-.696-.931-.71-.241-.014-.517-.017-.793-.017-.275 0-.724.103-1.103.517-.379.413-1.448 1.414-1.448 3.448 0 2.034 1.484 4 1.69 4.275.206.275 2.923 4.469 7.094 6.268.992.428 1.764.683 2.366.876.993.316 1.896.271 2.61.164.797-.12 2.446-.999 2.791-1.964.345-.965.345-1.793.241-1.964-.104-.172-.379-.275-.792-.481z"/></svg>
+              Abril
+            </a>
+            <a href="https://wa.me/5217341123645" target="_blank" class="wa-btn">
+              <svg class="wa-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M16 .396C7.165.396.002 7.559.002 16.394c0 2.879.747 5.686 2.167 8.171L0 32l7.633-2.096A15.872 15.872 0 0 0 16 32c8.836 0 16-7.163 16-16 0-8.836-7.164-15.999-16-15.999zM16 29.333c-2.64 0-5.222-.716-7.483-2.07l-.536-.319-4.531 1.244 1.211-4.605-.35-.567A13.291 13.291 0 0 1 2.667 16C2.667 8.648 8.649 2.667 16 2.667c7.351 0 13.333 5.981 13.333 13.333 0 7.351-5.982 13.333-13.333 13.333zm7.517-9.408c-.413-.206-2.446-1.206-2.825-1.345-.379-.14-.655-.206-.931.206-.275.413-1.069 1.345-1.312 1.62-.243.275-.482.31-.895.104-.413-.206-1.743-.642-3.32-2.044-1.228-1.095-2.056-2.447-2.3-2.86-.243-.413-.026-.636.18-.842.185-.184.413-.482.62-.724.206-.241.275-.413.413-.689.138-.275.069-.517-.035-.724-.104-.206-.931-2.24-1.275-3.067-.334-.804-.675-.696-.931-.71-.241-.014-.517-.017-.793-.017-.275 0-.724.103-1.103.517-.379.413-1.448 1.414-1.448 3.448 0 2.034 1.484 4 1.69 4.275.206.275 2.923 4.469 7.094 6.268.992.428 1.764.683 2.366.876.993.316 1.896.271 2.61.164.797-.12 2.446-.999 2.791-1.964.345-.965.345-1.793.241-1.964-.104-.172-.379-.275-.792-.481z"/></svg>
+              Pablo
+            </a>
+          </div>
+
+          <div style="margin-top:18px">
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+de+Abril+y+Pablo&dates=20251228T140000Z/20251228T230000Z&details=Ceremonia+y+recepci%C3%B3n&location=Tlaquiltenango,+Morelos" target="_blank" class="magicBtn">Agregar al calendario</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- BOTÓN MUSICAL FLOTANTE -->
+  <button id="musicRetry" aria-hidden="true" aria-label="Reproducir música">🎵</button>
+
+  <!-- Menú lateral -->
+  <button class="menu-toggle" id="menuToggle">☰</button>
+  <nav class="side-menu compact" id="sideMenu">
+    <a data-target="sec-portada"><span class="icon">💍</span>Inicio</a>
+    <a data-target="sec-familias"><span class="icon">👨‍👩‍👧</span>Familias</a>
+    <a data-target="sec-itinerario"><span class="icon">📅</span>Itinerario</a>
+    <a data-target="sec-galeria"><span class="icon">📸</span>Galería</a>
+    <a data-target="sec-rsvp"><span class="icon">💌</span>Asistencia</a>
+    <a data-target="sec-colaborativa"><span class="icon">🤳</span>Invitados</a>
+    <a data-target="sec-romantica"><span class="icon">💞</span>Amor</a>
+    <a data-target="sec-final"><span class="icon">🌟</span>Final</a>
+  </nav>
+
+  <!-- Navegación con flechas -->
+  <div class="nav">
+    <button id="prevBtn">←</button>
+    <button id="nextBtn">→</button>
+  </div>
+
+  <!-- Script JS -->
+  <script>
+    /* ======== AUDIO ======== */
+    const audioMarcha = document.getElementById("marcha");
+    const audioEterna = document.getElementById("eternamente");
+    const ringBtn = document.getElementById("ringBtn");
+    const musicRetry = document.getElementById("musicRetry");
+    const tapUnlock = document.getElementById("tapUnlock");
+
+    function playMarcha() {
+      audioMarcha.currentTime = 0;
+      audioMarcha.volume = 1;
+      audioMarcha.play().catch(() => {
+        musicRetry.setAttribute("aria-hidden","false");
+      });
+    }
+
+    function crossfadeToEterna() {
+      let fadeOut = setInterval(()=>{
+        if(audioMarcha.volume>0.05) audioMarcha.volume -=0.05;
+        else {
+          clearInterval(fadeOut);
+          audioMarcha.pause();
+          audioEterna.volume = 0;
+          audioEterna.play();
+          let fadeIn = setInterval(()=>{
+            if(audioEterna.volume<1) audioEterna.volume +=0.05;
+            else clearInterval(fadeIn);
+          },100);
+        }
+      },100);
+    }
+
+    document.addEventListener("DOMContentLoaded", ()=>{
+      playMarcha();
+    });
+
+    ringBtn.addEventListener("click", ()=>{
+      ringBtn.classList.add("clicked");
+      crossfadeToEterna();
+    });
+
+    musicRetry.addEventListener("click", ()=>{
+      musicRetry.setAttribute("aria-hidden","true");
+      playMarcha();
+    });
+
+    /* ======== EFECTO LIBRO ======== */
+    const sections = document.querySelectorAll(".section");
+    let current = 0;
+    const showSection = (i)=>{
+      sections.forEach((s,idx)=>{
+        s.classList.remove("active","prev","next");
+        if(idx===i) s.classList.add("active");
+        else if(idx<i) s.classList.add("prev");
+        else s.classList.add("next");
+      });
+    };
+    const nextBtn=document.getElementById("nextBtn");
+    const prevBtn=document.getElementById("prevBtn");
+    nextBtn.onclick=()=>{current=(current+1)%sections.length;showSection(current);};
+    prevBtn.onclick=()=>{current=(current-1+sections.length)%sections.length;showSection(current);};
+
+    /* ======== BOTONES MÁGICOS Y MENÚ ======== */
+    document.querySelectorAll("[data-target]").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const id=btn.getAttribute("data-target");
+        const idx=[...sections].findIndex(s=>s.id===id);
+        if(idx>=0){current=idx;showSection(current);}
+      });
+    });
+
+    const menuToggle=document.getElementById("menuToggle");
+    const sideMenu=document.getElementById("sideMenu");
+    menuToggle.onclick=()=>{sideMenu.classList.toggle("open");};
+
+    /* ======== CONTADORES ======== */
+    const weddingDate = new Date("2025-12-28T14:00:00");
+    function updateCountdown(){
+      const now=new Date();
+      let diff=weddingDate-now;
+      if(diff<0) diff=0;
+      const d=Math.floor(diff/864e5);
+      const h=Math.floor(diff/36e5)%24;
+      const m=Math.floor(diff/6e4)%60;
+      const s=Math.floor(diff/1e3)%60;
+      document.querySelectorAll(".flip-mini, .flip").forEach(el=>{
+        const k=el.dataset.k;
+        let val={d,h,m,s}[k].toString().padStart(2,"0");
+        el.querySelectorAll(".top,.panel.top").forEach(t=>t.textContent=val);
+        el.querySelectorAll(".bottom,.panel.bottom").forEach(b=>b.textContent=val);
+      });
+    }
+    setInterval(updateCountdown,1000);
+    updateCountdown();
+
+    /* ======== CORAZONES MÁGICOS ======== */
+    const colors=["#ffffff","#9fd7ff","#a7ffcf","#cfcfcf"];
+    document.addEventListener("pointermove",(e)=>{
+      for(let i=0;i<3;i++){
+        const heart=document.createElement("div");
+        heart.className="magicHeart";
+        heart.textContent="❤";
+        heart.style.left=e.pageX+Math.random()*20-10+"px";
+        heart.style.top=e.pageY+Math.random()*20-10+"px";
+        heart.style.color=colors[Math.floor(Math.random()*colors.length)];
+        heart.style.opacity=0.9;
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),1500);
+      }
+    });
+
+    /* ======== GALERÍA LIGHTBOX ======== */
+    const gallery=document.getElementById("gallery");
+    const lightbox=document.createElement("div");
+    lightbox.className="lb";
+    lightbox.innerHTML='<button class="close-lb">✕</button><div class="lb-nav"><button id="lbPrev">←</button><button id="lbNext">→</button></div><img>';
+    document.body.appendChild(lightbox);
+    const lbImg=lightbox.querySelector("img");
+    const imgs=[...gallery.querySelectorAll("img")];
+    let currentImg=0;
+
+    function showImg(i){
+      if(i<0)i=imgs.length-1;
+      if(i>=imgs.length)i=0;
+      currentImg=i;
+      lbImg.src=imgs[i].src;
+      lightbox.classList.add("open");
+    }
+    imgs.forEach((img,i)=>{
+      img.addEventListener("click",()=>showImg(i));
+    });
+    lightbox.querySelector(".close-lb").onclick=()=>lightbox.classList.remove("open");
+    document.getElementById("lbPrev").onclick=()=>showImg(currentImg-1);
+    document.getElementById("lbNext").onclick=()=>showImg(currentImg+1);
+
+  </script>
+</body>
+</html>
+<!-- FIN PARTE 3 -->
+
