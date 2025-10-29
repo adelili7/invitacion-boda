@@ -3,25 +3,22 @@
 <head>
   <!-- ================================================================
        Boda de Abril & Pablo — Invitación FINAL (GitHub Pages)
-       * Entrega en 3 partes (pegar en orden en el MISMO index.html)
-       * Mismos nombres de archivos de tu repo (marcha_nupcial.mp3, eternamente.mp3,
-         fondo_floral.jpg, fondo_floral1.png, ..., momento1.jpg, etc.)
-       * Audio:
-         - Autoplay inmediato de marcha_nupcial.mp3 al abrir (si el navegador lo permite)
-         - Al hacer clic en el anillo: pausa marcha → crossfade 2s a eternamente.mp3
-       * Efecto libro (flip 3D) + scroll vertical suave
-       * Cursor mágico (corazones blanco/azul/plata/verde)
-       * Contadores flip (mini en portada, grande en Itinerario)
-       * Lightbox con navegación anterior/siguiente
-       * Compatible móvil/tablet/escritorio
-       ================================================================ -->
+       - Opción C: Pantalla de entrada con anillo (desbloquea audio en móviles)
+       - Al entrar: suena marcha_nupcial.mp3 (SIN fade-in)
+       - Al hacer clic en el anillo de la portada: crossfade 2s a eternamente.mp3
+       - Flipbook + scroll suave + flechas + menú lateral
+       - Fondos responsivos por página (mismos nombres de tu repo)
+       - Galería con lightbox y controles
+       - Contadores flip (mini en portada + grande en pág. 5)
+       - Formularios a Google Apps Script (RSVP y Buenos deseos)
+       ================================================================= -->
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#ffffff" />
   <title>Boda de Abril & Pablo 💍</title>
 
-  <!-- Fuentes: Waltograph SOLO para “Sí, ¡acepto!” + Playfair/Quicksand para el resto -->
+  <!-- Fuentes: Waltograph (solo “Sí, ¡acepto!”) + Playfair/Quicksand (románticas) -->
   <link href="https://fonts.cdnfonts.com/css/waltograph" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
 
@@ -55,8 +52,7 @@
 
     /* ========================= BASE ========================= */
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:var(--bg-cream);color:var(--deep);font-family:Quicksand,system-ui,Arial;-webkit-font-smoothing:antialiased}
-    html{scroll-behavior:smooth}
+    html,body{height:100%;margin:0;background:var(--bg-cream);color:var(--deep);font-family:Quicksand,system-ui,Arial;-webkit-font-smoothing:antialiased; scroll-behavior:smooth}
     img{max-width:100%;height:auto;display:block}
     a{color:inherit;text-decoration:none}
     button{font-family:inherit;cursor:pointer;outline:none}
@@ -70,7 +66,7 @@
       position:absolute; inset:0;
       display:flex; align-items:center; justify-content:center;
       padding:26px;
-      background-size:cover; background-position:center; background-attachment:fixed; /* parallax simple */
+      background-size:cover; background-position:center; background-attachment:fixed;
       opacity:0; transform:rotateY(90deg) translateZ(-200px); transform-origin:center;
       transition:transform .9s var(--ease), opacity .6s ease; backface-visibility:hidden;
       will-change:transform,opacity;
@@ -81,18 +77,6 @@
     .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.6)); pointer-events:none}
 
     /* ========================= FONDOS POR PÁGINA ========================= */
-    /* Mapeo EXACTO pedido:
-       Portada: fondo_floral.jpg
-       P1: fondo_floral1.png (Familias)
-       P2: fondo_floral2.jpg (Página de transición)
-       P3: fondo_floral3.jpg (Foto + verso Mateo 19:6)
-       P4: fondo_floral4.png (Itinerario + contador grande)
-       P5: fondo_floral5.jpg (Galería novios)
-       P6: fondo_floral6.jpg (RSVP + Deseos)
-       P7: fondo_floral7.jpg (Galería colaborativa + momento9.jpg)
-       P8: fondo_floral9.jpg (Momento8 + frase)
-       P9: fondo_floral8.png (Final: WhatsApp + Calendario + momento5.jpg)
-    */
     .bg-portada {background-image:url('fondo_floral.jpg')}
     .bg-p1      {background-image:url('fondo_floral1.png')}
     .bg-p2      {background-image:url('fondo_floral2.jpg')}
@@ -116,7 +100,7 @@
     h1,h2,h3,h4{font-family:'Playfair Display',serif;margin:0 0 8px}
     .title-top{font-size:46px; letter-spacing:.6px; text-align:center}
     .title-acepto{
-      font-family:'Waltograph',cursive; /* SOLO esta línea usa Waltograph */
+      font-family:'Waltograph',cursive;
       font-size:42px; margin-top:6px; text-align:center;
       background:linear-gradient(135deg,#fff,#f7e8c5 45%,#e3c792 70%,#fff);
       -webkit-background-clip:text; background-clip:text; color:transparent;
@@ -187,27 +171,27 @@
 
     /* ========================= FAMILIAS ========================= */
     .parents-grid{display:flex; gap:20px; align-items:stretch; justify-content:space-between; margin-top:16px}
-    .parent-col{flex:1; min-width:220px; display:flex; align-items:center; justify-content:center}
-    .parent-names{font-family:'Playfair Display',serif; font-size:22px; line-height:1.25; text-align:center}
-    .couple-names{font-family:'Playfair Display',serif; font-size:28px; margin-top:18px; text-align:center}
+    .parent-col{flex:1; min-width:240px; display:flex; align-items:center; justify-content:center}
+    .parent-names{font-family:'Playfair Display',serif; font-size:22px; line-height:1.35; text-align:center}
+    .couple-names{font-family:'Playfair Display',serif; font-size:30px; margin-top:18px; text-align:center}
 
     /* ========================= FOTO + VERSO ========================= */
     .photo-romantic{
-      width:420px; max-width:92%; border-radius:16px; box-shadow:0 16px 42px rgba(0,0,0,.16);
+      width:520px; max-width:92%; border-radius:16px; box-shadow:0 16px 42px rgba(0,0,0,.16);
       object-fit:cover; transition:transform .45s var(--ease), opacity .45s var(--ease);
     }
     .photo-romantic:hover{transform:scale(1.03)}
     .verse-big{font-family:'Playfair Display',serif; font-size:18px; margin-top:12px; text-align:center}
 
     /* ========================= ITINERARIO ========================= */
-    .itinerary{display:flex; flex-direction:column; gap:14px; margin-top:12px}
+    .itinerary{display:flex; flex-direction:column; gap:14px; margin-top:16px}
     .it-item{
-      display:flex; gap:12px; align-items:flex-start; padding:14px; border-radius:12px;
+      display:flex; gap:12px; align-items:flex-start; padding:16px; border-radius:12px;
       background:var(--glass-strong); box-shadow:0 10px 28px rgba(0,0,0,.08);
-      opacity:0; transform:translateY(14px); transition:opacity .6s, transform .6s;
+      opacity:0; transform:translateY(16px); transition:opacity .6s, transform .6s;
     }
     .it-item.show{opacity:1; transform:translateY(0)}
-    .it-icon{width:56px; height:56px; border-radius:10px; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center; font-size:22px}
+    .it-icon{width:58px; height:58px; border-radius:10px; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center; font-size:24px}
     .it-info strong{display:block}
     .map-link{display:inline-block; margin-top:6px; color:#2b87e6; text-decoration:underline}
     .palette{display:flex; gap:8px; margin-top:8px}
@@ -297,14 +281,32 @@
       50%{ box-shadow:0 12px 40px rgba(0,0,0,.24), 0 0 0 12px rgba(103,210,204,.04) }
     }
 
+    /* ========================= OVERLAY ENTRADA (OPCIÓN C) ========================= */
+    #entryOverlay{
+      position:fixed; inset:0; z-index:4000;
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.88));
+      display:flex; align-items:center; justify-content:center;
+      transition: opacity .45s ease, visibility .45s ease;
+    }
+    #entryOverlay.hide{ opacity:0; visibility:hidden }
+    .entry-card{
+      text-align:center; background:var(--glass-strong);
+      padding:22px; border-radius:16px; box-shadow:0 18px 60px rgba(0,0,0,.18);
+      max-width:520px; width:92%;
+    }
+    .entry-title{ font-family:'Playfair Display',serif; font-size:28px; margin-bottom:6px }
+    .entry-sub{ color:#666; margin-bottom:12px }
+    .entry-ring{ background:transparent; border:0; padding:0; cursor:pointer; display:block; margin:10px auto; position:relative }
+    .entry-instruction{ font-size:13px; color:#333; margin-top:8px }
+
     /* ========================= RESPONSIVE ========================= */
     @media (max-width:900px){
       .title-top{font-size:36px}
       .title-acepto{font-size:28px}
       .ring-svg{width:160px;height:160px}
       .parent-names{font-size:20px}
-      .couple-names{font-size:24px}
-      .photo-romantic{width:300px}
+      .couple-names{font-size:26px}
+      .photo-romantic{width:320px}
       .gallery-grid img{width:44vw;height:32vw}
       .flip{width:84px;height:78px}
       .flip-mini{width:64px;height:64px}
@@ -317,8 +319,11 @@
 
     /* ========================= CURSOR MÁGICO ========================= */
     .magicHeart{
-      position:fixed; pointer-events:none; z-index:99999;
-      width:22px; height:22px; opacity:0;
+      position:fixed;
+      pointer-events:none;
+      z-index:99999;
+      width:22px; height:22px;
+      opacity:0;
       transform:translate(-50%,-50%) scale(1);
       animation:heartFade 1500ms ease-out forwards;
       filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
@@ -328,12 +333,6 @@
       70% {opacity:.55; transform:translate(-50%,-120%) scale(.82)}
       100%{opacity:0;   transform:translate(-50%,-160%) scale(.68)}
     }
-
-    /* ========================= GESTO INVISIBLE PARA DESBLOQUEAR AUDIO ========================= */
-    #tapUnlock{
-      position:fixed; inset:0; z-index:5000;
-      background:transparent; display:none; /* se muestra si el autoplay falla */
-    }
   </style>
 </head>
 <body>
@@ -341,11 +340,43 @@
   <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop></audio>
   <audio id="eternamente" src="eternamente.mp3" preload="auto"></audio>
 
-  <!-- Gesto invisible para desbloquear audio en móviles si el autoplay falla -->
-  <div id="tapUnlock" aria-hidden="true"></div>
+  <!-- ========================= OVERLAY DE ENTRADA (Opción C) ========================= -->
+  <div id="entryOverlay" role="dialog" aria-modal="true" aria-label="Toca para entrar">
+    <div class="entry-card">
+      <div class="entry-title">Toca para comenzar 💍</div>
+      <div class="entry-sub">Pulsa el anillo para activar la música y entrar a la invitación.</div>
+      <button id="entryRing" class="entry-ring" aria-label="Entrar">
+        <svg class="ring-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <radialGradient id="entryMetal" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#e9eef2"/>
+              <stop offset="60%" stop-color="#c9ccd0"/>
+              <stop offset="100%" stop-color="var(--rose)"/>
+            </radialGradient>
+            <radialGradient id="entryGem" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#dff6ff"/>
+              <stop offset="60%" stop-color="#66c9ff"/>
+              <stop offset="100%" stop-color="#004c99"/>
+            </radialGradient>
+          </defs>
+          <g class="ring-rotate">
+            <ellipse cx="100" cy="100" rx="40" ry="12" stroke="url(#entryMetal)" stroke-width="12" fill="none"/>
+            <path d="M100 58 L110 70 L100 86 L90 70 Z" fill="url(#entryGem)" stroke="#fff" stroke-opacity="0.4" stroke-width="0.6">
+              <animateTransform attributeName="transform" type="scale" values="1;1.05;1" dur="2.6s" repeatCount="indefinite"/>
+            </path>
+            <circle cx="100" cy="60" r="2" fill="#fff" opacity="0.9">
+              <animate attributeName="r" values="2;4;2" dur="1.6s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+        </svg>
+      </button>
+      <div class="entry-instruction">Toca el anillo para entrar</div>
+    </div>
+  </div>
 
   <div class="viewport">
     <div class="sections" id="sections">
+
       <!-- ========== PORTADA (fondo_floral.jpg) ========== -->
       <section id="sec-portada" class="section bg-portada active" aria-label="Portada" data-name="portada">
         <div class="overlay"></div>
@@ -353,7 +384,7 @@
           <h1 class="title-top">Abril &amp; Pablo</h1>
           <div class="title-acepto">Sí, ¡acepto!</div>
 
-          <!-- Anillo -->
+          <!-- Anillo de la portada (cambiar a eternamente) -->
           <button class="ring-button" id="ringBtn" aria-label="Anillo: abrir invitación">
             <div class="ring-spark"></div>
             <svg class="ring-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -382,7 +413,7 @@
           </button>
           <div class="ring-instruction"><em>Da clic en el anillo para abrir</em></div>
 
-          <!-- Contador mini (números flip) -->
+          <!-- Contador mini (números flotando/flip) -->
           <div class="mini-flip" id="miniFlip">
             <div class="flip-mini" data-k="d"><div class="face top">00</div><div class="face bottom">00</div></div>
             <div class="flip-mini" data-k="h"><div class="face top">00</div><div class="face bottom">00</div></div>
@@ -390,7 +421,7 @@
             <div class="flip-mini" data-k="s"><div class="face top">00</div><div class="face bottom">00</div></div>
           </div>
 
-          <!-- Versículo portada -->
+          <!-- Versículo -->
           <p class="verse">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></p>
 
           <!-- Botones mágicos -->
@@ -403,353 +434,592 @@
         </div>
       </section>
 
-      <!-- ========== PÁGINA 1 — FAMILIAS (fondo_floral1.png) ========== -->
+      <!-- ========== P2 — FAMILIAS (fondo_floral1.png) ========== -->
       <section id="sec-familias" class="section bg-p1" aria-label="Familias" data-name="familias">
         <div class="overlay"></div>
         <div class="card center">
           <h2>Padres de los novios</h2>
-          <div class="parents-grid" style="margin-top:16px">
+          <div class="parents-grid" style="margin-top:18px">
+            <!-- IZQUIERDA: Novia (papá primero, luego mamá) -->
             <div class="parent-col">
               <div class="parent-names">
                 Padres de la novia<br />
-                <strong>Eva Aguilar Rendón</strong><br />
-                <strong>Pedro Pérez Hernández</strong>
+                <strong>Pedro Pérez Hernández</strong><br />
+                <strong>Eva Aguilar Rendón</strong>
               </div>
             </div>
+            <!-- DERECHA: Novio (papá primero con cruz, luego mamá) -->
             <div class="parent-col">
               <div class="parent-names">
                 Padres del novio<br />
-                <strong>Saray Hernández Santana</strong><br />
-                <strong>Pablo Tinoco Carranza <span title="finado">✝</span></strong>
+                <strong>Pablo Tinoco Carranza <span title="finado">✝</span></strong><br />
+                <strong>Saray Hernández Santana</strong>
               </div>
             </div>
           </div>
-          <div style="margin-top:18px;font-family:'Playfair Display',serif;font-size:18px">
-            Tienen el honor de compartir la dicha que enlaza a sus amados hijos.
+
+          <div style="margin-top:22px;font-family:'Playfair Display',serif;font-size:18px">
+            “Tienen el honor de compartir la dicha que enlaza a sus amados hijos.”
           </div>
-          <div class="couple-names">Abril Pérez Aguilar &amp; Pablo Eliel Tinoco Hernández</div>
+
+          <div class="couple-names">Abril &amp; Pablo Eliel</div>
         </div>
       </section>
 
-      <!-- ========== PÁGINA 2 — TRANSICIÓN (fondo_floral2.jpg) ==========
-           (Página de respiro visual, sin foto; la foto 1 va en la PÁGINA 3) -->
-      <section id="sec-transicion" class="section bg-p2" aria-label="Transición" data-name="transicion">
+      <!-- ========== P3 — FOTO + VERSÍCULO (Mateo 19:6) (fondo_floral2.jpg) ========== -->
+      <section id="sec-foto-verse" class="section bg-p2" aria-label="Foto y versículo" data-name="foto-verse">
         <div class="overlay"></div>
         <div class="card center">
-          <h2>Con cariño…</h2>
-          <p class="verse" style="margin-top:10px">
-            Nos llena de alegría compartir este día contigo.
+          <img src="foto1.jpg" alt="Abril y Pablo" class="photo-romantic lb-target" data-src="foto1.jpg">
+          <p class="verse-big" style="max-width:780px;margin-left:auto;margin-right:auto">
+            “Así que no son ya más dos, sino una sola carne; por tanto, lo que Dios juntó, no lo separe el hombre.”
+            — <strong>Mateo 19:6</strong>
           </p>
         </div>
       </section>
 
-      <!-- (AQUÍ seguirá la PÁGINA 3 con foto1.jpg + Mateo 19:6 en la Parte 2) -->
-<!-- INICIO PARTE 2 -->
-
-      <!-- ========== PÁGINA 3 — FOTO + FRASE BÍBLICA (fondo_floral3.jpg) ========== -->
-      <section id="sec-verse" class="section bg-p3" aria-label="Versículo" data-name="versiculo">
+      <!-- ========== P4 — GALERÍA NOVIOS (fondo_floral4.png) ========== -->
+      <section id="sec-galeria" class="section bg-p4" aria-label="Galería novios" data-name="galeria">
         <div class="overlay"></div>
-        <div class="card center">
-          <img src="foto1.jpg" alt="Foto romántica" class="photo-romantic" />
-          <p class="verse-big">“Así que no son ya más dos, sino una sola carne; por tanto, lo que Dios juntó, no lo separe el hombre.”<br><strong>Mateo 19:6</strong></p>
+        <div class="card">
+          <h2>Galería — Los novios</h2>
+          <div class="gallery-grid" id="galleryGrid">
+            <img src="momento1.jpg" alt="momento1" class="lb-target" data-src="momento1.jpg">
+            <img src="momento2.jpg" alt="momento2" class="lb-target" data-src="momento2.jpg">
+            <img src="momento3.jpg" alt="momento3" class="lb-target" data-src="momento3.jpg">
+            <img src="momento4.jpg" alt="momento4" class="lb-target" data-src="momento4.jpg">
+            <img src="momento5.jpg" alt="momento5" class="lb-target" data-src="momento5.jpg">
+            <img src="momento6.jpg" alt="momento6" class="lb-target" data-src="momento6.jpg">
+            <img src="momento7.jpg" alt="momento7" class="lb-target" data-src="momento7.jpg">
+          </div>
+          <div class="gallery-controls">
+            <button id="prevGallery" class="magicBtn">Anterior</button>
+            <button id="nextGallery" class="magicBtn">Siguiente</button>
+          </div>
         </div>
       </section>
 
-      <!-- ========== PÁGINA 4 — ITINERARIO (fondo_floral4.png) ========== -->
-      <section id="sec-itinerario" class="section bg-p4" aria-label="Itinerario" data-name="itinerario">
+      <!-- ========== P5 — “Con cariño…” + CONTADOR + ITINERARIO (fondo_floral3.jpg) ========== -->
+      <section id="sec-itinerario" class="section bg-p3" aria-label="Itinerario" data-name="itinerario">
         <div class="overlay"></div>
-        <div class="card center">
-          <h2>Itinerario del Gran Día</h2>
-          <div class="itinerary">
-            <div class="it-item"><div class="it-icon">💒</div>
-              <div class="it-info">
-                <strong>Ceremonia Religiosa</strong>
-                28 de diciembre de 2025 — 2:00 PM<br>
-                Iglesia Cristiana Palabra de Vida AD<br>
-                Rodeo #35, Gabriel Tepepa, Tlaquiltenango, Morelos.<br>
-                <a href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6" class="map-link" target="_blank">Ver ubicación</a>
-              </div>
-            </div>
-
-            <div class="it-item"><div class="it-icon">🌿</div>
-              <div class="it-info">
-                <strong>Recepción</strong>
-                4:00 PM en “Jardín Los Abuelos”<br>
-                Insurgentes #819, Gabriel Tepepa, Tlaquiltenango, Morelos.<br>
-                <a href="https://maps.app.goo.gl/B2W65gnaMnyodGh56" class="map-link" target="_blank">Ver ubicación</a>
-              </div>
-            </div>
-
-            <div class="it-item"><div class="it-icon">👗</div>
-              <div class="it-info">
-                <strong>Código de vestimenta</strong><br>
-                Formal — Tonos recomendados: Celeste, beige, verde, gris, rosa.<br>
-                <em>Dejemos el blanco para la novia 💕</em>
-                <div class="palette">
-                  <div class="chip" style="background:var(--chip-celeste)"></div>
-                  <div class="chip" style="background:var(--chip-beige)"></div>
-                  <div class="chip" style="background:var(--chip-verde)"></div>
-                  <div class="chip" style="background:var(--chip-gris)"></div>
-                  <div class="chip" style="background:var(--chip-rosa)"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="card">
+          <h2 style="text-align:center">Con cariño…</h2>
+          <p class="center" style="font-family:'Playfair Display',serif;font-size:18px;margin:6px 0 12px">
+            Nos llena de alegría compartir este día contigo. <br>
+            <strong>Fecha del evento: 28 de diciembre del 2025.</strong>
+          </p>
 
           <!-- Contador grande -->
-          <div class="flip-grid" id="flipGrid">
-            <div class="flip" data-k="d"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Días</div></div>
-            <div class="flip" data-k="h"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Horas</div></div>
-            <div class="flip" data-k="m"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Min</div></div>
-            <div class="flip" data-k="s"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Seg</div></div>
+          <div style="margin-top:2px;text-align:center">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:#333">Faltan para nuestro gran día</div>
+            <div class="flip-grid" id="mainFlip">
+              <div class="flip" data-key="days"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Días</div></div>
+              <div class="flip" data-key="hours"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Horas</div></div>
+              <div class="flip" data-key="mins"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Minutos</div></div>
+              <div class="flip" data-key="secs"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Segundos</div></div>
+            </div>
+          </div>
+
+          <h2 style="text-align:center;margin-top:18px">Itinerario</h2>
+          <div class="itinerary" id="itineraryList">
+            <div class="it-item">
+              <div class="it-icon">⛪</div>
+              <div class="it-info">
+                <strong>Ceremonia Religiosa — 2:00 p.m.</strong>
+                <div>Iglesia cristiana “Palabra de vida AD”</div>
+                <div>Rodeo #35, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos</div>
+                <a class="map-link" href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6" target="_blank" rel="noopener">Mapa de ubicación</a>
+              </div>
+            </div>
+            <div class="it-item">
+              <div class="it-icon">🎉</div>
+              <div class="it-info">
+                <strong>Recepción — 4:00 p.m.</strong>
+                <div>Jardín Los Abuelos</div>
+                <div>Insurgentes #819, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos</div>
+                <a class="map-link" href="https://maps.app.goo.gl/B2W65gnaMnyodGh56" target="_blank" rel="noopener">Mapa de ubicación</a>
+              </div>
+            </div>
+            <div class="it-item">
+              <div class="it-icon">👗</div>
+              <div class="it-info">
+                <strong>Código de vestimenta</strong>
+                <div>Formal — Tonos recomendados: celestes, beige, verde, gris, rosa</div>
+                <div class="palette">
+                  <div class="chip" style="background:var(--chip-celeste)" title="Celeste"></div>
+                  <div class="chip" style="background:var(--chip-beige)"  title="Beige"></div>
+                  <div class="chip" style="background:var(--chip-verde)"   title="Verde"></div>
+                  <div class="chip" style="background:var(--chip-gris)"    title="Gris"></div>
+                  <div class="chip" style="background:var(--chip-rosa)"    title="Rosa"></div>
+                </div>
+                <div style="margin-top:6px;font-style:italic;color:#666">Dejemos el blanco para la novia.</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ========== PÁGINA 5 — GALERÍA NOVIOS (fondo_floral5.jpg) ========== -->
-      <section id="sec-galeria" class="section bg-p5" aria-label="Galería" data-name="galeria">
+      <!-- ========== P6 — RSVP + DESEOS (fondo_floral5.jpg) ========== -->
+      <section id="sec-rsvp" class="section bg-p5" aria-label="RSVP y Buenos Deseos" data-name="rsvp">
         <div class="overlay"></div>
-        <div class="card center">
-          <h2>Galería de momentos</h2>
-          <div class="gallery-grid" id="gallery">
-            <img src="momento1.jpg" alt="Momento 1">
-            <img src="momento2.jpg" alt="Momento 2">
-            <img src="momento3.jpg" alt="Momento 3">
-            <img src="momento4.jpg" alt="Momento 4">
-            <img src="momento5.jpg" alt="Momento 5">
-            <img src="momento6.jpg" alt="Momento 6">
-            <img src="momento7.jpg" alt="Momento 7">
+        <div class="card">
+          <h2>Confirmación de asistencia</h2>
+          <p class="note">Se abrirá en una pestaña nueva. Tu confirmación se guarda en Google Sheets.</p>
+          <div style="text-align:center;margin-top:12px">
+            <a class="magicBtn" href="https://script.google.com/macros/s/AKfycbyDEgVJzj-vGvwxFE1eqTmKb4pO4__lXB9gX8gMKGc2yGhlzR15AFPY8vQMvnjoNs01Vg/exec" target="_blank" rel="noopener">Abrir formulario RSVP</a>
           </div>
-          <p class="note">Toca una foto para ampliar</p>
+          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.06)">
+          <h2>Buenos deseos</h2>
+          <p class="note">Se abrirá en pestaña nueva. Tus palabras se guardarán en Google Sheets en tiempo real.</p>
+          <div style="text-align:center;margin-top:12px">
+            <a class="magicBtn" href="https://script.google.com/macros/s/AKfycbwY2G6aHz1-W9Sk3CUspgJYNf2EhEchr_gNk4mvaZS4wXn7sKIfIV3Qy-Wje2UCKdgC/exec" target="_blank" rel="noopener">Abrir formulario de deseos</a>
+          </div>
         </div>
       </section>
 
-      <!-- ========== PÁGINA 6 — CONFIRMAR ASISTENCIA + DESEOS (fondo_floral6.jpg) ========== -->
-      <section id="sec-rsvp" class="section bg-p6" aria-label="Confirmar asistencia" data-name="rsvp">
+      <!-- ========== P7 — COLABORATIVA + MOMENTO9 (fondo_floral6.jpg) ========== -->
+      <section id="sec-colaborativa" class="section bg-p6" aria-label="Galería colaborativa" data-name="colaborativa">
         <div class="overlay"></div>
         <div class="card center">
-          <h2>Confirmar asistencia</h2>
-          <p>Por favor confirma tu presencia en nuestro gran día 💍</p>
-          <a href="https://script.google.com/macros/s/AKfycbyDEgVJzj-vGvwxFE1eqTmKb4pO4__lXB9gX8gMKGc2yGhlzR15AFPY8vQMvnjoNs01Vg/exec" class="magicBtn" target="_blank">Confirmar asistencia</a>
-
-          <h3 style="margin-top:22px">Comparte tus buenos deseos</h3>
-          <p>Déjanos un mensaje especial y se guardará automáticamente 💖</p>
-          <a href="https://script.google.com/macros/s/AKfycbwY2G6aHz1-W9Sk3CUspgJYNf2EhEchr_gNk4mvaZS4wXn7sKIfIV3Qy-Wje2UCKdgC/exec" class="magicBtn" target="_blank">Dejar buenos deseos</a>
+          <h2>Galería colaborativa</h2>
+          <img src="momento9.jpg" alt="momento9" class="collab-photo lb-target" data-src="momento9.jpg" style="margin-top:12px">
+          <p class="note" style="margin-top:10px">Comparte tus fotos o videos de la boda. ¡Queremos ver tu perspectiva!</p>
+          <div style="margin-top:12px">
+            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=header" target="_blank" rel="noopener">
+              Subir tus fotos o videos
+            </a>
+          </div>
         </div>
       </section>
 
-      <!-- (la Parte 3 continúa desde aquí: páginas 7–9, galería colaborativa, cierre y scripts JS) -->
-<!-- FIN PARTE 2 -->
-<!-- INICIO PARTE 3 -->
-
-      <!-- ========== PÁGINA 7 — GALERÍA COLABORATIVA (fondo_floral7.jpg) ========== -->
-      <section id="sec-colaborativa" class="section bg-p7" aria-label="Galería colaborativa" data-name="colaborativa">
+      <!-- ========== P8 — MOMENTO8 + FRASE (fondo_floral7.jpg) ========== -->
+      <section id="sec-momento8" class="section bg-p7" aria-label="Momento 8" data-name="momento8">
         <div class="overlay"></div>
         <div class="card center">
-          <h2>Galería de invitados 📸</h2>
-          <p>Comparte tus fotos o videos y forma parte de nuestra historia 💕</p>
-          <img src="momento9.jpg" alt="Galería colaborativa" class="collab-photo" />
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=header" class="magicBtn" target="_blank">Subir mis fotos</a>
+          <img src="momento8.jpg" alt="momento8" class="collab-photo lb-target" data-src="momento8.jpg">
+          <p style="margin-top:12px;font-family:'Playfair Display',serif;font-size:18px">
+            "Tu amor es lo que he anhelado y el regalo que Dios me ha dado"
+          </p>
         </div>
       </section>
 
-      <!-- ========== PÁGINA 8 — FRASE ROMÁNTICA (fondo_floral9.jpg) ========== -->
-      <section id="sec-romantica" class="section bg-p8" aria-label="Frase romántica" data-name="romantica">
+      <!-- ========== P9 — FINAL (WhatsApp + Calendario) (fondo_floral9.jpg) ========== -->
+      <section id="sec-final" class="section bg-p8" aria-label="Final" data-name="final">
         <div class="overlay"></div>
         <div class="card center">
-          <img src="momento8.jpg" alt="Momento romántico" class="collab-photo" />
-          <p class="verse-big">"Tu amor es lo que he anhelado y el regalo que Dios me ha dado."</p>
-        </div>
-      </section>
-
-      <!-- ========== PÁGINA 9 — CIERRE (fondo_floral8.png) ========== -->
-      <section id="sec-final" class="section bg-p9" aria-label="Final" data-name="final">
-        <div class="overlay"></div>
-        <div class="card center">
-          <img src="momento5.jpg" alt="Foto final" class="collab-photo" />
-          <h2 class="final-title">Con amor eterno</h2>
-          <div class="final-sub">Abril & Pablo</div>
-          <p class="note">Gracias por ser parte de nuestro día especial 💖</p>
-
+          <img src="momento5.jpg" alt="momento5" class="collab-photo lb-target" data-src="momento5.jpg" style="margin-bottom:12px">
+          <div class="final-title">Con amor eterno</div>
+          <div style="font-family:'Playfair Display',serif;font-size:22px;margin-top:6px">Abril &amp; Pablo</div>
+          <div class="final-sub">Gracias por ser parte de nuestro día especial</div>
           <div class="wa-row">
-            <a href="https://wa.me/5217774914500" target="_blank" class="wa-btn">
-              <svg class="wa-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M16 .396C7.165.396.002 7.559.002 16.394c0 2.879.747 5.686 2.167 8.171L0 32l7.633-2.096A15.872 15.872 0 0 0 16 32c8.836 0 16-7.163 16-16 0-8.836-7.164-15.999-16-15.999zM16 29.333c-2.64 0-5.222-.716-7.483-2.07l-.536-.319-4.531 1.244 1.211-4.605-.35-.567A13.291 13.291 0 0 1 2.667 16C2.667 8.648 8.649 2.667 16 2.667c7.351 0 13.333 5.981 13.333 13.333 0 7.351-5.982 13.333-13.333 13.333zm7.517-9.408c-.413-.206-2.446-1.206-2.825-1.345-.379-.14-.655-.206-.931.206-.275.413-1.069 1.345-1.312 1.62-.243.275-.482.31-.895.104-.413-.206-1.743-.642-3.32-2.044-1.228-1.095-2.056-2.447-2.3-2.86-.243-.413-.026-.636.18-.842.185-.184.413-.482.62-.724.206-.241.275-.413.413-.689.138-.275.069-.517-.035-.724-.104-.206-.931-2.24-1.275-3.067-.334-.804-.675-.696-.931-.71-.241-.014-.517-.017-.793-.017-.275 0-.724.103-1.103.517-.379.413-1.448 1.414-1.448 3.448 0 2.034 1.484 4 1.69 4.275.206.275 2.923 4.469 7.094 6.268.992.428 1.764.683 2.366.876.993.316 1.896.271 2.61.164.797-.12 2.446-.999 2.791-1.964.345-.965.345-1.793.241-1.964-.104-.172-.379-.275-.792-.481z"/></svg>
-              Abril
+            <a class="wa-btn" href="https://wa.me/5217774914500" target="_blank" rel="noopener" aria-label="WhatsApp Abril">
+              <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/>
+              </svg>
+              WhatsApp Abril
             </a>
-            <a href="https://wa.me/5217341123645" target="_blank" class="wa-btn">
-              <svg class="wa-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M16 .396C7.165.396.002 7.559.002 16.394c0 2.879.747 5.686 2.167 8.171L0 32l7.633-2.096A15.872 15.872 0 0 0 16 32c8.836 0 16-7.163 16-16 0-8.836-7.164-15.999-16-15.999zM16 29.333c-2.64 0-5.222-.716-7.483-2.07l-.536-.319-4.531 1.244 1.211-4.605-.35-.567A13.291 13.291 0 0 1 2.667 16C2.667 8.648 8.649 2.667 16 2.667c7.351 0 13.333 5.981 13.333 13.333 0 7.351-5.982 13.333-13.333 13.333zm7.517-9.408c-.413-.206-2.446-1.206-2.825-1.345-.379-.14-.655-.206-.931.206-.275.413-1.069 1.345-1.312 1.62-.243.275-.482.31-.895.104-.413-.206-1.743-.642-3.32-2.044-1.228-1.095-2.056-2.447-2.3-2.86-.243-.413-.026-.636.18-.842.185-.184.413-.482.62-.724.206-.241.275-.413.413-.689.138-.275.069-.517-.035-.724-.104-.206-.931-2.24-1.275-3.067-.334-.804-.675-.696-.931-.71-.241-.014-.517-.017-.793-.017-.275 0-.724.103-1.103.517-.379.413-1.448 1.414-1.448 3.448 0 2.034 1.484 4 1.69 4.275.206.275 2.923 4.469 7.094 6.268.992.428 1.764.683 2.366.876.993.316 1.896.271 2.61.164.797-.12 2.446-.999 2.791-1.964.345-.965.345-1.793.241-1.964-.104-.172-.379-.275-.792-.481z"/></svg>
-              Pablo
+            <a class="wa-btn" href="https://wa.me/5217341123645" target="_blank" rel="noopener" aria-label="WhatsApp Pablo">
+              <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/>
+              </svg>
+              WhatsApp Pablo
             </a>
           </div>
-
-          <div style="margin-top:18px">
-            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+de+Abril+y+Pablo&dates=20251228T140000Z/20251228T230000Z&details=Ceremonia+y+recepci%C3%B3n&location=Tlaquiltenango,+Morelos" target="_blank" class="magicBtn">Agregar al calendario</a>
+          <div style="margin-top:12px">
+            <a class="magicBtn" href="#" id="addCalendar">Agregar al calendario</a>
           </div>
         </div>
       </section>
+
+      <!-- ========== P10 (DECORATIVA) — FONDO FINAL (fondo_floral8.png) ========== -->
+      <section id="sec-fondo-final" class="section bg-p9" aria-label="Fondo final" data-name="fondo-final">
+        <div class="overlay"></div>
+        <div class="card center">
+          <p style="font-family:'Playfair Display',serif">¡Gracias por visitar nuestra invitación!</p>
+        </div>
+      </section>
+
     </div>
+
+    <!-- Flechas (ocultas en portada) -->
+    <div class="nav" id="navArrows">
+      <div><button id="prevBtn" aria-label="Anterior">‹</button></div>
+      <div><button id="nextBtn" aria-label="Siguiente">›</button></div>
+    </div>
+
+    <!-- Menú lateral flotante -->
+    <nav class="side-menu compact" id="sideMenu" aria-label="Navegación rápida">
+      <a href="#sec-portada"       data-goto="sec-portada"><span class="icon">🏠</span> Portada</a>
+      <a href="#sec-familias"      data-goto="sec-familias"><span class="icon">👪</span> Familias</a>
+      <a href="#sec-foto-verse"    data-goto="sec-foto-verse"><span class="icon">💞</span> Foto &amp; Verso</a>
+      <a href="#sec-galeria"       data-goto="sec-galeria"><span class="icon">📸</span> Galería</a>
+      <a href="#sec-itinerario"    data-goto="sec-itinerario"><span class="icon">🗓️</span> Itinerario</a>
+      <a href="#sec-rsvp"          data-goto="sec-rsvp"><span class="icon">💌</span> Confirmación</a>
+      <a href="#sec-colaborativa"  data-goto="sec-colaborativa"><span class="icon">🤳</span> Colaborativa</a>
+      <a href="#sec-momento8"      data-goto="sec-momento8"><span class="icon">💚</span> Momento 8</a>
+      <a href="#sec-final"         data-goto="sec-final"><span class="icon">🌟</span> Final</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+    <!-- Lightbox -->
+    <div class="lb" id="lightbox" aria-hidden="true" role="dialog">
+      <button class="close-lb" id="lbClose" aria-label="Cerrar">✕</button>
+      <div class="lb-nav">
+        <button id="lbPrev" aria-label="Anterior">‹</button>
+        <button id="lbNext" aria-label="Siguiente">›</button>
+      </div>
+      <img id="lbImg" src="" alt="Imagen ampliada">
+    </div>
+
+    <!-- Botón musical flotante (solo si el navegador bloquea autoplay) -->
+    <button id="musicRetry" aria-label="Reproducir música" title="Reproducir música" aria-hidden="true">🎵</button>
   </div>
 
-  <!-- BOTÓN MUSICAL FLOTANTE -->
-  <button id="musicRetry" aria-hidden="true" aria-label="Reproducir música">🎵</button>
-
-  <!-- Menú lateral -->
-  <button class="menu-toggle" id="menuToggle">☰</button>
-  <nav class="side-menu compact" id="sideMenu">
-    <a data-target="sec-portada"><span class="icon">💍</span>Inicio</a>
-    <a data-target="sec-familias"><span class="icon">👨‍👩‍👧</span>Familias</a>
-    <a data-target="sec-itinerario"><span class="icon">📅</span>Itinerario</a>
-    <a data-target="sec-galeria"><span class="icon">📸</span>Galería</a>
-    <a data-target="sec-rsvp"><span class="icon">💌</span>Asistencia</a>
-    <a data-target="sec-colaborativa"><span class="icon">🤳</span>Invitados</a>
-    <a data-target="sec-romantica"><span class="icon">💞</span>Amor</a>
-    <a data-target="sec-final"><span class="icon">🌟</span>Final</a>
-  </nav>
-
-  <!-- Navegación con flechas -->
-  <div class="nav">
-    <button id="prevBtn">←</button>
-    <button id="nextBtn">→</button>
-  </div>
-
-  <!-- Script JS -->
   <script>
-    /* ======== AUDIO ======== */
-    const audioMarcha = document.getElementById("marcha");
-    const audioEterna = document.getElementById("eternamente");
-    const ringBtn = document.getElementById("ringBtn");
-    const musicRetry = document.getElementById("musicRetry");
-    const tapUnlock = document.getElementById("tapUnlock");
-
-    function playMarcha() {
-      audioMarcha.currentTime = 0;
-      audioMarcha.volume = 1;
-      audioMarcha.play().catch(() => {
-        musicRetry.setAttribute("aria-hidden","false");
-      });
-    }
-
-    function crossfadeToEterna() {
-      let fadeOut = setInterval(()=>{
-        if(audioMarcha.volume>0.05) audioMarcha.volume -=0.05;
-        else {
-          clearInterval(fadeOut);
-          audioMarcha.pause();
-          audioEterna.volume = 0;
-          audioEterna.play();
-          let fadeIn = setInterval(()=>{
-            if(audioEterna.volume<1) audioEterna.volume +=0.05;
-            else clearInterval(fadeIn);
-          },100);
-        }
-      },100);
-    }
-
-    document.addEventListener("DOMContentLoaded", ()=>{
-      playMarcha();
-    });
-
-    ringBtn.addEventListener("click", ()=>{
-      ringBtn.classList.add("clicked");
-      crossfadeToEterna();
-    });
-
-    musicRetry.addEventListener("click", ()=>{
-      musicRetry.setAttribute("aria-hidden","true");
-      playMarcha();
-    });
-
-    /* ======== EFECTO LIBRO ======== */
-    const sections = document.querySelectorAll(".section");
+    /* ============================ ORDEN DE SECCIONES ============================ */
+    const order = [
+      'sec-portada','sec-familias','sec-foto-verse','sec-galeria',
+      'sec-itinerario','sec-rsvp','sec-colaborativa','sec-momento8',
+      'sec-final','sec-fondo-final'
+    ];
+    const sections = order.map(id => document.getElementById(id));
     let current = 0;
-    const showSection = (i)=>{
-      sections.forEach((s,idx)=>{
-        s.classList.remove("active","prev","next");
-        if(idx===i) s.classList.add("active");
-        else if(idx<i) s.classList.add("prev");
-        else s.classList.add("next");
-      });
-    };
-    const nextBtn=document.getElementById("nextBtn");
-    const prevBtn=document.getElementById("prevBtn");
-    nextBtn.onclick=()=>{current=(current+1)%sections.length;showSection(current);};
-    prevBtn.onclick=()=>{current=(current-1+sections.length)%sections.length;showSection(current);};
+    let firstNavDone = false;
+    let wheelLock = false;
 
-    /* ======== BOTONES MÁGICOS Y MENÚ ======== */
-    document.querySelectorAll("[data-target]").forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        const id=btn.getAttribute("data-target");
-        const idx=[...sections].findIndex(s=>s.id===id);
-        if(idx>=0){current=idx;showSection(current);}
+    function setStates(idx){
+      sections.forEach((s,i)=>{
+        s.classList.remove('active','prev','next');
+        if(i<idx) s.classList.add('prev'); else if(i>idx) s.classList.add('next');
       });
-    });
-
-    const menuToggle=document.getElementById("menuToggle");
-    const sideMenu=document.getElementById("sideMenu");
-    menuToggle.onclick=()=>{sideMenu.classList.toggle("open");};
-
-    /* ======== CONTADORES ======== */
-    const weddingDate = new Date("2025-12-28T14:00:00");
-    function updateCountdown(){
-      const now=new Date();
-      let diff=weddingDate-now;
-      if(diff<0) diff=0;
-      const d=Math.floor(diff/864e5);
-      const h=Math.floor(diff/36e5)%24;
-      const m=Math.floor(diff/6e4)%60;
-      const s=Math.floor(diff/1e3)%60;
-      document.querySelectorAll(".flip-mini, .flip").forEach(el=>{
-        const k=el.dataset.k;
-        let val={d,h,m,s}[k].toString().padStart(2,"0");
-        el.querySelectorAll(".top,.panel.top").forEach(t=>t.textContent=val);
-        el.querySelectorAll(".bottom,.panel.bottom").forEach(b=>b.textContent=val);
-      });
+      sections[idx].classList.add('active');
     }
-    setInterval(updateCountdown,1000);
-    updateCountdown();
-
-    /* ======== CORAZONES MÁGICOS ======== */
-    const colors=["#ffffff","#9fd7ff","#a7ffcf","#cfcfcf"];
-    document.addEventListener("pointermove",(e)=>{
-      for(let i=0;i<3;i++){
-        const heart=document.createElement("div");
-        heart.className="magicHeart";
-        heart.textContent="❤";
-        heart.style.left=e.pageX+Math.random()*20-10+"px";
-        heart.style.top=e.pageY+Math.random()*20-10+"px";
-        heart.style.color=colors[Math.floor(Math.random()*colors.length)];
-        heart.style.opacity=0.9;
-        document.body.appendChild(heart);
-        setTimeout(()=>heart.remove(),1500);
+    function show(i, playSound=true){
+      i = ((i % sections.length) + sections.length) % sections.length;
+      if (i !== current && firstNavDone && playSound) playFlipSoundBook();
+      setStates(i);
+      current = i;
+      const hide = (order[i] === 'sec-portada');
+      document.querySelectorAll('#navArrows button').forEach(b=>b.style.display = hide ? 'none':'block');
+      markActiveInMenu(order[i]);
+      if(order[i] === 'sec-itinerario'){
+        document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => { setTimeout(()=>it.classList.add('show'), idx*140); });
       }
-    });
-
-    /* ======== GALERÍA LIGHTBOX ======== */
-    const gallery=document.getElementById("gallery");
-    const lightbox=document.createElement("div");
-    lightbox.className="lb";
-    lightbox.innerHTML='<button class="close-lb">✕</button><div class="lb-nav"><button id="lbPrev">←</button><button id="lbNext">→</button></div><img>';
-    document.body.appendChild(lightbox);
-    const lbImg=lightbox.querySelector("img");
-    const imgs=[...gallery.querySelectorAll("img")];
-    let currentImg=0;
-
-    function showImg(i){
-      if(i<0)i=imgs.length-1;
-      if(i>=imgs.length)i=0;
-      currentImg=i;
-      lbImg.src=imgs[i].src;
-      lightbox.classList.add("open");
+      if (i!==0) firstNavDone = true;
     }
-    imgs.forEach((img,i)=>{
-      img.addEventListener("click",()=>showImg(i));
-    });
-    lightbox.querySelector(".close-lb").onclick=()=>lightbox.classList.remove("open");
-    document.getElementById("lbPrev").onclick=()=>showImg(currentImg-1);
-    document.getElementById("lbNext").onclick=()=>showImg(currentImg+1);
+    show(0,false);
 
+    /* ============================ SCROLL SUAVE (simula páginas) ============================ */
+    function onWheel(e){
+      if(wheelLock) return;
+      wheelLock = true;
+      const dy = e.deltaY;
+      if(Math.abs(dy) < 10){ wheelLock = false; return; }
+      if(dy > 0) show(current+1);
+      else show(current-1);
+      setTimeout(()=>wheelLock=false, 650);
+    }
+    window.addEventListener('wheel', onWheel, {passive:true});
+
+    /* ============================ FLECHAS & TECLAS ============================ */
+    document.getElementById('prevBtn').addEventListener('click',()=>show(current-1));
+    document.getElementById('nextBtn').addEventListener('click',()=>show(current+1));
+
+    window.addEventListener('keydown', (e) => {
+      if(e.key==='ArrowRight' || e.key==='PageDown') show(current+1);
+      if(e.key==='ArrowLeft'  || e.key==='PageUp')   show(current-1);
+      if(e.key==='Home') show(0);
+      if(e.key==='End')  show(order.length-1);
+      if(e.key==='Escape' && lb.classList.contains('open')) closeLb();
+    });
+
+    /* ============================ SWIPE (móvil) ============================ */
+    let touchStartX=0, touchEndX=0, touchStartY=0;
+    document.addEventListener('touchstart', (e)=>{
+      if(e.touches[0]){ touchStartX=e.touches[0].clientX; touchStartY=e.touches[0].clientY; }
+    }, {passive:true});
+    document.addEventListener('touchend',   (e)=>{
+      const t = e.changedTouches[0];
+      if(!t) return;
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+      if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx)>42){
+        if(dx<0) show(current+1); else show(current-1);
+      }else if(Math.abs(dy)>80){
+        if(dy<0) show(current+1); else show(current-1);
+      }
+    }, {passive:true});
+
+    /* ============================ BOTONES MÁGICOS ============================ */
+    document.querySelectorAll('.magicBtn[data-target]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const tgt=btn.getAttribute('data-target');
+        const i=order.indexOf(tgt);
+        if(i>=0){ show(i); closeMenuOnMobile(); }
+      });
+    });
+
+    /* ============================ MENÚ LATERAL ============================ */
+    const sideMenu=document.getElementById('sideMenu');
+    const menuToggle=document.getElementById('menuToggle');
+    sideMenu.querySelectorAll('a[data-goto]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const id=a.getAttribute('data-goto');
+        const idx=order.indexOf(id);
+        if(idx>=0){ show(idx); closeMenuOnMobile(); }
+      });
+    });
+    function markActiveInMenu(id){ sideMenu.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.getAttribute('data-goto')===id)); }
+    function closeMenuOnMobile(){ sideMenu.classList.remove('open'); }
+    menuToggle.addEventListener('click',()=> sideMenu.classList.toggle('open'));
+
+    /* ============================ AUDIO ============================ */
+    const marcha=document.getElementById('marcha');
+    const eternamente=document.getElementById('eternamente');
+    const musicRetry=document.getElementById('musicRetry');
+    const entryOverlay=document.getElementById('entryOverlay');
+    const entryRing=document.getElementById('entryRing');
+
+    function playUnlocked(audio){ // helper
+      try{
+        const p = audio.play();
+        if(p && typeof p.then==='function'){ return p.then(()=>true).catch(()=>false); }
+        return Promise.resolve(true);
+      }catch(_){ return Promise.resolve(false); }
+    }
+
+    async function startMarcha(){
+      try{
+        marcha.currentTime = 0;
+        marcha.volume = 1; // SIN fade-in (pedido)
+        const ok = await playUnlocked(marcha);
+        if(!ok) musicRetry.setAttribute('aria-hidden','false');
+      }catch(_){
+        musicRetry.setAttribute('aria-hidden','false');
+      }
+    }
+
+    function fadeAudio(audio, from, to, duration=2000){
+      return new Promise(res=>{
+        const steps=40, dt=duration/steps;
+        let i=0;
+        audio.volume = Math.max(0, Math.min(1, from));
+        const id=setInterval(()=>{
+          i++;
+          audio.volume = Math.max(0, Math.min(1, from + (to-from)*(i/steps)));
+          if(i>=steps){ clearInterval(id); audio.volume = Math.max(0, Math.min(1, to)); res(); }
+        }, dt);
+      });
+    }
+
+    // Entrada (Opción C): un toque desbloquea audio y arranca la marcha
+    entryRing.addEventListener('click', async ()=>{
+      await startMarcha();
+      entryOverlay.classList.add('hide');
+    });
+
+    // Fallback si aún así no inicia
+    musicRetry.addEventListener('click', async ()=>{
+      const ok = await playUnlocked(marcha);
+      if(ok){ musicRetry.setAttribute('aria-hidden','true'); }
+    });
+
+    // Clic en anillo de portada: crossfade a eternamente y pasar a Familias
+    document.getElementById('ringBtn').addEventListener('click', async ()=>{
+      try{
+        if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 2000); marcha.pause(); }
+      }catch(e){}
+      try{
+        eternamente.currentTime=0; eternamente.volume=0;
+        const ok = await playUnlocked(eternamente);
+        if(ok){ await fadeAudio(eternamente,0,1,2000); }
+        else { musicRetry.setAttribute('aria-hidden','true'); }
+      }catch(e){}
+      const idx = order.indexOf('sec-familias');
+      if(idx>=0) show(idx);
+      const ringBtn=document.getElementById('ringBtn');
+      ringBtn.classList.add('clicked'); setTimeout(()=>ringBtn.classList.remove('clicked'),900);
+    });
+
+    /* ============================ SONIDO FLIP (WebAudio) ============================ */
+    function playFlipSoundBook(){
+      try{
+        const ctx = window._audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+        window._audioCtx = ctx;
+        const t = ctx.currentTime;
+
+        const o1 = ctx.createOscillator(), g1 = ctx.createGain();
+        o1.type='sawtooth'; o1.frequency.setValueAtTime(180, t);
+        o1.frequency.exponentialRampToValueAtTime(120, t+0.08);
+        g1.gain.setValueAtTime(0.0001, t);
+        g1.gain.exponentialRampToValueAtTime(0.18, t+0.02);
+        g1.gain.exponentialRampToValueAtTime(0.0001, t+0.14);
+        o1.connect(g1).connect(ctx.destination); o1.start(t); o1.stop(t+0.16);
+
+        const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+        o2.type='triangle'; o2.frequency.setValueAtTime(520, t+0.04);
+        o2.frequency.exponentialRampToValueAtTime(340, t+0.16);
+        g2.gain.setValueAtTime(0.0001, t);
+        g2.gain.exponentialRampToValueAtTime(0.20, t+0.06);
+        g2.gain.exponentialRampToValueAtTime(0.0001, t+0.22);
+        o2.connect(g2).connect(ctx.destination); o2.start(t+0.02); o2.stop(t+0.24);
+      }catch(e){}
+    }
+
+    /* ============================ CONTADORES ============================ */
+    const target=new Date('2025-12-28T14:00:00'); // 28 dic 2025 2:00 p.m.
+    const pad=n=>String(n).padStart(2,'0');
+
+    function animateMini(flipEl,newVal){
+      const top=flipEl.querySelector('.top'); const bot=flipEl.querySelector('.bottom');
+      if(top.textContent===newVal) return;
+      bot.textContent=newVal;
+      flipEl.classList.remove('animate'); void flipEl.offsetWidth; flipEl.classList.add('animate');
+      setTimeout(()=>{ top.textContent=newVal; flipEl.classList.remove('animate'); },700);
+    }
+    function tickMini(){
+      const now=new Date(); let diff=Math.max(0, target-now);
+      const d=Math.floor(diff/86400000); diff-=d*86400000;
+      const h=Math.floor(diff/3600000);  diff-=h*3600000;
+      const m=Math.floor(diff/60000);    diff-=m*60000;
+      const s=Math.floor(diff/1000);
+      const flips=document.querySelectorAll('#miniFlip .flip-mini');
+      const vals=[String(d), pad(h), pad(m), pad(s)];
+      flips.forEach((f,i)=>animateMini(f, vals[i]));
+    }
+    setInterval(tickMini,1000);
+
+    function animateFlip(flipEl,newVal){
+      const top=flipEl.querySelector('.top'); const bottom=flipEl.querySelector('.bottom');
+      if(top.textContent.trim()===newVal) return;
+      bottom.textContent=newVal;
+      flipEl.classList.remove('animate'); void flipEl.offsetWidth; flipEl.classList.add('animate');
+      setTimeout(()=>{ top.textContent=newVal; flipEl.classList.remove('animate'); },700);
+    }
+    function tickMain(){
+      const now=new Date(); let diff=Math.max(0, target-now);
+      const days=Math.floor(diff/86400000); diff-=days*86400000;
+      const hours=Math.floor(diff/3600000); diff-=hours*3600000;
+      const mins=Math.floor(diff/60000);    diff-=mins*60000;
+      const secs=Math.floor(diff/1000);
+      const flips=[...document.querySelectorAll('#mainFlip .flip')];
+      const vals=[String(days), pad(hours), pad(mins), pad(secs)];
+      flips.forEach((f,i)=>animateFlip(f, vals[i]));
+    }
+    setInterval(tickMain,1000);
+
+    /* ============================ LIGHTBOX ============================ */
+    const lb=document.getElementById('lightbox');
+    const lbImg=document.getElementById('lbImg');
+    const lbClose=document.getElementById('lbClose');
+    const lbPrev=document.getElementById('lbPrev');
+    const lbNext=document.getElementById('lbNext');
+
+    const lbTargets=[...document.querySelectorAll('.lb-target')];
+    const lbSrcs=lbTargets.map(t=>t.dataset.src||t.getAttribute('src'));
+    let lbIndex=0;
+
+    lbTargets.forEach((t,i)=>t.addEventListener('click', ()=>openLb(i)));
+
+    function openLb(i){
+      lbIndex=i;
+      lbImg.style.opacity=0;
+      lbImg.src=lbSrcs[lbIndex];
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden','false');
+      setTimeout(()=>{
+        lbImg.style.transition='opacity .45s ease, transform .45s ease';
+        lbImg.style.opacity=1; lbImg.style.transform='scale(1)';
+      },40);
+    }
+    function closeLb(){
+      lb.classList.remove('open'); lbImg.src='';
+      lb.setAttribute('aria-hidden','true');
+    }
+    function lbShow(dir){
+      lbIndex=(lbIndex+(dir>0?1:-1)+lbSrcs.length)%lbSrcs.length;
+      const useFade=(lbIndex%2===0);
+      if(useFade){
+        lbImg.style.opacity=0;
+        setTimeout(()=>{ lbImg.src=lbSrcs[lbIndex]; lbImg.style.opacity=1; },260);
+      }else{
+        lbImg.style.transform=dir>0?'translateX(-15%)':'translateX(15%)';
+        lbImg.style.opacity=0;
+        setTimeout(()=>{
+          lbImg.src=lbSrcs[lbIndex];
+          lbImg.style.transform='translateX(0)'; lbImg.style.opacity=1;
+        },260);
+      }
+    }
+    lbClose.addEventListener('click', closeLb);
+    lbPrev.addEventListener('click', ()=>lbShow(-1));
+    lbNext.addEventListener('click', ()=>lbShow(1));
+    lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLb(); });
+
+    /* ============================ GALERÍA AUTO-FOCUS ============================ */
+    const galleryImgs=[...document.querySelectorAll('#galleryGrid img')];
+    let gIdx=0;
+    function paintGallery(){ galleryImgs.forEach((im,i)=>im.style.opacity=(i===gIdx?1:.46)); }
+    function gNext(){ gIdx=(gIdx+1)%galleryImgs.length; paintGallery(); }
+    paintGallery();
+    let gAuto=setInterval(gNext,4200);
+    document.getElementById('prevGallery').addEventListener('click',()=>{ gIdx=(gIdx-1+galleryImgs.length)%galleryImgs.length; paintGallery(); });
+    document.getElementById('nextGallery').addEventListener('click',()=>gNext());
+    document.getElementById('galleryGrid').addEventListener('mouseenter',()=>{ clearInterval(gAuto); gAuto=null; });
+    document.getElementById('galleryGrid').addEventListener('mouseleave',()=>{ if(!gAuto) gAuto=setInterval(gNext,4200); });
+
+    /* ============================ CALENDARIO ============================ */
+    document.getElementById('addCalendar').addEventListener('click',(e)=>{
+      e.preventDefault();
+      const start='20251228T140000', end='20251228T230000';
+      const title=encodeURIComponent('Boda — Abril & Pablo');
+      const details=encodeURIComponent('Ceremonia y recepción — Abril & Pablo');
+      const location=encodeURIComponent('Iglesia Cristiana Palabra de Vida AD / Jardín Los Abuelos, Tlaquiltenango, Morelos');
+      const url=`https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+      window.open(url,'_blank','noopener');
+    });
+
+    /* ============================ CURSOR MÁGICO ============================ */
+    function createHeartAt(x,y){
+      const heart=document.createElement('div');
+      heart.className='magicHeart';
+      const size=16 + Math.random()*14;
+      heart.style.width = size+'px';
+      heart.style.height= size+'px';
+      const jitter=18;
+      heart.style.left=(x + (Math.random()*jitter - jitter/2))+'px';
+      heart.style.top =(y + (Math.random()*jitter - jitter/2))+'px';
+      const r=Math.random();
+      if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';
+      else if(r<0.5)  heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)';
+      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';
+      else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';
+      heart.style.clipPath='polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
+      document.body.appendChild(heart);
+      const life=1500 + Math.random()*400;
+      setTimeout(()=>heart.remove(), life);
+    }
+    function spawnHearts(x,y,countMin=3,countMax=4){
+      const n = Math.floor(countMin + Math.random()*(countMax-countMin+1));
+      for(let i=0;i<n;i++){ setTimeout(()=>createHeartAt(x,y), i*60); }
+    }
+    document.addEventListener('mousemove',(e)=>{ if(Math.random()>0.6) return; spawnHearts(e.clientX,e.clientY,3,4); });
+    document.addEventListener('click',(e)=>{ spawnHearts(e.clientX,e.clientY,3,4); });
+    document.addEventListener('touchstart',(e)=>{ const t=e.touches[0]; if(!t) return; spawnHearts(t.clientX,t.clientY,3,4); },{passive:true});
+    document.addEventListener('touchmove',(e)=>{ const t=e.touches[0]; if(!t) return; if(Math.random()>0.6) return; spawnHearts(t.clientX,t.clientY,3,4); },{passive:true});
+
+    /* ============================ INICIO CONTADORES ============================ */
+    function initCounters(){
+      tickMini(); tickMain();
+      // Dispara la animación de itinerary si ya estás en esa página al cargar (por si recargas en medio)
+      if(order[current]==='sec-itinerario'){
+        document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => { setTimeout(()=>it.classList.add('show'), idx*140); });
+      }
+    }
+    window.addEventListener('load', initCounters);
   </script>
 </body>
 </html>
-<!-- FIN PARTE 3 -->
+ 
 
