@@ -22,7 +22,41 @@
   <link href="https://fonts.cdnfonts.com/css/waltograph" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
 
-  <style>
+  <style>.form-box{
+  background:rgba(255,255,255,0.78);
+  padding:20px;
+  border-radius:14px;
+  max-width:320px;
+  margin:0 auto 20px auto;
+  text-align:left;
+  backdrop-filter:blur(4px);
+}
+.form-box input, .form-box textarea{
+  width:100%;
+  padding:8px;
+  margin:6px 0 14px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+.btn-rose{
+  background:#d49ca3;
+  border:0;
+  padding:10px 16px;
+  border-radius:8px;
+  color:white;
+  cursor:pointer;
+  font-size:15px;
+}
+.btn-blue{
+  background:#88bde9;
+  border:0;
+  padding:10px 16px;
+  border-radius:8px;
+  color:white;
+  cursor:pointer;
+  font-size:15px;
+}
+
     /* ========================= VARIABLES ========================= */
     :root{
       --bg-cream:#F8F5F0;
@@ -603,6 +637,40 @@
           </div>
         </div>
       </section>
+<!-- ✅ Página 6: Confirmación y Buenos Deseos -->
+<section class="page" style="background-image:url('fondo_floral6.jpg'); background-size:cover; background-position:center;">
+  <div class="content-section">
+
+    <h2 class="title-romantic" style="margin-bottom:20px;">Confirmar asistencia</h2>
+
+    <!-- Formulario RSVP -->
+    <form id="rsvpForm" action="https://script.google.com/macros/s/AKfycbyDEgVJzj-vGvwxFE1eqTmKb4pO4__lXB9gX8gMKGc2yGhlzR15AFPY8vQMvnjoNs01Vg/exec" method="POST" target="_blank" class="form-box">
+      <label>Nombre del invitado:</label>
+      <input type="text" name="nombre" required>
+
+      <label>Número de personas que asistirán:</label>
+      <input type="number" name="cantidad" min="1" required>
+
+      <button type="submit" class="btn-rose">Confirmar asistencia 💌</button>
+    </form>
+
+    <hr style="margin:30px auto; width:60%; opacity:0.6;">
+
+    <h2 class="title-romantic" style="margin-bottom:20px;">Deja tus buenos deseos</h2>
+
+    <!-- Formulario Buenos Deseos -->
+    <form id="deseosForm" action="https://script.google.com/macros/s/AKfycbwY2G6aHz1-W9Sk3CUspgJYNf2EhEchr_gNk4mvaZS4wXn7sKIfIV3Qy-Wje2UCKdgC/exec" method="POST" target="_blank" class="form-box">
+      <label>Tu nombre:</label>
+      <input type="text" name="nombre" required>
+
+      <label>Tu mensaje:</label>
+      <textarea name="mensaje" rows="4" required></textarea>
+
+      <button type="submit" class="btn-blue">Enviar mensaje ✨</button>
+    </form>
+
+  </div>
+</section>
 
       <!-- ========== P7 — COLABORATIVA + MOMENTO9 (fondo_floral6.jpg) ========== -->
       <section id="sec-colaborativa" class="section bg-p6" aria-label="Galería colaborativa" data-name="colaborativa">
