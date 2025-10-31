@@ -3,14 +3,15 @@
 <head>
   <!-- ================================================================
        Boda de Abril & Pablo — Invitación FINAL (GitHub Pages)
-       - Opción C: Pantalla de entrada con anillo (desbloquea audio en móviles)
+       - Libro Real con sombra + scroll suave
+       - Pantalla de entrada con anillo (desbloquea audio en móviles)
        - Al entrar: suena marcha_nupcial.mp3 (SIN fade-in)
-       - Al hacer clic en el anillo de la portada: crossfade 2s a eternamente.mp3
-       - Flipbook + scroll suave + flechas + menú lateral
+       - Al clicar el anillo de la portada: crossfade 2s a eternamente.mp3
        - Fondos responsivos por página (mismos nombres de tu repo)
        - Galería con lightbox y controles
        - Contadores flip (mini en portada + grande en pág. 5)
        - Formularios a Google Apps Script (RSVP y Buenos deseos)
+       - WhatsApp + Agregar al Google Calendar (28/12/2025 14:00-23:00)
        ================================================================= -->
 
   <meta charset="utf-8" />
@@ -18,7 +19,7 @@
   <meta name="theme-color" content="#ffffff" />
   <title>Boda de Abril & Pablo 💍</title>
 
-  <!-- Fuentes: Waltograph (solo “Sí, ¡acepto!”) + Playfair/Quicksand (románticas) -->
+  <!-- Fuentes -->
   <link href="https://fonts.cdnfonts.com/css/waltograph" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
 
@@ -60,21 +61,41 @@
 
     /* ========================= LAYOUT SECCIONES (flipbook) ========================= */
     .viewport{height:100vh;overflow:hidden;position:relative;background:var(--bg-cream)}
-    .sections{height:100%;width:100%;position:relative;perspective:1200px;}
+    .sections{height:100%;width:100%;position:relative;perspective:1400px;}
 
     .section{
       position:absolute; inset:0;
       display:flex; align-items:center; justify-content:center;
       padding:26px;
       background-size:cover; background-position:center; background-attachment:fixed;
-      opacity:0; transform:rotateY(90deg) translateZ(-200px); transform-origin:center;
+      opacity:0; transform:rotateY(90deg) translateZ(-220px); transform-origin:50% 50%;
       transition:transform .9s var(--ease), opacity .6s ease; backface-visibility:hidden;
       will-change:transform,opacity;
     }
     .section.active{opacity:1; transform:rotateY(0) translateZ(0)}
-    .section.prev  {opacity:0; transform:rotateY(-90deg) translateZ(-200px)}
-    .section.next  {opacity:0; transform:rotateY( 90deg) translateZ(-200px)}
+    .section.prev  {opacity:0; transform:rotateY(-90deg) translateZ(-220px)}
+    .section.next  {opacity:0; transform:rotateY( 90deg) translateZ(-220px)}
     .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.6)); pointer-events:none}
+
+    /* ===== Libro real: sombras laterales y lomo ===== */
+    .section.active::before,
+    .section.active::after{
+      content:""; position:absolute; top:0; bottom:0; width:40px; pointer-events:none; z-index:1;
+      transition:opacity .6s ease;
+    }
+    .section.active::before{
+      left:0; background:linear-gradient(90deg, rgba(0,0,0,.22), rgba(0,0,0,0));
+      opacity:.15;
+    }
+    .section.active::after{
+      right:0; background:linear-gradient(270deg, rgba(0,0,0,.22), rgba(0,0,0,0));
+      opacity:.12;
+    }
+    .sections::before{
+      content:""; position:absolute; left:50%; top:0; bottom:0; width:2px; transform:translateX(-1px);
+      background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.05), rgba(0,0,0,.25));
+      opacity:.22; pointer-events:none; z-index:0;
+    }
 
     /* ========================= FONDOS POR PÁGINA ========================= */
     .bg-portada {background-image:url('fondo_floral.jpg')}
@@ -377,7 +398,7 @@
   <div class="viewport">
     <div class="sections" id="sections">
 
-      <!-- ========== PORTADA (fondo_floral.jpg) ========== -->
+      <!-- ========== PORTADA ========== -->
       <section id="sec-portada" class="section bg-portada active" aria-label="Portada" data-name="portada">
         <div class="overlay"></div>
         <div class="card center">
@@ -413,7 +434,7 @@
           </button>
           <div class="ring-instruction"><em>Da clic en el anillo para abrir</em></div>
 
-          <!-- Contador mini (números flotando/flip) -->
+          <!-- Contador mini -->
           <div class="mini-flip" id="miniFlip">
             <div class="flip-mini" data-k="d"><div class="face top">00</div><div class="face bottom">00</div></div>
             <div class="flip-mini" data-k="h"><div class="face top">00</div><div class="face bottom">00</div></div>
@@ -421,7 +442,6 @@
             <div class="flip-mini" data-k="s"><div class="face top">00</div><div class="face bottom">00</div></div>
           </div>
 
-          <!-- Versículo -->
           <p class="verse">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></p>
 
           <!-- Botones mágicos -->
@@ -434,13 +454,13 @@
         </div>
       </section>
 
-      <!-- ========== P2 — FAMILIAS (fondo_floral1.png) ========== -->
+      <!-- ========== P2 — FAMILIAS ========== -->
       <section id="sec-familias" class="section bg-p1" aria-label="Familias" data-name="familias">
         <div class="overlay"></div>
         <div class="card center">
           <h2>Padres de los novios</h2>
           <div class="parents-grid" style="margin-top:18px">
-            <!-- IZQUIERDA: Novia (papá primero, luego mamá) -->
+            <!-- IZQUIERDA: Novia -->
             <div class="parent-col">
               <div class="parent-names">
                 Padres de la novia<br />
@@ -448,7 +468,7 @@
                 <strong>Eva Aguilar Rendón</strong>
               </div>
             </div>
-            <!-- DERECHA: Novio (papá primero con cruz, luego mamá) -->
+            <!-- DERECHA: Novio -->
             <div class="parent-col">
               <div class="parent-names">
                 Padres del novio<br />
@@ -466,7 +486,7 @@
         </div>
       </section>
 
-      <!-- ========== P3 — FOTO + VERSÍCULO (Mateo 19:6) (fondo_floral2.jpg) ========== -->
+      <!-- ========== P3 — FOTO + VERSÍCULO (Mateo 19:6) ========== -->
       <section id="sec-foto-verse" class="section bg-p2" aria-label="Foto y versículo" data-name="foto-verse">
         <div class="overlay"></div>
         <div class="card center">
@@ -478,7 +498,7 @@
         </div>
       </section>
 
-      <!-- ========== P4 — GALERÍA NOVIOS (fondo_floral4.png) ========== -->
+      <!-- ========== P4 — GALERÍA NOVIOS ========== -->
       <section id="sec-galeria" class="section bg-p4" aria-label="Galería novios" data-name="galeria">
         <div class="overlay"></div>
         <div class="card">
@@ -499,7 +519,7 @@
         </div>
       </section>
 
-      <!-- ========== P5 — “Con cariño…” + CONTADOR + ITINERARIO (fondo_floral3.jpg) ========== -->
+      <!-- ========== P5 — “Con cariño…” + CONTADOR + ITINERARIO ========== -->
       <section id="sec-itinerario" class="section bg-p3" aria-label="Itinerario" data-name="itinerario">
         <div class="overlay"></div>
         <div class="card">
@@ -559,7 +579,7 @@
         </div>
       </section>
 
-      <!-- ========== P6 — RSVP + DESEOS (fondo_floral5.jpg) ========== -->
+      <!-- ========== P6 — RSVP + DESEOS ========== -->
       <section id="sec-rsvp" class="section bg-p5" aria-label="RSVP y Buenos Deseos" data-name="rsvp">
         <div class="overlay"></div>
         <div class="card">
@@ -577,7 +597,7 @@
         </div>
       </section>
 
-      <!-- ========== P7 — COLABORATIVA + MOMENTO9 (fondo_floral6.jpg) ========== -->
+      <!-- ========== P7 — COLABORATIVA + MOMENTO9 ========== -->
       <section id="sec-colaborativa" class="section bg-p6" aria-label="Galería colaborativa" data-name="colaborativa">
         <div class="overlay"></div>
         <div class="card center">
@@ -592,7 +612,7 @@
         </div>
       </section>
 
-      <!-- ========== P8 — MOMENTO8 + FRASE (fondo_floral7.jpg) ========== -->
+      <!-- ========== P8 — MOMENTO8 + FRASE ========== -->
       <section id="sec-momento8" class="section bg-p7" aria-label="Momento 8" data-name="momento8">
         <div class="overlay"></div>
         <div class="card center">
@@ -603,7 +623,7 @@
         </div>
       </section>
 
-      <!-- ========== P9 — FINAL (WhatsApp + Calendario) (fondo_floral9.jpg) ========== -->
+      <!-- ========== P9 — FINAL (WhatsApp + Calendario) ========== -->
       <section id="sec-final" class="section bg-p8" aria-label="Final" data-name="final">
         <div class="overlay"></div>
         <div class="card center">
@@ -631,7 +651,7 @@
         </div>
       </section>
 
-      <!-- ========== P10 (DECORATIVA) — FONDO FINAL (fondo_floral8.png) ========== -->
+      <!-- ========== P10 (DECORATIVA) — FONDO FINAL ========== -->
       <section id="sec-fondo-final" class="section bg-p9" aria-label="Fondo final" data-name="fondo-final">
         <div class="overlay"></div>
         <div class="card center">
@@ -694,6 +714,27 @@
       });
       sections[idx].classList.add('active');
     }
+
+    /* ============================ MENÚ LATERAL ============================ */
+    const sideMenu=document.getElementById('sideMenu');
+    const menuToggle=document.getElementById('menuToggle');
+
+    function markActiveInMenu(id){
+      sideMenu.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.getAttribute('data-goto')===id));
+    }
+    function closeMenuOnMobile(){ sideMenu.classList.remove('open'); }
+
+    sideMenu.querySelectorAll('a[data-goto]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const id=a.getAttribute('data-goto');
+        const idx=order.indexOf(id);
+        if(idx>=0){ show(idx); closeMenuOnMobile(); }
+      });
+    });
+    menuToggle.addEventListener('click',()=> sideMenu.classList.toggle('open'));
+
+    /* ============================ MOSTRAR SECCIÓN (se llama después de menú) ============================ */
     function show(i, playSound=true){
       i = ((i % sections.length) + sections.length) % sections.length;
       if (i !== current && firstNavDone && playSound) playFlipSoundBook();
@@ -707,6 +748,7 @@
       }
       if (i!==0) firstNavDone = true;
     }
+    /* Llamamos show() DESPUÉS de declarar sideMenu/markActiveInMenu (fix error) */
     show(0,false);
 
     /* ============================ SCROLL SUAVE (simula páginas) ============================ */
@@ -734,7 +776,7 @@
     });
 
     /* ============================ SWIPE (móvil) ============================ */
-    let touchStartX=0, touchEndX=0, touchStartY=0;
+    let touchStartX=0, touchStartY=0;
     document.addEventListener('touchstart', (e)=>{
       if(e.touches[0]){ touchStartX=e.touches[0].clientX; touchStartY=e.touches[0].clientY; }
     }, {passive:true});
@@ -750,7 +792,7 @@
       }
     }, {passive:true});
 
-    /* ============================ BOTONES MÁGICOS ============================ */
+    /* ============================ BOTONES MAGICOS DE PORTADA ============================ */
     document.querySelectorAll('.magicBtn[data-target]').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const tgt=btn.getAttribute('data-target');
@@ -759,21 +801,6 @@
       });
     });
 
-    /* ============================ MENÚ LATERAL ============================ */
-    const sideMenu=document.getElementById('sideMenu');
-    const menuToggle=document.getElementById('menuToggle');
-    sideMenu.querySelectorAll('a[data-goto]').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        e.preventDefault();
-        const id=a.getAttribute('data-goto');
-        const idx=order.indexOf(id);
-        if(idx>=0){ show(idx); closeMenuOnMobile(); }
-      });
-    });
-    function markActiveInMenu(id){ sideMenu.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.getAttribute('data-goto')===id)); }
-    function closeMenuOnMobile(){ sideMenu.classList.remove('open'); }
-    menuToggle.addEventListener('click',()=> sideMenu.classList.toggle('open'));
-
     /* ============================ AUDIO ============================ */
     const marcha=document.getElementById('marcha');
     const eternamente=document.getElementById('eternamente');
@@ -781,7 +808,7 @@
     const entryOverlay=document.getElementById('entryOverlay');
     const entryRing=document.getElementById('entryRing');
 
-    function playUnlocked(audio){ // helper
+    function playUnlocked(audio){
       try{
         const p = audio.play();
         if(p && typeof p.then==='function'){ return p.then(()=>true).catch(()=>false); }
@@ -792,7 +819,7 @@
     async function startMarcha(){
       try{
         marcha.currentTime = 0;
-        marcha.volume = 1; // SIN fade-in (pedido)
+        marcha.volume = 1; // sin fade-in
         const ok = await playUnlocked(marcha);
         if(!ok) musicRetry.setAttribute('aria-hidden','false');
       }catch(_){
@@ -813,7 +840,7 @@
       });
     }
 
-    // Entrada (Opción C): un toque desbloquea audio y arranca la marcha
+    // Entrada: un toque desbloquea audio y arranca la marcha
     entryRing.addEventListener('click', async ()=>{
       await startMarcha();
       entryOverlay.classList.add('hide');
@@ -1012,7 +1039,6 @@
     /* ============================ INICIO CONTADORES ============================ */
     function initCounters(){
       tickMini(); tickMain();
-      // Dispara la animación de itinerary si ya estás en esa página al cargar (por si recargas en medio)
       if(order[current]==='sec-itinerario'){
         document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => { setTimeout(()=>it.classList.add('show'), idx*140); });
       }
@@ -1022,4 +1048,3 @@
 </body>
 </html>
  
-
