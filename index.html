@@ -1,39 +1,28 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <!-- ================================================================
-       Boda de Abril & Pablo — Invitación FINAL (GitHub Pages)
-       - Entrada con anillo: desbloquea audio en móviles (marcha_nupcial.mp3)
-       - Clic en anillo de portada: crossfade a eternamente.mp3
-       - Flipbook + scroll suave + flechas + menú lateral plegable
-       - Fondos responsivos por página
-       - Galería con lightbox y navegación
-       - Contadores flip (mini en portada + compacto en Itinerario)
-       - Página 6: RSVP + Buenos deseos (envío a Google Apps Script)
-         + Lista de deseos visible de inmediato (optimista) + iframe de respaldo
-       ================================================================= -->
-
+  <!-- Invitación de Boda — Abril & Pablo — Estilo C1 Perlado Fino -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#ffffff" />
   <title>Boda de Abril & Pablo 💍</title>
 
-  <!-- Fuentes: Waltograph (solo “Sí, ¡acepto!”) + Playfair/Quicksand -->
+  <!-- Fuentes -->
   <link href="https://fonts.cdnfonts.com/css/waltograph" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
 
   <style>
     /* ========================= VARIABLES ========================= */
     :root{
-      --bg-cream:#F8F5F0;
-      --deep:#2B2A2F;
+      --bg-cream:#F7F7F8;
+      --deep:#283038;
       --glass:rgba(255,255,255,0.86);
-      --glass-strong:rgba(255,255,255,0.95);
+      --glass-strong:rgba(255,255,255,0.96);
       --rose:#d6a79b;
       --accent:#66c9ff;
       --accent2:#4a8fe7;
       --wa:#25D366;
-      --shadow:0 18px 50px rgba(0,0,0,.12);
+      --shadow:0 18px 50px rgba(16,32,56,.12);
       --ease:cubic-bezier(.2,.9,.2,1);
 
       /* Dress code chips */
@@ -43,15 +32,12 @@
       --chip-gris:#c5ced6;
       --chip-rosa:#f7b6b1;
 
-      --menu-bg: rgba(255,255,255,.92);
+      --menu-bg: rgba(255,255,255,.95);
       --menu-shadow: 0 12px 28px rgba(0,0,0,.12);
 
-      /* Paleta corazones cursor */
-      --music-grad: linear-gradient(135deg, #ffffff 0%, #9fd7ff 28%, #cfcfcf 64%, #a7ffcf 100%);
-
-      /* Tarjeta romántica dorada (Opción 1) */
-      --romantic-gold:#d8b16f;
-      --romantic-shadow:0 16px 46px rgba(216,177,111,.22);
+      /* Botón musical / FAB */
+      --music-grad: linear-gradient(135deg, #ffffff 0%, #cfe9ff 30%, #ffffff 60%, #e9f6ff 100%);
+      --fab-grad: linear-gradient(135deg,#eaf5ff 0%,#ffffff 60%,#e7f2ff 100%);
     }
 
     /* ========================= BASE ========================= */
@@ -65,19 +51,18 @@
     /* ========================= LAYOUT (flipbook) ========================= */
     .viewport{height:100vh;overflow:hidden;position:relative;background:var(--bg-cream)}
     .sections{height:100%;width:100%;position:relative;perspective:1200px;}
-
     .section{
       position:absolute; inset:0;
       display:flex; align-items:center; justify-content:center;
       padding:26px;
       background-size:cover; background-position:center; background-attachment:fixed;
-      opacity:0; transform:rotateY(90deg) translateZ(-200px); transform-origin:center;
+      opacity:0; transform:rotateY(90deg) translateZ(-220px); transform-origin:center;
       transition:transform .9s var(--ease), opacity .6s ease; backface-visibility:hidden;
       will-change:transform,opacity;
     }
     .section.active{opacity:1; transform:rotateY(0) translateZ(0)}
-    .section.prev  {opacity:0; transform:rotateY(-90deg) translateZ(-200px)}
-    .section.next  {opacity:0; transform:rotateY( 90deg) translateZ(-200px)}
+    .section.prev  {opacity:0; transform:rotateY(-90deg) translateZ(-220px)}
+    .section.next  {opacity:0; transform:rotateY( 90deg) translateZ(-220px)}
     .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.6)); pointer-events:none}
 
     /* ========================= FONDOS POR PÁGINA ========================= */
@@ -92,16 +77,24 @@
     .bg-p8      {background-image:url('fondo_floral9.jpg')}
     .bg-p9      {background-image:url('fondo_floral8.png')}
 
-    /* ========================= CARD ========================= */
+    /* ========================= CARD (Perlado C1) ========================= */
     .card{
-      position:relative; z-index:2;
-      max-width:980px; width:100%;
-      background:var(--glass); backdrop-filter: blur(6px);
-      border-radius:16px; padding:28px; box-shadow:var(--shadow);
+      position:relative; z-index:2; max-width:980px; width:100%;
+      background:
+        radial-gradient(140% 100% at 100% 0%, rgba(180,220,255,.16) 0%, rgba(180,220,255,0) 42%),
+        radial-gradient(120% 80% at 0% 100%, rgba(160,208,255,.14) 0%, rgba(160,208,255,0) 38%),
+        var(--glass);
+      backdrop-filter: blur(8px) saturate(1.05);
+      border-radius:18px; padding:26px;
+      box-shadow:
+        0 18px 50px rgba(0,0,0,.12),
+        inset 0 1px 0 rgba(255,255,255,.6),
+        inset 0 -1px 0 rgba(0,0,0,.03);
+      border:1px solid rgba(255,255,255,.7);
     }
 
     /* ========================= TIPOGRAFÍA ========================= */
-    h1,h2,h3,h4{font-family:'Playfair Display',serif;margin:0 0 8px}
+    h1,h2,h3,h4{font-family:'Playfair Display',serif;margin:0 0 10px}
     .title-top{font-size:46px; letter-spacing:.6px; text-align:center}
     .title-acepto{
       font-family:'Waltograph',cursive;
@@ -121,9 +114,9 @@
       -webkit-background-clip:text; background-clip:text; color:transparent;
       text-align:center;
     }
-    .note{color:#555; font-size:14px}
+    .note{color:#566; font-size:14px}
 
-    /* ========================= BOTONES ========================= */
+    /* ========================= BOTONES MÁGICOS ========================= */
     .btns{margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
     .magicBtn{
       padding:10px 14px; border-radius:12px; border:0;
@@ -142,7 +135,7 @@
     @keyframes spark{0%{opacity:0; transform:translate(-50%,-50%) scale(.6)} 30%{opacity:1; transform:translate(-50%,-50%) scale(1.05)} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.6)}}
     .ring-instruction{font-size:13px;color:#333;margin-top:6px;text-align:center}
 
-    /* ========================= CONTADOR MINI (PORTADA) ========================= */
+    /* ========================= CONTADORES ========================= */
     .mini-flip{display:flex; gap:10px; justify-content:center; margin-top:12px; align-items:center}
     .flip-mini{width:72px; height:72px; perspective:800px; position:relative}
     .flip-mini .face{
@@ -157,9 +150,8 @@
     .flip-mini.animate .top{animation:flipTop .7s forwards}
     .flip-mini.animate .bottom{animation:flipBottom .7s forwards}
 
-    /* ========================= CONTADOR (ITINERARIO — compacto) ========================= */
-    .flip-grid{display:flex; gap:10px; justify-content:center; align-items:center; margin-top:14px; flex-wrap:wrap}
-    .flip{width:88px; height:78px; perspective:900px; position:relative}
+    .flip-grid{display:flex; gap:12px; justify-content:center; align-items:center; margin-top:18px; flex-wrap:wrap}
+    .flip{width:92px; height:88px; perspective:900px; position:relative}
     .flip .panel{
       position:absolute; left:0; top:0; width:100%; height:100%; border-radius:12px;
       background:var(--glass-strong); display:flex; align-items:center; justify-content:center;
@@ -169,45 +161,52 @@
     .flip .bottom{top:50%;border-top-left-radius:0;border-top-right-radius:0;transform-origin:top;z-index:1}
     .flip.animate .top{animation:flipTop .7s forwards}
     .flip.animate .bottom{animation:flipBottom .7s forwards}
-    .flip .label{font-size:12px; color:#333; margin-top:8px; text-align:center}
+    .flip .label{font-size:12px; color:#333; margin-top:6px; text-align:center}
     @keyframes flipTop{0%{transform:rotateX(0)}100%{transform:rotateX(-180deg)}}
     @keyframes flipBottom{0%{transform:rotateX(180deg)}100%{transform:rotateX(0)}}
 
-    /* Móvil: aún más compacto en pág. Itinerario */
-    @media (max-width:600px){
-      #sec-itinerario .flip{width:72px; height:66px}
-      #sec-itinerario .flip .panel{font-size:22px}
-    }
-
-    /* ========================= FAMILIAS (página 2 responsive) ========================= */
-    .parents-wrap{
-      display:flex; flex-direction:column; gap:16px; margin-top:8px;
-    }
+    /* ========================= FAMILIAS ========================= */
+    .parents-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:stretch; margin-top:12px}
+    .parent-col{display:flex; align-items:center; justify-content:center}
     .parent-block{
-      background:var(--glass-strong);
-      border:1px solid rgba(0,0,0,.06);
-      border-radius:14px; padding:14px 16px; box-shadow:0 10px 26px rgba(0,0,0,.06);
+      width:100%;
+      background:
+        radial-gradient(120% 80% at 0% 100%, rgba(160,208,255,.14) 0%, rgba(160,208,255,0) 38%),
+        var(--glass-strong);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:14px; padding:16px 14px; box-shadow: var(--shadow);
     }
-    .parent-title{font-weight:700; margin-bottom:6px; text-align:center}
-    .parent-names{font-family:'Playfair Display',serif; font-size:20px; line-height:1.4; text-align:center}
+    .parent-names{font-family:'Playfair Display',serif; font-size:21px; line-height:1.35; text-align:center; word-wrap:break-word}
+    .couple-names{font-family:'Playfair Display',serif; font-size:30px; margin-top:16px; text-align:center}
 
-    .romantic-phrase{
-      font-family:'Playfair Display',serif;
-      font-size:18px; text-align:center; margin-top:14px;
+    /* ========================= FOTO + VERSO ========================= */
+    .photo-romantic{
+      width:520px; max-width:92%; border-radius:16px; box-shadow:0 16px 42px rgba(0,0,0,.16);
+      object-fit:cover; transition:transform .45s var(--ease), opacity .45s var(--ease);
     }
-    .couple-big{
-      font-family:'Playfair Display',serif; text-align:center; margin-top:10px;
-      font-size:30px;
+    .photo-romantic:hover{transform:scale(1.03)}
+    .verse-big{font-family:'Playfair Display',serif; font-size:18px; margin-top:12px; text-align:center}
+
+    /* ========================= ITINERARIO ========================= */
+    .itinerary{display:flex; flex-direction:column; gap:14px; margin-top:12px}
+    .it-item{
+      display:flex; gap:12px; align-items:flex-start; padding:16px; border-radius:12px;
+      background:
+        radial-gradient(120% 90% at 100% 0%, rgba(160,208,255,.12) 0%, rgba(160,208,255,0) 40%),
+        var(--glass-strong);
+      border:1px solid rgba(255,255,255,.7);
+      box-shadow:0 10px 28px rgba(0,0,0,.08);
+      opacity:0; transform:translateY(16px); transition:opacity .6s, transform .6s;
     }
-    @media (min-width:900px){
-      .parents-wrap{flex-direction:row}
-      .parent-block{flex:1}
-      .parent-names{font-size:22px}
-      .couple-big{font-size:34px}
-    }
+    .it-item.show{opacity:1; transform:translateY(0)}
+    .it-icon{width:56px; height:56px; border-radius:10px; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center; font-size:24px}
+    .it-info strong{display:block}
+    .map-link{display:inline-block; margin-top:6px; color:#2b87e6; text-decoration:underline}
+    .palette{display:flex; gap:8px; margin-top:8px}
+    .chip{width:22px; height:22px; border-radius:6px}
 
     /* ========================= GALERÍA ========================= */
-    .gallery-grid{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:12px}
+    .gallery-grid{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:10px}
     .gallery-grid img{
       width:260px; height:176px; object-fit:cover; border-radius:12px;
       box-shadow:0 10px 30px rgba(0,0,0,.12); cursor:pointer; transition:transform .35s, opacity .35s;
@@ -215,7 +214,7 @@
     .gallery-grid img:hover{transform:scale(1.03); opacity:.96}
     .gallery-controls{margin-top:12px; text-align:center}
 
-    /* ========================= COLABORATIVA / FINALES ========================= */
+    /* ========================= FINALES / WA ========================= */
     .collab-photo{
       width:100%; max-width:860px; border-radius:14px; box-shadow:0 14px 40px rgba(0,0,0,.14);
       object-fit:cover; transition:transform .45s var(--ease);
@@ -242,12 +241,14 @@
     .nav{position:fixed; top:50%; left:0; right:0; display:flex; justify-content:space-between; pointer-events:none; z-index:990; transform:translateY(-50%)}
     .nav button{pointer-events:all; background:rgba(255,255,255,.95); border:0; padding:10px 12px; border-radius:999px; font-size:28px; cursor:pointer; margin:8px; box-shadow:0 10px 30px rgba(0,0,0,.12)}
 
-    /* ========================= MENÚ LATERAL (plegable) ========================= */
+    /* ========================= MENÚ LATERAL (oculto por defecto) ========================= */
     .side-menu{
       position:fixed; right:18px; top:50%; transform:translateY(-50%);
       background:var(--menu-bg); border-radius:16px; box-shadow: var(--menu-shadow);
       padding:10px 8px; z-index: 995; backdrop-filter: blur(6px);
+      display:none; /* oculto por defecto */
     }
+    .side-menu.open{ display:block; }
     .side-menu a{
       display:flex; align-items:center; gap:8px;
       padding:10px 12px; border-radius:12px; margin:6px 0;
@@ -256,19 +257,21 @@
     .side-menu a:hover{ background: rgba(35,117,255,.08); transform: translateX(-1px); }
     .side-menu a.active{ background: rgba(35,117,255,.16); }
     .side-menu .icon{ width:18px; text-align:center }
-    .menu-toggle{
-      position:fixed; right:18px; bottom:18px;
-      width:48px; height:48px; border-radius:50%;
-      background: linear-gradient(135deg,var(--accent),var(--accent2));
-      color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; border:0; box-shadow: var(--menu-shadow);
-      z-index: 996;
+
+    /* FAB para abrir/cerrar menú */
+    .menu-fab{
+      position:fixed; right:16px; bottom:16px; z-index:996;
+      width:52px; height:52px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      background: var(--fab-grad);
+      border:1px solid rgba(255,255,255,.8);
+      box-shadow:0 14px 36px rgba(0,0,0,.16);
+      font-size:22px;
     }
-    .side-menu.compact{ display:none; }
-    .side-menu.open{ display:block; }
 
     /* ========================= BOTÓN MUSICAL FLOTANTE (fallback) ========================= */
     #musicRetry{
-      position:fixed; right:16px; bottom:16px; z-index:3500;
+      position:fixed; right:84px; bottom:16px; z-index:3500;
       width:48px; height:48px; border-radius:50%;
       display:none; align-items:center; justify-content:center;
       background: var(--music-grad);
@@ -308,45 +311,35 @@
     .entry-ring{ background:transparent; border:0; padding:0; cursor:pointer; display:block; margin:10px auto; position:relative }
     .entry-instruction{ font-size:13px; color:#333; margin-top:8px }
 
-    /* ========================= TARJETAS ROMÁNTICAS (Página 6) ========================= */
-    .romantic-card{
-      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.94));
-      border:1px solid var(--romantic-gold);
-      border-radius:16px; padding:16px;
-      box-shadow: var(--romantic-shadow);
-    }
-    .romantic-card h3{ font-family:'Playfair Display',serif; margin-bottom:8px }
-
-    .wish-item{
-      border-left:4px solid var(--romantic-gold);
-      background:rgba(255,255,255,.92);
-      border-radius:10px; padding:10px 12px; margin:8px 0;
-      box-shadow:0 10px 24px rgba(0,0,0,.06);
-    }
-    .wish-item strong{display:block; margin-bottom:4px}
-
     /* ========================= RESPONSIVE ========================= */
-    @media (max-width:900px){
-      .title-top{font-size:36px}
+    @media (max-width:980px){
+      .card{max-width:820px}
+      .flip{width:86px;height:82px}
+      .parent-names{font-size:20px}
+      .couple-names{font-size:28px}
+    }
+    @media (max-width:720px){
+      .title-top{font-size:34px}
       .title-acepto{font-size:28px}
       .ring-svg{width:160px;height:160px}
-      .card{padding:16px;border-radius:12px}
+      .parents-grid{grid-template-columns:1fr; gap:12px}
+      .parent-names{font-size:19px}
+      .couple-names{font-size:26px}
+      .gallery-grid img{width:44vw;height:32vw}
+      .flip{width:78px;height:74px}
+      .flip .panel{font-size:22px}
+      .card{padding:16px;border-radius:14px}
     }
-    @media (max-width: 880px){
-      .side-menu.compact{ display:block; }
-      .side-menu{ display:none; right:12px; top:auto; bottom:78px; transform:none; }
+    @media (max-width:420px){
+      .flip{width:72px;height:66px}
+      .flip .panel{font-size:20px}
     }
 
     /* ========================= CURSOR MÁGICO ========================= */
     .magicHeart{
-      position:fixed;
-      pointer-events:none;
-      z-index:99999;
-      width:22px; height:22px;
-      opacity:0;
-      transform:translate(-50%,-50%) scale(1);
-      animation:heartFade 1500ms ease-out forwards;
-      filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
+      position:fixed; pointer-events:none; z-index:99999;
+      width:22px; height:22px; opacity:0; transform:translate(-50%,-50%) scale(1);
+      animation:heartFade 1500ms ease-out forwards; filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
     }
     @keyframes heartFade{
       0%  {opacity:.88; transform:translate(-50%,-50%) scale(1)}
@@ -397,14 +390,14 @@
   <div class="viewport">
     <div class="sections" id="sections">
 
-      <!-- ========== P1 — PORTADA ========== -->
+      <!-- ========== PORTADA ========== -->
       <section id="sec-portada" class="section bg-portada active" aria-label="Portada" data-name="portada">
         <div class="overlay"></div>
         <div class="card center">
           <h1 class="title-top">Abril &amp; Pablo</h1>
           <div class="title-acepto">Sí, ¡acepto!</div>
 
-          <!-- Anillo de la portada (cambiar a eternamente) -->
+          <!-- Anillo de la portada (crossfade a eternamente) -->
           <button class="ring-button" id="ringBtn" aria-label="Anillo: abrir invitación">
             <div class="ring-spark"></div>
             <svg class="ring-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -441,7 +434,6 @@
             <div class="flip-mini" data-k="s"><div class="face top">00</div><div class="face bottom">00</div></div>
           </div>
 
-          <!-- Versículo -->
           <p class="verse">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></p>
 
           <!-- Botones mágicos -->
@@ -459,52 +451,83 @@
         <div class="card center">
           <h2>Padres de los novios</h2>
 
-          <div class="parents-wrap">
-            <div class="parent-block">
-              <div class="parent-title">Padres de la novia</div>
-              <div class="parent-names">
-                <strong>Eva Aguilar Rendón</strong><br/>
-                <strong>Pedro Pérez Hernández</strong>
+          <div class="parents-grid">
+            <!-- Novia -->
+            <div class="parent-col">
+              <div class="parent-block">
+                <div class="parent-names">
+                  <strong>Padres de la novia</strong><br/>
+                  Eva Aguilar Rendón<br/>
+                  Pedro Pérez Hernández
+                </div>
               </div>
             </div>
-
-            <div class="parent-block">
-              <div class="parent-title">Padres del novio</div>
-              <div class="parent-names">
-                <strong>Saray Hernández Santana</strong><br/>
-                <strong>Pablo Tinoco Carranza <span title="finado">✝</span></strong>
+            <!-- Novio -->
+            <div class="parent-col">
+              <div class="parent-block">
+                <div class="parent-names">
+                  <strong>Padres del novio</strong><br/>
+                  Saray Hernández Santana<br/>
+                  Pablo Tinoco Carranza <span title="finado">✝</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="romantic-phrase">“Tienen el honor de compartir la dicha que enlaza a sus amados hijos.”</div>
-          <div class="couple-big">Abril Pérez Aguilar &amp; Pablo Eliel Tinoco Hernández</div>
+          <div style="margin-top:18px;font-family:'Playfair Display',serif;font-size:18px">
+            “Tienen el honor de compartir la dicha que enlaza a sus amados hijos.”
+          </div>
+
+          <div class="couple-names" style="font-size:32px">
+            Abril Pérez Aguilar &amp; Pablo Eliel Tinoco Hernández
+          </div>
         </div>
       </section>
 
-      <!-- ========== P3 — FOTO + VERSÍCULO (Mateo 19:6) ========== -->
+      <!-- ========== P3 — FOTO + VERSÍCULO ========== -->
       <section id="sec-foto-verse" class="section bg-p2" aria-label="Foto y versículo" data-name="foto-verse">
         <div class="overlay"></div>
         <div class="card center">
           <img src="foto1.jpg" alt="Abril y Pablo" class="photo-romantic lb-target" data-src="foto1.jpg">
-          <p class="romantic-phrase" style="max-width:780px;margin-left:auto;margin-right:auto">
+          <p class="verse-big" style="max-width:780px;margin-left:auto;margin-right:auto">
             “Así que no son ya más dos, sino una sola carne; por tanto, lo que Dios juntó, no lo separe el hombre.”
             — <strong>Mateo 19:6</strong>
           </p>
         </div>
       </section>
 
-      <!-- ========== P4 — ITINERARIO + CONTADOR COMPACTO ========== -->
+      <!-- ========== P4 — GALERÍA NOVIOS ========== -->
+      <section id="sec-galeria" class="section bg-p4" aria-label="Galería novios" data-name="galeria">
+        <div class="overlay"></div>
+        <div class="card">
+          <h2 class="center">Galería — Los novios</h2>
+          <div class="gallery-grid" id="galleryGrid">
+            <img src="momento1.jpg" alt="momento1" class="lb-target" data-src="momento1.jpg">
+            <img src="momento2.jpg" alt="momento2" class="lb-target" data-src="momento2.jpg">
+            <img src="momento3.jpg" alt="momento3" class="lb-target" data-src="momento3.jpg">
+            <img src="momento4.jpg" alt="momento4" class="lb-target" data-src="momento4.jpg">
+            <img src="momento5.jpg" alt="momento5" class="lb-target" data-src="momento5.jpg">
+            <img src="momento6.jpg" alt="momento6" class="lb-target" data-src="momento6.jpg">
+            <img src="momento7.jpg" alt="momento7" class="lb-target" data-src="momento7.jpg">
+          </div>
+          <div class="gallery-controls">
+            <button id="prevGallery" class="magicBtn">Anterior</button>
+            <button id="nextGallery" class="magicBtn">Siguiente</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== P5 — ITINERARIO + CONTADOR ========== -->
       <section id="sec-itinerario" class="section bg-p3" aria-label="Itinerario" data-name="itinerario">
         <div class="overlay"></div>
         <div class="card">
-          <h2 class="center">Con cariño…</h2>
-          <p class="center" style="font-family:'Playfair Display',serif;font-size:18px;margin:6px 0 12px">
+          <h2 style="text-align:center">Con cariño…</h2>
+          <p class="center" style="font-family:'Playfair Display',serif;font-size:18px;margin:6px 0 10px">
             Nos llena de alegría compartir este día contigo. <br>
             <strong>Fecha del evento: 28 de diciembre del 2025.</strong>
           </p>
 
-          <!-- Contador compacto -->
+          <!-- Contador grande (más compacto en móviles) -->
           <div style="margin-top:2px;text-align:center">
             <div style="font-family:'Playfair Display',serif;font-size:18px;color:#333">Faltan para nuestro gran día</div>
             <div class="flip-grid" id="mainFlip">
@@ -515,7 +538,7 @@
             </div>
           </div>
 
-          <h2 class="center" style="margin-top:18px">Itinerario</h2>
+          <h2 style="text-align:center;margin-top:16px">Itinerario</h2>
           <div class="itinerary" id="itineraryList">
             <div class="it-item">
               <div class="it-icon">⛪</div>
@@ -540,7 +563,7 @@
               <div class="it-info">
                 <strong>Código de vestimenta</strong>
                 <div>Formal — Tonos recomendados: celestes, beige, verde, gris, rosa</div>
-                <div style="display:flex; gap:8px; margin-top:8px">
+                <div class="palette">
                   <div class="chip" style="background:var(--chip-celeste)" title="Celeste"></div>
                   <div class="chip" style="background:var(--chip-beige)"  title="Beige"></div>
                   <div class="chip" style="background:var(--chip-verde)"   title="Verde"></div>
@@ -554,88 +577,40 @@
         </div>
       </section>
 
-      <!-- ========== P5 — GALERÍA NOVIOS ========== -->
-      <section id="sec-galeria" class="section bg-p4" aria-label="Galería novios" data-name="galeria">
-        <div class="overlay"></div>
-        <div class="card">
-          <h2>Galería — Los novios</h2>
-          <div class="gallery-grid" id="galleryGrid">
-            <img src="momento1.jpg" alt="momento1" class="lb-target" data-src="momento1.jpg">
-            <img src="momento2.jpg" alt="momento2" class="lb-target" data-src="momento2.jpg">
-            <img src="momento3.jpg" alt="momento3" class="lb-target" data-src="momento3.jpg">
-            <img src="momento4.jpg" alt="momento4" class="lb-target" data-src="momento4.jpg">
-            <img src="momento5.jpg" alt="momento5" class="lb-target" data-src="momento5.jpg">
-            <img src="momento6.jpg" alt="momento6" class="lb-target" data-src="momento6.jpg">
-            <img src="momento7.jpg" alt="momento7" class="lb-target" data-src="momento7.jpg">
-          </div>
-          <div class="gallery-controls">
-            <button id="prevGallery" class="magicBtn">Anterior</button>
-            <button id="nextGallery" class="magicBtn">Siguiente</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ========== P6 — RSVP + BUENOS DESEOS ========== -->
+      <!-- ========== P6 — CONFIRMACIÓN ========== -->
       <section id="sec-rsvp" class="section bg-p5" aria-label="RSVP y Buenos Deseos" data-name="rsvp">
         <div class="overlay"></div>
         <div class="card">
-          <div class="romantic-card" style="margin-bottom:12px">
-            <h3>Confirmación de asistencia</h3>
-            <p class="note">Tus respuestas se guardarán en Google Sheets. También puedes abrir el formulario en una pestaña nueva si lo prefieres.</p>
-            <form id="rsvpForm" style="display:grid; gap:10px; grid-template-columns:1fr; max-width:680px; margin:10px auto">
-              <label>Nombre del invitado
-                <input name="nombre" required placeholder="Escribe tu nombre" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(0,0,0,.15)"/>
-              </label>
-              <label>Número de acompañantes
-                <input name="acompanantes" type="number" min="0" value="0" required style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(0,0,0,.15)"/>
-              </label>
-              <label>Confirmo asistencia
-                <select name="confirmo" required style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(0,0,0,.15)">
-                  <option value="">Selecciona…</option>
-                  <option>Sí</option>
-                  <option>No</option>
-                </select>
-              </label>
-              <label>Mensaje para los novios (opcional)
-                <textarea name="mensaje" rows="3" placeholder="Escribe un mensajito" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(0,0,0,.15)"></textarea>
-              </label>
-              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
-                <button class="magicBtn" type="submit">Confirmar asistencia</button>
-                <a class="magicBtn" href="https://script.google.com/macros/s/AKfycbwpH3TXJ1p7X7rYxbN_X6t6eVA6JO9iJY6PlURLkr4gJpYkZlZzs2mmxs79hyCuhn3JTA/exec" target="_blank" rel="noopener">Abrir formulario RSVP</a>
-              </div>
-              <div id="rsvpMsg" class="note"></div>
-            </form>
-          </div>
+          <h2 class="center">Confirmación de asistencia</h2>
+          <p class="note center">Completa el formulario y se guardará en Google Sheets. Si tu navegador bloquea el envío, usa el botón alterno.</p>
 
-          <div class="romantic-card">
-            <h3>Buenos deseos</h3>
-            <p class="note">Tu mensaje se mostrará aquí de inmediato y se guardará en Google Sheets.</p>
-            <form id="wishForm" style="display:grid; gap:10px; grid-template-columns:1fr; max-width:680px; margin:10px auto">
-              <label>Nombre del invitado
-                <input name="nombre" required placeholder="Escribe tu nombre" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(0,0,0,.15)"/>
-              </label>
-              <label>Buenos deseos
-                <textarea name="deseo" rows="3" required placeholder="Escribe tus palabras para los novios" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(0,0,0,.15)"></textarea>
-              </label>
-              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
-                <button class="magicBtn" type="submit">Enviar buenos deseos</button>
-                <a class="magicBtn" href="https://script.google.com/macros/s/AKfycbwA6Ur4xGzH4oUGv_2lj_nh0phkvZn_f3720DZ-fJdxUQjPEjMbcBSvHMtyaogW7UOw/exec" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
-              </div>
-              <div id="wishMsg" class="note"></div>
-            </form>
+          <form id="rsvpForm" style="max-width:720px;margin:12px auto 0;display:grid;gap:10px">
+            <label>Nombre del invitado
+              <input required name="nombre" type="text" placeholder="Tu nombre completo" style="width:100%;padding:10px;border-radius:10px;border:1px solid #d9e2ef;background:rgba(255,255,255,.9)">
+            </label>
+            <label>Número de acompañantes
+              <input required name="acompanantes" type="number" min="0" max="10" value="0" style="width:100%;padding:10px;border-radius:10px;border:1px solid #d9e2ef;background:rgba(255,255,255,.9)">
+            </label>
+            <label>¿Confirmo asistencia?
+              <select name="confirmo" required style="width:100%;padding:10px;border-radius:10px;border:1px solid #d9e2ef;background:rgba(255,255,255,.9)">
+                <option value="">Selecciona…</option>
+                <option>Sí</option>
+                <option>No</option>
+              </select>
+            </label>
+            <label>Mensaje para los novios (opcional)
+              <textarea name="mensaje" rows="3" placeholder="Escribe tus buenos deseos" style="width:100%;padding:10px;border-radius:10px;border:1px solid #d9e2ef;background:rgba(255,255,255,.9)"></textarea>
+            </label>
 
-            <!-- Lista visible al instante -->
-            <div id="wishList" style="max-width:760px; margin:8px auto 0"></div>
-
-            <!-- Respaldo en iframe por si deseas ver la lista completa del WebApp -->
-            <div style="margin-top:10px">
-              <iframe src="https://script.google.com/macros/s/AKfycbwA6Ur4xGzH4oUGv_2lj_nh0phkvZn_f3720DZ-fJdxUQjPEjMbcBSvHMtyaogW7UOw/exec"
-                      style="width:100%; height:420px; border:1px solid rgba(0,0,0,.08); border-radius:12px"></iframe>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px">
+              <button type="submit" class="magicBtn">Confirmar asistencia</button>
+              <a class="magicBtn" href="https://script.google.com/macros/s/AKfycbw8CbfknoX8dz8wHHYOYsGcf7dd61rRvUW-SeVX9cOBL2MKsGK5Qxm3201DX9u4SF0/exec" target="_blank" rel="noopener">Abrir formulario alterno</a>
             </div>
-          </div>
+            <p id="rsvpStatus" class="note center" style="margin:6px 0 0"></p>
+          </form>
         </div>
       </section>
-      <!-- ========== P7 — COLABORATIVA + MOMENTO9 ========== -->
+      <!-- ========== P7 — COLABORATIVA ========== -->
       <section id="sec-colaborativa" class="section bg-p6" aria-label="Galería colaborativa" data-name="colaborativa">
         <div class="overlay"></div>
         <div class="card center">
@@ -650,18 +625,18 @@
         </div>
       </section>
 
-      <!-- ========== P8 — MOMENTO8 + FRASE ========== -->
+      <!-- ========== P8 — FRASE ROMÁNTICA ========== -->
       <section id="sec-momento8" class="section bg-p7" aria-label="Momento 8" data-name="momento8">
         <div class="overlay"></div>
         <div class="card center">
           <img src="momento8.jpg" alt="momento8" class="collab-photo lb-target" data-src="momento8.jpg">
-          <p class="romantic-phrase" style="margin-top:12px">
+          <p style="margin-top:12px;font-family:'Playfair Display',serif;font-size:18px">
             "Tu amor es lo que he anhelado y el regalo que Dios me ha dado"
           </p>
         </div>
       </section>
 
-      <!-- ========== P9 — FINAL (WhatsApp + Calendario) ========== -->
+      <!-- ========== P9 — FINAL + BUENOS DESEOS EN VIVO ========== -->
       <section id="sec-final" class="section bg-p8" aria-label="Final" data-name="final">
         <div class="overlay"></div>
         <div class="card center">
@@ -669,23 +644,53 @@
           <div class="final-title">Con amor eterno</div>
           <div style="font-family:'Playfair Display',serif;font-size:22px;margin-top:6px">Abril &amp; Pablo</div>
           <div class="final-sub">Gracias por ser parte de nuestro día especial</div>
+
+          <!-- Formulario Buenos Deseos -->
+          <div style="max-width:760px;margin:14px auto 6px">
+            <h3 style="font-family:'Playfair Display',serif;margin:0 0 6px">Deja tus buenos deseos</h3>
+            <form id="wishForm" style="display:grid;gap:10px">
+              <label>Nombre del invitado
+                <input required name="nombre" type="text" placeholder="Tu nombre" style="width:100%;padding:10px;border-radius:10px;border:1px solid #d9e2ef;background:rgba(255,255,255,.9)">
+              </label>
+              <label>Buenos deseos
+                <textarea required name="mensaje" rows="3" placeholder="Tu mensaje para los novios" style="width:100%;padding:10px;border-radius:10px;border:1px solid #d9e2ef;background:rgba(255,255,255,.9)"></textarea>
+              </label>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+                <button type="submit" class="magicBtn">Enviar buenos deseos</button>
+                <a class="magicBtn" href="https://script.google.com/macros/s/AKfycbwR3YBGpR1qY13z4DNX0mdlCiGL5EPdnIIg5sTdanKYaaqGp3sUGadJ_JBt5t9P6sy8/exec" target="_blank" rel="noopener">Ver en Google</a>
+              </div>
+              <p id="wishStatus" class="note center" style="margin:4px 0 0"></p>
+            </form>
+          </div>
+
+          <!-- Lista en vivo (iframe del Apps Script) -->
+          <div style="max-width:860px;margin:10px auto">
+            <iframe id="wishFeed" src="https://script.google.com/macros/s/AKfycbwR3YBGpR1qY13z4DNX0mdlCiGL5EPdnIIg5sTdanKYaaqGp3sUGadJ_JBt5t9P6sy8/exec"
+              style="width:100%;height:360px;border:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.10);background:#fff"></iframe>
+            <p class="note">La lista se actualiza automáticamente. Si no la ves, abre el enlace “Ver en Google”.</p>
+          </div>
+
           <div class="wa-row">
             <a class="wa-btn" href="https://wa.me/5217774914500" target="_blank" rel="noopener" aria-label="WhatsApp Abril">
-              <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/></svg>
+              <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/>
+              </svg>
               WhatsApp Abril
             </a>
             <a class="wa-btn" href="https://wa.me/5217341123645" target="_blank" rel="noopener" aria-label="WhatsApp Pablo">
-              <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/></svg>
+              <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/>
+              </svg>
               WhatsApp Pablo
             </a>
           </div>
-          <div style="margin-top:12px">
+          <div style="margin-top:10px">
             <a class="magicBtn" href="#" id="addCalendar">Agregar al calendario</a>
           </div>
         </div>
       </section>
 
-      <!-- ========== P10 (DECORATIVA) — FONDO FINAL ========== -->
+      <!-- (Decorativa final) -->
       <section id="sec-fondo-final" class="section bg-p9" aria-label="Fondo final" data-name="fondo-final">
         <div class="overlay"></div>
         <div class="card center">
@@ -695,25 +700,25 @@
 
     </div>
 
-    <!-- Flechas (ocultas en portada) -->
+    <!-- Flechas -->
     <div class="nav" id="navArrows">
       <div><button id="prevBtn" aria-label="Anterior">‹</button></div>
       <div><button id="nextBtn" aria-label="Siguiente">›</button></div>
     </div>
 
-    <!-- Menú lateral flotante -->
-    <nav class="side-menu compact" id="sideMenu" aria-label="Navegación rápida">
+    <!-- Menú lateral (oculto al inicio) -->
+    <nav class="side-menu" id="sideMenu" aria-label="Navegación rápida">
       <a href="#sec-portada"       data-goto="sec-portada"><span class="icon">🏠</span> Portada</a>
       <a href="#sec-familias"      data-goto="sec-familias"><span class="icon">👪</span> Familias</a>
       <a href="#sec-foto-verse"    data-goto="sec-foto-verse"><span class="icon">💞</span> Foto &amp; Verso</a>
-      <a href="#sec-itinerario"    data-goto="sec-itinerario"><span class="icon">🗓️</span> Itinerario</a>
       <a href="#sec-galeria"       data-goto="sec-galeria"><span class="icon">📸</span> Galería</a>
+      <a href="#sec-itinerario"    data-goto="sec-itinerario"><span class="icon">🗓️</span> Itinerario</a>
       <a href="#sec-rsvp"          data-goto="sec-rsvp"><span class="icon">💌</span> Confirmación</a>
       <a href="#sec-colaborativa"  data-goto="sec-colaborativa"><span class="icon">🤳</span> Colaborativa</a>
       <a href="#sec-momento8"      data-goto="sec-momento8"><span class="icon">💚</span> Momento 8</a>
       <a href="#sec-final"         data-goto="sec-final"><span class="icon">🌟</span> Final</a>
     </nav>
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+    <button class="menu-fab" id="menuFab" aria-label="Abrir menú">✿</button>
 
     <!-- Lightbox -->
     <div class="lb" id="lightbox" aria-hidden="true" role="dialog">
@@ -730,10 +735,14 @@
   </div>
 
   <script>
-    /* ============================ SECCIONES ============================ */
+    /* ======== REFERENCIAS TEMPRANAS (evita error sideMenu antes de init) ======== */
+    const sideMenu = document.getElementById('sideMenu');
+    const menuFab  = document.getElementById('menuFab');
+
+    /* ============================ ORDEN DE SECCIONES ============================ */
     const order = [
-      'sec-portada','sec-familias','sec-foto-verse','sec-itinerario',
-      'sec-galeria','sec-rsvp','sec-colaborativa','sec-momento8',
+      'sec-portada','sec-familias','sec-foto-verse','sec-galeria',
+      'sec-itinerario','sec-rsvp','sec-colaborativa','sec-momento8',
       'sec-final','sec-fondo-final'
     ];
     const sections = order.map(id => document.getElementById(id));
@@ -747,6 +756,9 @@
         if(i<idx) s.classList.add('prev'); else if(i>idx) s.classList.add('next');
       });
       sections[idx].classList.add('active');
+    }
+    function markActiveInMenu(id){
+      sideMenu.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.getAttribute('data-goto')===id));
     }
     function show(i, playSound=true){
       i = ((i % sections.length) + sections.length) % sections.length;
@@ -790,18 +802,28 @@
     document.addEventListener('touchstart', (e)=>{
       if(e.touches[0]){ touchStartX=e.touches[0].clientX; touchStartY=e.touches[0].clientY; }
     }, {passive:true});
-    document.addEventListener('touchend', (e)=>{
-      const t = e.changedTouches[0]; if(!t) return;
-      const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
-      if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx)>42){ if(dx<0) show(current+1); else show(current-1); }
-      else if(Math.abs(dy)>80){ if(dy<0) show(current+1); else show(current-1); }
+    document.addEventListener('touchend',   (e)=>{
+      const t = e.changedTouches[0];
+      if(!t) return;
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+      if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx)>42){
+        if(dx<0) show(current+1); else show(current-1);
+      }else if(Math.abs(dy)>80){
+        if(dy<0) show(current+1); else show(current-1);
+      }
     }, {passive:true});
 
-    /* ============================ MENÚ LATERAL ============================ */
-    const sideMenu=document.getElementById('sideMenu');
-    const menuToggle=document.getElementById('menuToggle');
-    function markActiveInMenu(id){ sideMenu.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.getAttribute('data-goto')===id)); }
-    function closeMenuOnMobile(){ sideMenu.classList.remove('open'); }
+    /* ============================ BOTONES MÁGICOS ============================ */
+    document.querySelectorAll('.magicBtn[data-target]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const tgt=btn.getAttribute('data-target');
+        const i=order.indexOf(tgt);
+        if(i>=0){ show(i); closeMenuOnMobile(); }
+      });
+    });
+
+    /* ============================ MENÚ LATERAL (toggle) ============================ */
     sideMenu.querySelectorAll('a[data-goto]').forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
@@ -810,19 +832,8 @@
         if(idx>=0){ show(idx); closeMenuOnMobile(); }
       });
     });
-    menuToggle.addEventListener('click',()=> sideMenu.classList.toggle('open'));
-
-    /* ============================ INICIAR EN PORTADA (tras menú) ============================ */
-    show(0,false); // <- se llama después de definir sideMenu para evitar errores de inicialización
-
-    /* ============================ BOTONES MAGICOS (portada) ============================ */
-    document.querySelectorAll('.magicBtn[data-target]').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const tgt=btn.getAttribute('data-target');
-        const i=order.indexOf(tgt);
-        if(i>=0){ show(i); closeMenuOnMobile(); }
-      });
-    });
+    function closeMenuOnMobile(){ sideMenu.classList.remove('open'); }
+    menuFab.addEventListener('click', ()=> sideMenu.classList.toggle('open'));
 
     /* ============================ AUDIO ============================ */
     const marcha=document.getElementById('marcha');
@@ -841,12 +852,10 @@
     async function startMarcha(){
       try{
         marcha.currentTime = 0;
-        marcha.volume = 1;
+        marcha.volume = 1; // sin fade-in
         const ok = await playUnlocked(marcha);
         if(!ok) musicRetry.setAttribute('aria-hidden','false');
-      }catch(_){
-        musicRetry.setAttribute('aria-hidden','false');
-      }
+      }catch(_){ musicRetry.setAttribute('aria-hidden','false'); }
     }
     function fadeAudio(audio, from, to, duration=2000){
       return new Promise(res=>{
@@ -859,22 +868,31 @@
         }, dt);
       });
     }
-    entryRing.addEventListener('click', async ()=>{ await startMarcha(); entryOverlay.classList.add('hide'); });
-    musicRetry.addEventListener('click', async ()=>{ const ok = await playUnlocked(marcha); if(ok){ musicRetry.setAttribute('aria-hidden','true'); }});
-
-    // Clic en anillo de portada: crossfade a eternamente y pasar a Familias
+    entryRing.addEventListener('click', async ()=>{
+      await startMarcha();
+      entryOverlay.classList.add('hide');
+    });
+    musicRetry.addEventListener('click', async ()=>{
+      const ok = await playUnlocked(marcha);
+      if(ok){ musicRetry.setAttribute('aria-hidden','true'); }
+    });
     document.getElementById('ringBtn').addEventListener('click', async ()=>{
-      try{ if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 2000); marcha.pause(); } }catch(e){}
+      try{
+        if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 2000); marcha.pause(); }
+      }catch(e){}
       try{
         eternamente.currentTime=0; eternamente.volume=0;
         const ok = await playUnlocked(eternamente);
-        if(ok){ await fadeAudio(eternamente,0,1,2000); } else { musicRetry.setAttribute('aria-hidden','true'); }
+        if(ok){ await fadeAudio(eternamente,0,1,2000); }
+        else { musicRetry.setAttribute('aria-hidden','true'); }
       }catch(e){}
-      const idx = order.indexOf('sec-familias'); if(idx>=0) show(idx);
-      const ringBtn=document.getElementById('ringBtn'); ringBtn.classList.add('clicked'); setTimeout(()=>ringBtn.classList.remove('clicked'),900);
+      const idx = order.indexOf('sec-familias');
+      if(idx>=0) show(idx);
+      const ringBtn=document.getElementById('ringBtn');
+      ringBtn.classList.add('clicked'); setTimeout(()=>ringBtn.classList.remove('clicked'),900);
     });
 
-    /* ============================ SONIDO FLIP ============================ */
+    /* ============================ SONIDO FLIP (WebAudio) ============================ */
     function playFlipSoundBook(){
       try{
         const ctx = window._audioCtx || new (window.AudioContext||window.webkitAudioContext)();
@@ -902,7 +920,6 @@
     /* ============================ CONTADORES ============================ */
     const target=new Date('2025-12-28T14:00:00'); // 28 dic 2025 2:00 p.m.
     const pad=n=>String(n).padStart(2,'0');
-
     function animateMini(flipEl,newVal){
       const top=flipEl.querySelector('.top'); const bot=flipEl.querySelector('.bottom');
       if(top.textContent===newVal) return;
@@ -953,7 +970,6 @@
     let lbIndex=0;
 
     lbTargets.forEach((t,i)=>t.addEventListener('click', ()=>openLb(i)));
-
     function openLb(i){
       lbIndex=i;
       lbImg.style.opacity=0;
@@ -992,7 +1008,7 @@
     /* ============================ GALERÍA AUTO-FOCUS ============================ */
     const galleryImgs=[...document.querySelectorAll('#galleryGrid img')];
     let gIdx=0;
-    function paintGallery(){ galleryImgs.forEach((im,i)=>im.style.opacity=(i===gIdx?1:.46)); }
+    function paintGallery(){ galleryImgs.forEach((im,i)=>im.style.opacity=(i===gIdx?1:.48)); }
     function gNext(){ gIdx=(gIdx+1)%galleryImgs.length; paintGallery(); }
     paintGallery();
     let gAuto=setInterval(gNext,4200);
@@ -1012,6 +1028,54 @@
       window.open(url,'_blank','noopener');
     });
 
+    /* ============================ FORM RSVP (POST a Apps Script) ============================ */
+    const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbw8CbfknoX8dz8wHHYOYsGcf7dd61rRvUW-SeVX9cOBL2MKsGK5Qxm3201DX9u4SF0/exec';
+    document.getElementById('rsvpForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const st = document.getElementById('rsvpStatus');
+      st.textContent = 'Enviando…';
+      const data = new FormData(e.target);
+      const payload = new URLSearchParams({
+        nombre:        data.get('nombre') || '',
+        acompanantes:  data.get('acompanantes') || '0',
+        confirmo:      data.get('confirmo') || '',
+        mensaje:       data.get('mensaje') || ''
+      });
+      try{
+        const res = await fetch(RSVP_ENDPOINT, { method:'POST', mode:'no-cors', body: payload });
+        // no-cors no deja leer el body; asumimos éxito si no lanza error de red
+        st.textContent = '¡Gracias! Tu confirmación fue enviada.';
+        e.target.reset();
+      }catch(err){
+        st.textContent = 'No se pudo enviar desde aquí. Usa el botón “Abrir formulario alterno”.';
+      }
+    });
+
+    /* ============================ FORM BUENOS DESEOS ============================ */
+    const WISH_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwR3YBGpR1qY13z4DNX0mdlCiGL5EPdnIIg5sTdanKYaaqGp3sUGadJ_JBt5t9P6sy8/exec';
+    document.getElementById('wishForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const st = document.getElementById('wishStatus');
+      st.textContent = 'Enviando…';
+      const data = new FormData(e.target);
+      const payload = new URLSearchParams({
+        nombre:  data.get('nombre') || '',
+        mensaje: data.get('mensaje') || ''
+      });
+      try{
+        await fetch(WISH_ENDPOINT, { method:'POST', mode:'no-cors', body: payload });
+        st.textContent = '¡Gracias por tu mensaje! Se mostrará enseguida.';
+        e.target.reset();
+        // refresca el iframe para ver el mensaje en vivo
+        const frame=document.getElementById('wishFeed');
+        if(frame) frame.src = frame.src;
+      }catch(err){
+        st.textContent = 'No se pudo enviar desde aquí. Usa “Ver en Google”.';
+      }
+    });
+    // refresco periódico por si alguien escribe mientras ves la página
+    setInterval(()=>{ const f=document.getElementById('wishFeed'); if(f) f.src=f.src; }, 15000);
+
     /* ============================ CURSOR MÁGICO ============================ */
     function createHeartAt(x,y){
       const heart=document.createElement('div');
@@ -1024,7 +1088,7 @@
       heart.style.top =(y + (Math.random()*jitter - jitter/2))+'px';
       const r=Math.random();
       if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';
-      else if(r<0.5)  heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)';
+      else if(r<0.5)  heart.style.background='radial-gradient(circle,#cfe9ff,#f3fbff)';
       else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';
       else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';
       heart.style.clipPath='polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
@@ -1036,84 +1100,22 @@
       const n = Math.floor(countMin + Math.random()*(countMax-countMin+1));
       for(let i=0;i<n;i++){ setTimeout(()=>createHeartAt(x,y), i*60); }
     }
-    document.addEventListener('mousemove',(e)=>{ if(Math.random()>0.6) return; spawnHearts(e.clientX,e.clientY,3,4); });
+    document.addEventListener('mousemove',(e)=>{ if(Math.random()>0.65) return; spawnHearts(e.clientX,e.clientY,2,3); });
     document.addEventListener('click',(e)=>{ spawnHearts(e.clientX,e.clientY,3,4); });
     document.addEventListener('touchstart',(e)=>{ const t=e.touches[0]; if(!t) return; spawnHearts(t.clientX,t.clientY,3,4); },{passive:true});
-    document.addEventListener('touchmove',(e)=>{ const t=e.touches[0]; if(!t) return; if(Math.random()>0.6) return; spawnHearts(t.clientX,t.clientY,3,4); },{passive:true});
+    document.addEventListener('touchmove',(e)=>{ const t=e.touches[0]; if(!t) return; if(Math.random()>0.65) return; spawnHearts(t.clientX,t.clientY,2,3); },{passive:true});
 
-    /* ============================ FORM: RSVP ============================ */
-    const RSVP_URL = 'https://script.google.com/macros/s/AKfycbwpH3TXJ1p7X7rYxbN_X6t6eVA6JO9iJY6PlURLkr4gJpYkZlZzs2mmxs79hyCuhn3JTA/exec';
-    const rsvpForm = document.getElementById('rsvpForm');
-    const rsvpMsg  = document.getElementById('rsvpMsg');
-
-    rsvpForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const fd = new FormData(rsvpForm);
-      const payload = {
-        nombre: fd.get('nombre')||'',
-        acompanantes: fd.get('acompanantes')||'0',
-        confirmo: fd.get('confirmo')||'',
-        mensaje: fd.get('mensaje')||''
-      };
-      // Envío en segundo plano (optimista abreviado por CORS, también abrimos nueva pestaña)
-      try{
-        fetch(RSVP_URL, {method:'POST', mode:'no-cors', body:new URLSearchParams(payload)});
-        rsvpMsg.textContent = '¡Gracias! Tu confirmación ha sido enviada.';
-        rsvpForm.reset();
-      }catch(_){
-        rsvpMsg.textContent = 'No pudimos confirmar desde aquí. Usa el botón "Abrir formulario RSVP".';
-      }
-      // Abre además el WebApp en pestaña nueva con params pre-rellenos (mejor experiencia)
-      const qs = new URLSearchParams(payload).toString();
-      window.open(RSVP_URL + '?' + qs, '_blank', 'noopener');
-    });
-
-    /* ============================ FORM: BUENOS DESEOS ============================ */
-    const WISH_URL = 'https://script.google.com/macros/s/AKfycbwA6Ur4xGzH4oUGv_2lj_nh0phkvZn_f3720DZ-fJdxUQjPEjMbcBSvHMtyaogW7UOw/exec';
-    const wishForm = document.getElementById('wishForm');
-    const wishMsg  = document.getElementById('wishMsg');
-    const wishList = document.getElementById('wishList');
-
-    function renderWishCard({nombre, deseo, fecha}){
-      const card = document.createElement('div');
-      card.className='wish-item';
-      const f = fecha || new Date().toLocaleString();
-      card.innerHTML = `<strong>${nombre}</strong><div>${deseo}</div><div class="note" style="margin-top:4px">${f}</div>`;
-      wishList.prepend(card);
-    }
-
-    wishForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const fd = new FormData(wishForm);
-      const payload = {
-        nombre: fd.get('nombre')||'',
-        deseo: fd.get('deseo')||'',
-        fecha: new Date().toISOString()
-      };
-      // Optimista: se pinta al instante
-      renderWishCard({nombre: payload.nombre, deseo: payload.deseo, fecha: new Date().toLocaleString()});
-
-      // Envío silencioso (no-cors). Además, abrimos pestaña para ver en tiempo real el registro.
-      try{
-        fetch(WISH_URL, {method:'POST', mode:'no-cors', body:new URLSearchParams(payload)});
-        wishMsg.textContent = '¡Gracias por tus palabras! Tu mensaje quedó guardado.';
-        wishForm.reset();
-      }catch(_){
-        wishMsg.textContent = 'No pudimos enviar desde aquí. Usa "Abrir en pestaña nueva".';
-      }
-
-      const qs = new URLSearchParams(payload).toString();
-      window.open(WISH_URL + '?' + qs, '_blank', 'noopener');
-    });
-
-    /* ============================ INICIO CONTADORES ============================ */
+    /* ============================ INICIO ============================ */
     function initCounters(){
       tickMini(); tickMain();
       if(order[current]==='sec-itinerario'){
         document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => { setTimeout(()=>it.classList.add('show'), idx*140); });
       }
     }
-    window.addEventListener('load', initCounters);
+    window.addEventListener('load', ()=>{
+      show(0,false);   // ahora sí, después de definir sideMenu y funciones
+      initCounters();
+    });
   </script>
 </body>
 </html>
