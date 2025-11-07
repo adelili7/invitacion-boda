@@ -1,21 +1,7 @@
-<!doctype html>
+   <!doctype html>
 <html lang="es">
 <head>
-  <!-- ================================================================
-       Invitación Boda — Abril & Pablo (vertical tipo libro)
-       ✔ Portada con overlay “Toca para comenzar” (desbloquea audio)
-       ✔ Al entrar: suena marcha_nupcial.mp3 (sin fade)
-       ✔ Anillo portada: crossfade a eternamente.mp3 y pasa a Familias
-       ✔ Menú flotante que se ABRE/CERRA (no tapa contenido)
-       ✔ “Libro” vertical con flip y scroll suave (móvil optimizado)
-       ✔ Contador ajustado en tamaño
-       ✔ Galería con zoom y navegación
-       ✔ Página 6: Confirmación conectada a Apps Script (POST/GET)
-       ✔ Página 9: Buenos deseos (form + feed en tiempo real) conectados
-       ✔ Cursor mágico opción B (blanco / celeste / plata / verde)
-       ✔ Fondos responsivos por página
-       ================================================================ -->
-
+  <!-- Invitación de boda — Abril & Pablo (vertical, flipbook, móviles optimizado) -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#ffffff" />
@@ -23,7 +9,7 @@
 
   <!-- Fuentes -->
   <link href="https://fonts.cdnfonts.com/css/waltograph" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
 
   <style>
     :root{
@@ -38,26 +24,23 @@
       --shadow:0 18px 50px rgba(0,0,0,.12);
       --ease:cubic-bezier(.2,.9,.2,1);
 
-      /* Paleta Dress code */
+      /* Tarjeta romántica */
+      --card-bg:#e0f2ff;         /* azul empolvado claro */
+      --card-border:#cfae7c;     /* oro rosado suave */
+      --card-grad:linear-gradient(180deg,#e0f2ff 0%, #f6fbff 100%);
+
+      /* Dress code chips */
       --chip-celeste:#a8dadc;
       --chip-beige:#efe5d0;
       --chip-verde:#a8e6cf;
       --chip-gris:#c5ced6;
       --chip-rosa:#f7b6b1;
 
-      /* Menú */
-      --menu-bg: rgba(255,255,255,.94);
-      --menu-shadow: 0 12px 28px rgba(0,0,0,.14);
+      --menu-bg: rgba(255,255,255,.95);
+      --menu-shadow: 0 12px 28px rgba(0,0,0,.12);
 
-      /* Cursor mágico */
-      --heart-white: radial-gradient(circle,#ffffff,#f5f5f5);
-      --heart-blue:  radial-gradient(circle,#d7f0ff,#87d3ff);
-      --heart-silver:radial-gradient(circle,#e4e7eb,#ffffff);
-      --heart-green: radial-gradient(circle,#bff5db,#eafff3);
-
-      /* Tarjeta romántica suave (Opción B moderna y delicada) */
-      --romantic-bg: linear-gradient(180deg,#e0f2ff 0%, #f6fbff 100%);
-      --romantic-border: #cfae7c; /* oro rosado suave */
+      /* Botón musical flotante con la paleta de corazones */
+      --music-grad: linear-gradient(135deg, #ffffff 0%, #9fd7ff 28%, #cfcfcf 64%, #a7ffcf 100%);
     }
 
     *{box-sizing:border-box}
@@ -67,25 +50,26 @@
     button{font-family:inherit;cursor:pointer;outline:none}
     .center{text-align:center}
 
-    /* Vista libro vertical */
+    /* Contenedor/flipbook */
     .viewport{height:100vh;overflow:hidden;position:relative;background:var(--bg-cream)}
     .sections{height:100%;width:100%;position:relative;perspective:1200px;}
 
     .section{
       position:absolute; inset:0;
       display:flex; align-items:center; justify-content:center;
-      padding:28px;
+      padding:26px;
       background-size:cover; background-position:center; background-attachment:fixed;
-      opacity:0; transform:rotateY(90deg) translateZ(-240px); transform-origin:center;
-      transition:transform .9s var(--ease), opacity .6s ease; backface-visibility:hidden;
+      opacity:0; transform:rotateY(90deg) translateZ(-200px);
+      transform-origin:center; backface-visibility:hidden;
+      transition:transform .85s var(--ease), opacity .6s ease;
       will-change:transform,opacity;
     }
     .section.active{opacity:1; transform:rotateY(0) translateZ(0)}
-    .section.prev  {opacity:0; transform:rotateY(-90deg) translateZ(-240px)}
-    .section.next  {opacity:0; transform:rotateY( 90deg) translateZ(-240px)}
-    .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.30),rgba(255,255,255,.62)); pointer-events:none}
+    .section.prev  {opacity:0; transform:rotateY(-90deg) translateZ(-200px)}
+    .section.next  {opacity:0; transform:rotateY( 90deg) translateZ(-200px)}
+    .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.6)); pointer-events:none}
 
-    /* Fondos por página (ajusta nombres a tus imágenes del repo) */
+    /* Fondos */
     .bg-portada {background-image:url('fondo_floral.jpg')}
     .bg-p1      {background-image:url('fondo_floral1.png')}
     .bg-p2      {background-image:url('fondo_floral2.jpg')}
@@ -97,22 +81,21 @@
     .bg-p8      {background-image:url('fondo_floral9.jpg')}
     .bg-p9      {background-image:url('fondo_floral8.png')}
 
-    /* Tarjeta central con estilo romántico */
+    /* Tarjeta principal con estilo romántico */
     .card{
       position:relative; z-index:2;
       max-width:980px; width:100%;
-      background:var(--romantic-bg);
-      border:1px solid var(--romantic-border);
-      backdrop-filter: blur(6px);
-      border-radius:18px; padding:26px; box-shadow:var(--shadow);
+      background:var(--card-grad);
+      border:1px solid var(--card-border);
+      border-radius:16px; padding:28px; box-shadow:var(--shadow);
+      backdrop-filter: blur(4px);
     }
 
-    /* Tipografía */
-    h1,h2,h3,h4{font-family:'Playfair Display',serif;margin:0 0 10px}
-    .title-top{font-size:44px; letter-spacing:.6px; text-align:center}
+    h1,h2,h3,h4{font-family:'Playfair Display',serif;margin:0 0 8px}
+    .title-top{font-size:46px; letter-spacing:.6px; text-align:center}
     .title-acepto{
       font-family:'Waltograph',cursive;
-      font-size:40px; margin-top:6px; text-align:center;
+      font-size:42px; margin-top:6px; text-align:center;
       background:linear-gradient(135deg,#fff,#f7e8c5 45%,#e3c792 70%,#fff);
       -webkit-background-clip:text; background-clip:text; color:transparent;
       text-shadow:0 0 18px rgba(255,255,255,.45), 0 0 6px rgba(230,186,120,.45);
@@ -130,7 +113,7 @@
     }
     .note{color:#555; font-size:14px}
 
-    /* Botones mágicos */
+    /* Botones */
     .btns{margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
     .magicBtn{
       padding:10px 14px; border-radius:12px; border:0;
@@ -139,7 +122,7 @@
     }
     .magicBtn:hover{filter:brightness(1.05); transform:translateY(-1px); box-shadow:0 12px 36px rgba(74,143,231,.26)}
 
-    /* Anillos (portada y overlay de entrada) */
+    /* Anillos (portada y overlay) */
     .ring-button,.entry-ring{background:transparent; border:0; padding:0; cursor:pointer; display:block; margin:12px auto; position:relative}
     .ring-svg{width:220px; height:220px; display:block}
     .ring-rotate{animation:ringSpin 14s linear infinite; transform-origin:110px 110px}
@@ -149,14 +132,14 @@
     @keyframes spark{0%{opacity:0; transform:translate(-50%,-50%) scale(.6)} 30%{opacity:1; transform:translate(-50%,-50%) scale(1.05)} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.6)}}
     .ring-instruction,.entry-instruction{font-size:13px;color:#333;margin-top:6px;text-align:center}
 
-    /* Contador mini portada */
+    /* Contador mini */
     .mini-flip{display:flex; gap:10px; justify-content:center; margin-top:12px; align-items:center}
-    .flip-mini{width:68px; height:68px; perspective:800px; position:relative}
+    .flip-mini{width:72px; height:72px; perspective:800px; position:relative}
     .flip-mini .face{
       position:absolute; left:0; top:0; width:100%; height:50%;
       overflow:hidden; border-radius:12px; background:var(--glass-strong);
       display:flex; align-items:center; justify-content:center;
-      font-weight:800; font-size:20px; font-family:'Playfair Display',serif;
+      font-weight:800; font-size:22px; font-family:'Playfair Display',serif;
       box-shadow:0 10px 26px rgba(0,0,0,.08);
     }
     .flip-mini .top{border-bottom-left-radius:0;border-bottom-right-radius:0;transform-origin:bottom}
@@ -164,83 +147,79 @@
     .flip-mini.animate .top{animation:flipTop .7s forwards}
     .flip-mini.animate .bottom{animation:flipBottom .7s forwards}
 
-    /* Contador grande (pág. Itinerario) */
-    .flip-grid{display:flex; gap:10px; justify-content:center; align-items:center; margin-top:14px; flex-wrap:wrap}
-    .flip{width:88px; height:82px; perspective:900px; position:relative}
+    /* Contador grande (pág. 4) — reducido en móviles */
+    .flip-grid{display:flex; gap:12px; justify-content:center; align-items:center; margin-top:12px; flex-wrap:wrap}
+    .flip{width:100px; height:96px; perspective:900px; position:relative}
     .flip .panel{
       position:absolute; left:0; top:0; width:100%; height:100%; border-radius:12px;
       background:var(--glass-strong); display:flex; align-items:center; justify-content:center;
-      font-family:'Playfair Display',serif; font-size:26px; box-shadow:0 10px 30px rgba(0,0,0,.08);
+      font-family:'Playfair Display',serif; font-size:28px; box-shadow:0 10px 30px rgba(0,0,0,.08);
     }
     .flip .top{border-bottom-left-radius:0;border-bottom-right-radius:0;transform-origin:bottom;z-index:2}
     .flip .bottom{top:50%;border-top-left-radius:0;border-top-right-radius:0;transform-origin:top;z-index:1}
     .flip.animate .top{animation:flipTop .7s forwards}
     .flip.animate .bottom{animation:flipBottom .7s forwards}
-    .flip .label{font-size:12px; color:#333; margin-top:6px; text-align:center}
+    .flip .label{font-size:12px; color:#333; margin-top:8px; text-align:center}
     @keyframes flipTop{0%{transform:rotateX(0)}100%{transform:rotateX(-180deg)}}
     @keyframes flipBottom{0%{transform:rotateX(180deg)}100%{transform:rotateX(0)}}
 
     /* Familias (pág. 2) */
-    .parents-wrap{display:flex; flex-direction:column; gap:16px; margin-top:8px}
-    .parents-block{
-      padding:14px; border-radius:14px; background:rgba(255,255,255,.82); border:1px dashed rgba(0,0,0,.06)
+    .parents-wrap{display:flex; flex-direction:column; gap:16px; margin-top:12px}
+    .parent-block{
+      background:var(--glass-strong);
+      border:1px solid rgba(207,174,124,.45);
+      border-radius:14px; padding:14px 16px;
+      box-shadow:0 8px 24px rgba(0,0,0,.06);
     }
-    .parents-title{font-weight:700; font-family:'Playfair Display',serif; margin-bottom:6px; font-size:20px}
-    .parent-names{font-family:'Playfair Display',serif; font-size:20px; line-height:1.35; text-align:center}
-    .couple-names{font-family:'Playfair Display',serif; font-size:28px; margin-top:16px; text-align:center}
+    .parent-title{font-family:'Playfair Display',serif; font-size:18px; margin-bottom:6px}
+    .parent-names{font-family:'Playfair Display',serif; font-size:22px; line-height:1.4; text-align:center; word-break:break-word}
+    .couple-names{font-family:'Playfair Display',serif; font-size:30px; margin-top:14px; text-align:center}
 
-    /* Foto + verso */
+    /* Foto + verso (pág. 3) */
     .photo-romantic{
       width:520px; max-width:92%; border-radius:16px; box-shadow:0 16px 42px rgba(0,0,0,.16);
       object-fit:cover; transition:transform .45s var(--ease), opacity .45s var(--ease);
+      margin-left:auto; margin-right:auto;
     }
     .photo-romantic:hover{transform:scale(1.03)}
     .verse-big{font-family:'Playfair Display',serif; font-size:18px; margin-top:12px; text-align:center}
 
-    /* Itinerario */
-    .itinerary{display:flex; flex-direction:column; gap:14px; margin-top:14px}
+    /* Itinerario (pág. 4) */
+    .itinerary{display:flex; flex-direction:column; gap:14px; margin-top:10px}
     .it-item{
       display:flex; gap:12px; align-items:flex-start; padding:14px; border-radius:12px;
-      background:rgba(255,255,255,.92); box-shadow:0 10px 28px rgba(0,0,0,.08);
+      background:var(--glass-strong); box-shadow:0 10px 28px rgba(0,0,0,.08);
       opacity:0; transform:translateY(16px); transition:opacity .6s, transform .6s;
     }
     .it-item.show{opacity:1; transform:translateY(0)}
-    .it-icon{width:52px; height:52px; border-radius:10px; background:rgba(255,255,255,.96); display:flex; align-items:center; justify-content:center; font-size:22px}
-    .it-info strong{display:block}
+    .it-icon{min-width:48px; height:48px; border-radius:10px; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center; font-size:22px}
     .map-link{display:inline-block; margin-top:6px; color:#2b87e6; text-decoration:underline}
     .palette{display:flex; gap:8px; margin-top:8px}
     .chip{width:22px; height:22px; border-radius:6px}
 
-    /* Formularios (pág. 6 y 9) */
-    .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-    .form-grid-1{display:grid; grid-template-columns:1fr; gap:10px}
-    .field{
-      display:flex; flex-direction:column; gap:6px;
-    }
-    .field label{font-weight:700; font-size:14px}
-    .field input[type="text"], .field input[type="number"], .field textarea, .field select{
-      border:1px solid rgba(0,0,0,.12); border-radius:12px; padding:10px 12px; background:#fff; font-size:15px
-    }
-    .field textarea{min-height:90px; resize:vertical}
-    .submit-row{margin-top:8px; display:flex; gap:10px; flex-wrap:wrap}
-
-    .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; margin-top:12px}
-    .card-sm{
-      background:rgba(255,255,255,.96); border:1px solid rgba(0,0,0,.06); border-radius:12px; padding:12px;
-      box-shadow:0 6px 20px rgba(0,0,0,.06)
-    }
-    .card-sm .who{font-weight:700}
-    .card-sm .msg{margin-top:6px}
-    .empty{font-style:italic; color:#666; text-align:center; padding:10px}
-
-    /* Galería */
-    .gallery-grid{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:10px}
+    /* Galería (pág. 5) */
+    .gallery-grid{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:10px}
     .gallery-grid img{
       width:260px; height:176px; object-fit:cover; border-radius:12px;
       box-shadow:0 10px 30px rgba(0,0,0,.12); cursor:pointer; transition:transform .35s, opacity .35s;
     }
     .gallery-grid img:hover{transform:scale(1.03); opacity:.96}
     .gallery-controls{margin-top:10px; text-align:center}
+
+    /* Colaborativa / finales */
+    .collab-photo{
+      width:100%; max-width:860px; border-radius:14px; box-shadow:0 14px 40px rgba(0,0,0,.14);
+      object-fit:cover; transition:transform .45s var(--ease); margin-left:auto; margin-right:auto;
+    }
+    .collab-photo:hover{transform:scale(1.02)}
+    .final-title{font-family:'Playfair Display',serif; font-size:26px; text-align:center}
+    .final-sub{margin-top:8px; color:#666; text-align:center}
+    .wa-row{display:flex; gap:12px; justify-content:center; margin-top:12px; flex-wrap:wrap}
+    .wa-btn{
+      display:inline-flex; gap:8px; align-items:center; padding:10px 14px; border-radius:999px;
+      background:var(--wa); color:#fff; text-decoration:none; font-weight:700; box-shadow:0 10px 30px rgba(0,0,0,.12)
+    }
+    .wa-svg{width:18px; height:18px; display:inline-block; vertical-align:middle; fill:#fff}
 
     /* Lightbox */
     .lb{position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:3000}
@@ -250,35 +229,59 @@
     .lb-nav{position:fixed; left:6px; right:6px; top:50%; display:flex; justify-content:space-between; pointer-events:none}
     .lb-nav button{pointer-events:all; background:rgba(255,255,255,.92); border-radius:999px; padding:10px 12px; border:0; cursor:pointer}
 
-    /* Flechas libro */
+    /* Flechas */
     .nav{position:fixed; top:50%; left:0; right:0; display:flex; justify-content:space-between; pointer-events:none; z-index:990; transform:translateY(-50%)}
-    .nav button{pointer-events:all; background:rgba(255,255,255,.96); border:0; padding:10px 12px; border-radius:999px; font-size:28px; cursor:pointer; margin:8px; box-shadow:0 10px 30px rgba(0,0,0,.12)}
+    .nav button{pointer-events:all; background:rgba(255,255,255,.95); border:0; padding:10px 12px; border-radius:999px; font-size:28px; cursor:pointer; margin:8px; box-shadow:0 10px 30px rgba(0,0,0,.12)}
 
-    /* Menú flotante DESPLEGABLE (cerrado por defecto) */
-    .menu-toggle{
-      position:fixed; right:16px; bottom:18px;
-      width:52px; height:52px; border-radius:50%;
-      background: linear-gradient(135deg,var(--accent),var(--accent2));
-      color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; border:0; box-shadow: var(--menu-shadow);
-      z-index: 996;
-    }
+    /* Menú lateral (cerrado por defecto) */
     .side-menu{
-      position:fixed; right:16px; bottom:78px;
+      position:fixed; right:18px; top:50%; transform:translateY(-50%);
       background:var(--menu-bg); border-radius:16px; box-shadow: var(--menu-shadow);
       padding:10px 8px; z-index: 995; backdrop-filter: blur(6px);
-      display:none; max-height:70vh; overflow:auto;
+      display:none;
     }
-    .side-menu.open{ display:block; }
     .side-menu a{
       display:flex; align-items:center; gap:8px;
       padding:10px 12px; border-radius:12px; margin:6px 0;
       font-weight:700; color:#233; transition: background .2s, transform .2s; white-space: nowrap;
     }
-    .side-menu a:hover{ background: rgba(35,117,255,.10); transform: translateX(-1px); }
+    .side-menu a:hover{ background: rgba(35,117,255,.08); transform: translateX(-1px); }
     .side-menu a.active{ background: rgba(35,117,255,.16); }
     .side-menu .icon{ width:18px; text-align:center }
+    .menu-toggle{
+      position:fixed; right:18px; bottom:18px;
+      width:48px; height:48px; border-radius:50%;
+      background: linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; border:0; box-shadow: var(--menu-shadow);
+      z-index: 996;
+    }
+    .side-menu.open{ display:block; }
 
-    /* Overlay entrada */
+    /* Botón musical flotante (fallback) */
+    #musicRetry{
+      position:fixed; right:16px; bottom:76px; z-index:3500;
+      width:48px; height:48px; border-radius:50%;
+      display:none; align-items:center; justify-content:center;
+      background: var(--music-grad);
+      color:#1d4033; font-size:22px; box-shadow:0 10px 32px rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.6);
+      animation: pulseGlow 2.4s ease-in-out infinite;
+    }
+    #musicRetry[aria-hidden="false"]{ display:flex; }
+    #musicRetry:hover{ filter:brightness(1.06) }
+    #musicRetry::after{
+      content: attr(aria-label);
+      position:absolute; right:56px; bottom:12px; white-space:nowrap;
+      background:rgba(0,0,0,.65); color:#fff; font-size:12px; padding:6px 8px; border-radius:8px;
+      transform:translateY(4px); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+    }
+    #musicRetry:hover::after{ opacity:1; transform:translateY(0) }
+    @keyframes pulseGlow{
+      0%,100%{ box-shadow:0 10px 32px rgba(0,0,0,.18), 0 0 0 0 rgba(103,210,204,.22) }
+      50%{ box-shadow:0 12px 40px rgba(0,0,0,.24), 0 0 0 12px rgba(103,210,204,.04) }
+    }
+
+    /* Overlay de entrada */
     #entryOverlay{
       position:fixed; inset:0; z-index:4000;
       background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.88));
@@ -294,56 +297,43 @@
     .entry-title{ font-family:'Playfair Display',serif; font-size:28px; margin-bottom:6px }
     .entry-sub{ color:#666; margin-bottom:12px }
 
-    /* Botón musical de emergencia */
-    #musicRetry{
-      position:fixed; right:16px; bottom:82px; z-index:3500;
-      width:48px; height:48px; border-radius:50%;
-      display:none; align-items:center; justify-content:center;
-      background: linear-gradient(135deg,#ffffff 0%, #9fd7ff 28%, #cfcfcf 64%, #a7ffcf 100%);
-      color:#1d4033; font-size:22px; box-shadow:0 10px 32px rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.6);
-      animation: pulseGlow 2.4s ease-in-out infinite;
+    /* Buenos deseos (tarjeta romántica) */
+    .wish-card{
+      background:var(--card-grad);
+      border:1px solid var(--card-border);
+      border-radius:14px;
+      padding:12px 14px;
+      box-shadow:0 8px 24px rgba(0,0,0,.06);
     }
-    #musicRetry[aria-hidden="false"]{ display:flex; }
-    #musicRetry:hover{ filter:brightness(1.06) }
-    @keyframes pulseGlow{
-      0%,100%{ box-shadow:0 10px 32px rgba(0,0,0,.18), 0 0 0 0 rgba(103,210,204,.22) }
-      50%{ box-shadow:0 12px 40px rgba(0,0,0,.24), 0 0 0 12px rgba(103,210,204,.04) }
-    }
+    .wish-name{font-family:'Playfair Display',serif; font-weight:700}
+    .wish-date{font-size:12px; color:#666}
+    .wish-text{margin-top:6px; line-height:1.5}
 
-    /* Cursor mágico (opción B) */
-    .magicHeart{
-      position:fixed; pointer-events:none; z-index:99999;
-      width:22px; height:22px; opacity:0; transform:translate(-50%,-50%) scale(1);
-      animation:heartFade 1500ms ease-out forwards;
-      filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
+    /* Formularios */
+    .form-grid{display:grid; gap:10px; grid-template-columns:1fr 1fr}
+    .form-grid-1{display:grid; gap:10px; grid-template-columns:1fr}
+    .form-row{display:flex; flex-direction:column; gap:6px}
+    input,select,textarea{
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(0,0,0,.12);
+      background:#fff; font-size:14px;
     }
-    @keyframes heartFade{
-      0%  {opacity:.88; transform:translate(-50%,-50%) scale(1)}
-      70% {opacity:.55; transform:translate(-50%,-120%) scale(.82)}
-      100%{opacity:0;   transform:translate(-50%,-160%) scale(.68)}
-    }
+    textarea{min-height:96px; resize:vertical}
+    .form-actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .link-ext{color:#2b87e6; text-decoration:underline; font-size:13px}
 
-    /* Responsive extra para móviles pequeños */
+    /* Responsive */
     @media (max-width:900px){
       .title-top{font-size:36px}
       .title-acepto{font-size:28px}
       .ring-svg{width:160px;height:160px}
-      .parent-names{font-size:19px}
-      .couple-names{font-size:24px}
+      .parent-names{font-size:20px}
+      .couple-names{font-size:26px}
       .photo-romantic{width:320px}
       .gallery-grid img{width:44vw;height:32vw}
-      .flip{width:82px;height:76px}
-      .flip-mini{width:62px;height:62px}
-      .card{padding:16px;border-radius:14px}
-    }
-    @media (max-width:560px){
-      .flip{width:76px;height:70px}
+      .flip{width:84px;height:78px}
       .flip .panel{font-size:22px}
-      .title-top{font-size:32px}
-      .title-acepto{font-size:26px}
-      .parent-names{font-size:18px}
-      .couple-names{font-size:22px}
+      .flip-mini{width:64px;height:64px}
+      .card{padding:16px;border-radius:12px}
       .form-grid{grid-template-columns:1fr}
     }
   </style>
@@ -353,7 +343,7 @@
   <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop></audio>
   <audio id="eternamente" src="eternamente.mp3" preload="auto"></audio>
 
-  <!-- Overlay de entrada (desbloquea audio en móvil) -->
+  <!-- Overlay de entrada -->
   <div id="entryOverlay" role="dialog" aria-modal="true" aria-label="Toca para entrar">
     <div class="entry-card">
       <div class="entry-title">Toca para comenzar 💍</div>
@@ -390,14 +380,13 @@
   <div class="viewport">
     <div class="sections" id="sections">
 
-      <!-- P1 — Portada -->
-      <section id="sec-portada" class="section bg-portada active" aria-label="Portada" data-name="portada">
+      <!-- P1: Portada -->
+      <section id="sec-portada" class="section bg-portada active" data-name="portada" aria-label="Portada">
         <div class="overlay"></div>
         <div class="card center">
           <h1 class="title-top">Abril &amp; Pablo</h1>
           <div class="title-acepto">Sí, ¡acepto!</div>
 
-          <!-- Anillo portada: crossfade a eternamente y pasa a Familias -->
           <button class="ring-button" id="ringBtn" aria-label="Anillo: abrir invitación">
             <div class="ring-spark"></div>
             <svg class="ring-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -426,18 +415,15 @@
           </button>
           <div class="ring-instruction"><em>Da clic en el anillo para abrir</em></div>
 
-          <!-- Contador mini -->
           <div class="mini-flip" id="miniFlip">
-            <div class="flip-mini" data-k="d"><div class="face top">00</div><div class="face bottom">00</div></div>
-            <div class="flip-mini" data-k="h"><div class="face top">00</div><div class="face bottom">00</div></div>
-            <div class="flip-mini" data-k="m"><div class="face top">00</div><div class="face bottom">00</div></div>
-            <div class="flip-mini" data-k="s"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini"><div class="face top">00</div><div class="face bottom">00</div></div>
           </div>
 
-          <!-- Versículo -->
           <p class="verse">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></p>
 
-          <!-- Botones mágicos -->
           <div class="btns">
             <button class="magicBtn" data-target="sec-familias">Nuestras familias</button>
             <button class="magicBtn" data-target="sec-itinerario">Itinerario</button>
@@ -447,30 +433,28 @@
         </div>
       </section>
 
-      <!-- P2 — Familias -->
-      <section id="sec-familias" class="section bg-p1" aria-label="Familias" data-name="familias">
+      <!-- P2: Familias -->
+      <section id="sec-familias" class="section bg-p1" data-name="familias" aria-label="Familias">
         <div class="overlay"></div>
-        <div class="card center">
-          <h2>Padres de los novios</h2>
+        <div class="card">
+          <h2 class="center">Padres de los novios</h2>
 
           <div class="parents-wrap">
-            <div class="parents-block">
-              <div class="parents-title">Padres de la novia</div>
-              <div class="parent-names">
-                <strong>Eva Aguilar Rendón</strong><br/>
-                <strong>Pedro Pérez Hernández</strong>
-              </div>
+            <div class="parent-block">
+              <div class="parent-title center">Padres de la novia</div>
+              <div class="parent-names"><strong>Eva Aguilar Rendón</strong> y <strong>Pedro Pérez Hernández</strong></div>
             </div>
-            <div class="parents-block">
-              <div class="parents-title">Padres del novio</div>
+
+            <div class="parent-block">
+              <div class="parent-title center">Padres del novio</div>
               <div class="parent-names">
-                <strong>Saray Hernández Santana</strong><br/>
+                <strong>Saray Hernández Santana</strong> y
                 <strong>Pablo Tinoco Carranza <span title="finado">✝</span></strong>
               </div>
             </div>
           </div>
 
-          <div style="margin-top:16px;font-family:'Playfair Display',serif;font-size:18px">
+          <div style="margin-top:14px;font-family:'Playfair Display',serif;font-size:18px;text-align:center">
             “Tienen el honor de compartir la dicha que enlaza a sus amados hijos.”
           </div>
 
@@ -478,44 +462,42 @@
         </div>
       </section>
 
-      <!-- P3 — Foto + Mateo 19:6 -->
-      <section id="sec-foto-verse" class="section bg-p2" aria-label="Foto y versículo" data-name="foto-verse">
+      <!-- P3: Foto + versículo -->
+      <section id="sec-foto-verse" class="section bg-p2" data-name="foto-verse" aria-label="Foto y versículo">
         <div class="overlay"></div>
         <div class="card center">
           <img src="foto1.jpg" alt="Abril y Pablo" class="photo-romantic lb-target" data-src="foto1.jpg">
           <p class="verse-big" style="max-width:780px;margin-left:auto;margin-right:auto">
-            “Así que no son ya más dos, sino una sola carne; por tanto, lo que Dios juntó, no lo separe el hombre.”
-            — <strong>Mateo 19:6</strong>
+            “Así que no son ya más dos, sino una sola carne; por tanto, lo que Dios juntó, no lo separe el hombre.” — <strong>Mateo 19:6</strong>
           </p>
         </div>
       </section>
 
-      <!-- P4 — Itinerario + Contador grande -->
-      <section id="sec-itinerario" class="section bg-p3" aria-label="Itinerario" data-name="itinerario">
+      <!-- P4: Itinerario + contador -->
+      <section id="sec-itinerario" class="section bg-p3" data-name="itinerario" aria-label="Itinerario">
         <div class="overlay"></div>
         <div class="card">
-          <h2 style="text-align:center">Con cariño…</h2>
-          <p class="center" style="font-family:'Playfair Display',serif;font-size:18px;margin:6px 0 10px">
+          <h2 class="center">Con cariño…</h2>
+          <p class="center" style="font-family:'Playfair Display',serif;font-size:18px;margin:6px 0 8px">
             Nos llena de alegría compartir este día contigo. <br>
             <strong>Fecha del evento: 28 de diciembre del 2025.</strong>
           </p>
 
-          <!-- Contador grande (más compacto) -->
-          <div style="margin-top:0;text-align:center">
+          <div class="center">
             <div style="font-family:'Playfair Display',serif;font-size:18px;color:#333">Faltan para nuestro gran día</div>
             <div class="flip-grid" id="mainFlip">
-              <div class="flip" data-key="days"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Días</div></div>
-              <div class="flip" data-key="hours"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Horas</div></div>
-              <div class="flip" data-key="mins"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Minutos</div></div>
-              <div class="flip" data-key="secs"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Segundos</div></div>
+              <div class="flip"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Días</div></div>
+              <div class="flip"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Horas</div></div>
+              <div class="flip"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Minutos</div></div>
+              <div class="flip"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Segundos</div></div>
             </div>
           </div>
 
-          <h2 style="text-align:center;margin-top:14px">Itinerario</h2>
+          <h2 class="center" style="margin-top:14px">Itinerario</h2>
           <div class="itinerary" id="itineraryList">
             <div class="it-item">
               <div class="it-icon">⛪</div>
-              <div class="it-info">
+              <div>
                 <strong>Ceremonia Religiosa — 2:00 p.m.</strong>
                 <div>Iglesia cristiana “Palabra de vida AD”</div>
                 <div>Rodeo #35, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos</div>
@@ -524,7 +506,7 @@
             </div>
             <div class="it-item">
               <div class="it-icon">🎉</div>
-              <div class="it-info">
+              <div>
                 <strong>Recepción — 4:00 p.m.</strong>
                 <div>Jardín Los Abuelos</div>
                 <div>Insurgentes #819, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos</div>
@@ -533,7 +515,7 @@
             </div>
             <div class="it-item">
               <div class="it-icon">👗</div>
-              <div class="it-info">
+              <div>
                 <strong>Código de vestimenta</strong>
                 <div>Formal — Tonos recomendados: celestes, beige, verde, gris, rosa</div>
                 <div class="palette">
@@ -550,8 +532,8 @@
         </div>
       </section>
 
-      <!-- P5 — Galería novios -->
-      <section id="sec-galeria" class="section bg-p4" aria-label="Galería novios" data-name="galeria">
+      <!-- P5: Galería novios -->
+      <section id="sec-galeria" class="section bg-p4" data-name="galeria" aria-label="Galería">
         <div class="overlay"></div>
         <div class="card">
           <h2>Galería — Los novios</h2>
@@ -571,51 +553,49 @@
         </div>
       </section>
 
-      <!-- P6 — Confirmación de asistencia -->
-      <section id="sec-rsvp" class="section bg-p5" aria-label="RSVP" data-name="rsvp">
+      <!-- P6: Confirmación de asistencia -->
+      <section id="sec-rsvp" class="section bg-p5" data-name="rsvp" aria-label="Confirmación de asistencia">
         <div class="overlay"></div>
         <div class="card">
           <h2>Confirmación de asistencia</h2>
-          <p class="note">Tu confirmación se guarda en Google Sheets y nos ayuda a planear mejor 💙</p>
+          <p class="note">Completa el formulario. También puedes <a class="link-ext" href="https://script.google.com/macros/s/AKfycbxMDHjYXHV-BkLxgWNfB31jJSQ55JhjGBOTZCgHNQDliUpl34V-nkh67EW9CAfK0uwj/exec" target="_blank" rel="noopener">abrirlo en una pestaña nueva</a>.</p>
 
-          <form id="rsvpForm" novalidate>
-            <div class="form-grid">
-              <div class="field">
-                <label for="rsvpNombre">Nombre del invitado</label>
-                <input type="text" id="rsvpNombre" name="nombre" required placeholder="Tu nombre completo">
-              </div>
-              <div class="field">
-                <label for="rsvpNum">Número de acompañantes</label>
-                <input type="number" id="rsvpNum" name="numInvitados" min="0" step="1" required placeholder="0, 1, 2...">
-              </div>
-              <div class="field">
-                <label for="rsvpConfirmo">Confirmar asistencia</label>
-                <select id="rsvpConfirmo" name="confirmacion" required>
-                  <option value="">Selecciona una opción</option>
-                  <option value="Sí">Sí</option>
-                  <option value="No">No</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="rsvpMsg">Mensaje para los novios</label>
-                <textarea id="rsvpMsg" name="comentarios" placeholder="Escribe un mensajito…"></textarea>
-              </div>
+          <form id="rsvpForm" class="form-grid" autocomplete="on">
+            <div class="form-row">
+              <label>Nombre del invitado</label>
+              <input type="text" name="nombre" required placeholder="Tu nombre completo">
             </div>
-            <div class="submit-row">
-              <button class="magicBtn" type="submit">Confirmar asistencia</button>
+            <div class="form-row">
+              <label>Número de acompañantes</label>
+              <input type="number" name="numInvitados" min="0" value="0" required>
+            </div>
+            <div class="form-row">
+              <label>Confirmar asistencia</label>
+              <select name="confirmacion" required>
+                <option value="Asistiré">Asistiré</option>
+                <option value="No podré asistir">No podré asistir</option>
+                <option value="Aún no lo sé">Aún no lo sé</option>
+              </select>
+            </div>
+            <div class="form-row" style="grid-column:1/-1">
+              <label>Mensaje para los novios (opcional)</label>
+              <textarea name="comentarios" placeholder="Escribe un mensaje lindo..."></textarea>
+            </div>
+            <div class="form-actions" style="grid-column:1/-1">
+              <button type="submit" class="magicBtn">Confirmar asistencia</button>
               <span id="rsvpStatus" class="note"></span>
             </div>
           </form>
         </div>
       </section>
 
-      <!-- P7 — Colaborativa + momento9 -->
-      <section id="sec-colaborativa" class="section bg-p6" aria-label="Galería colaborativa" data-name="colaborativa">
+      <!-- P7: Galería colaborativa -->
+      <section id="sec-colaborativa" class="section bg-p6" data-name="colaborativa" aria-label="Galería colaborativa">
         <div class="overlay"></div>
         <div class="card center">
           <h2>Galería colaborativa</h2>
-          <img src="momento9.jpg" alt="momento9" class="photo-romantic lb-target" data-src="momento9.jpg" style="margin:10px auto">
-          <p class="note" style="margin-top:6px">Comparte tus fotos o videos de la boda. ¡Queremos ver tu perspectiva!</p>
+          <img src="momento9.jpg" alt="momento9" class="collab-photo lb-target" data-src="momento9.jpg" style="margin-top:10px">
+          <p class="note" style="margin-top:8px">Comparte tus fotos o videos de la boda. ¡Queremos ver tu perspectiva!</p>
           <div style="margin-top:10px">
             <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=header" target="_blank" rel="noopener">
               Subir tus fotos o videos
@@ -624,68 +604,68 @@
         </div>
       </section>
 
-      <!-- P8 — Momento8 + frase -->
-      <section id="sec-momento8" class="section bg-p7" aria-label="Momento 8" data-name="momento8">
+      <!-- P8: Momento 8 -->
+      <section id="sec-momento8" class="section bg-p7" data-name="momento8" aria-label="Momento 8">
         <div class="overlay"></div>
         <div class="card center">
-          <img src="momento8.jpg" alt="momento8" class="photo-romantic lb-target" data-src="momento8.jpg">
+          <img src="momento8.jpg" alt="momento8" class="collab-photo lb-target" data-src="momento8.jpg">
           <p style="margin-top:12px;font-family:'Playfair Display',serif;font-size:18px">
             "Tu amor es lo que he anhelado y el regalo que Dios me ha dado"
           </p>
         </div>
       </section>
 
-      <!-- P9 — Final + Buenos deseos (form + feed en vivo) -->
-      <section id="sec-final" class="section bg-p8" aria-label="Final" data-name="final">
+      <!-- P9: Final + WhatsApp + Calendario + Buenos deseos -->
+      <section id="sec-final" class="section bg-p8" data-name="final" aria-label="Final">
         <div class="overlay"></div>
         <div class="card">
           <div class="center">
-            <img src="momento5.jpg" alt="momento5" class="photo-romantic lb-target" data-src="momento5.jpg" style="margin-bottom:12px">
-            <div style="font-family:'Playfair Display',serif; font-size:26px;">Con amor eterno</div>
+            <img src="momento5.jpg" alt="momento5" class="collab-photo lb-target" data-src="momento5.jpg" style="margin-bottom:12px">
+            <div class="final-title">Con amor eterno</div>
             <div style="font-family:'Playfair Display',serif;font-size:22px;margin-top:6px">Abril &amp; Pablo</div>
-            <div class="note">Gracias por ser parte de nuestro día especial</div>
-            <div class="wa-row" style="margin-top:10px">
-              <a class="wa-btn" href="https://wa.me/5217774914500" target="_blank" rel="noopener" aria-label="WhatsApp Abril">WhatsApp Abril</a>
-              <a class="wa-btn" href="https://wa.me/5217341123645" target="_blank" rel="noopener" aria-label="WhatsApp Pablo">WhatsApp Pablo</a>
+            <div class="final-sub">Gracias por ser parte de nuestro día especial</div>
+
+            <div class="wa-row">
+              <a class="wa-btn" href="https://wa.me/5217774914500" target="_blank" rel="noopener" aria-label="WhatsApp Abril">
+                <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/></svg>
+                WhatsApp Abril
+              </a>
+              <a class="wa-btn" href="https://wa.me/5217341123645" target="_blank" rel="noopener" aria-label="WhatsApp Pablo">
+                <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/></svg>
+                WhatsApp Pablo
+              </a>
             </div>
+
             <div style="margin-top:10px">
               <a class="magicBtn" href="#" id="addCalendar">Agregar al calendario</a>
             </div>
           </div>
 
-          <hr style="margin:16px 0;border:none;border-top:1px solid rgba(0,0,0,.08)">
+          <!-- Buenos deseos -->
+          <div style="margin-top:18px">
+            <h2 class="center">Buenos deseos</h2>
+            <p class="note center">Comparte un mensaje para los novios. Se mostrará inmediatamente aquí.</p>
 
-          <h2 class="center">Buenos deseos</h2>
-          <p class="note center">Deja un mensaje para los novios ✨ (se guarda en Google Sheets y aparece aquí en vivo)</p>
+            <form id="deseosForm" class="form-grid-1" autocomplete="on">
+              <div class="form-row">
+                <label>Nombre del invitado</label>
+                <input type="text" name="nombre" required placeholder="Tu nombre completo">
+              </div>
+              <div class="form-row">
+                <label>Buenos deseos</label>
+                <textarea name="mensaje" required placeholder="Escribe tu deseo para los novios..."></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="magicBtn">Enviar buenos deseos</button>
+                <a class="link-ext" href="https://script.google.com/macros/s/AKfycbycwDsFO_s2MfNniVuunon9bJPkqIh5Ybg6rcfk5t61G-Ji2FJm0Ss8RKT8q7tVMKjK/exec" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
+                <span id="deseosStatus" class="note"></span>
+              </div>
+            </form>
 
-          <form id="wishForm" class="form-grid-1" novalidate>
-            <div class="field">
-              <label for="wishNombre">Nombre del invitado</label>
-              <input type="text" id="wishNombre" name="nombre" required placeholder="Tu nombre completo">
-            </div>
-            <div class="field">
-              <label for="wishMsg">Buenos deseos</label>
-              <textarea id="wishMsg" name="mensaje" required placeholder="Tus palabras para los novios…"></textarea>
-            </div>
-            <div class="submit-row">
-              <button class="magicBtn" type="submit">Enviar buenos deseos</button>
-              <span id="wishStatus" class="note"></span>
-            </div>
-          </form>
-
-          <div id="wishList" class="cards"></div>
-          <div id="wishEmpty" class="empty" style="display:none">Aún no hay mensajes. ¡Sé la primera persona en escribir! 💌</div>
+            <div id="deseosList" style="display:grid; gap:10px; margin-top:12px"></div>
+          </div>
         </div>
       </section>
-
-      <!-- P10 — Decorativa de cierre -->
-      <section id="sec-fondo-final" class="section bg-p9" aria-label="Fondo final" data-name="fondo-final">
-        <div class="overlay"></div>
-        <div class="card center">
-          <p style="font-family:'Playfair Display',serif">¡Gracias por visitar nuestra invitación!</p>
-        </div>
-      </section>
-
     </div>
 
     <!-- Flechas -->
@@ -694,7 +674,7 @@
       <div><button id="nextBtn" aria-label="Siguiente">›</button></div>
     </div>
 
-    <!-- Menú flotante (cerrado por defecto) -->
+    <!-- Menú lateral (cerrado) -->
     <nav class="side-menu" id="sideMenu" aria-label="Navegación rápida">
       <a href="#sec-portada"       data-goto="sec-portada"><span class="icon">🏠</span> Portada</a>
       <a href="#sec-familias"      data-goto="sec-familias"><span class="icon">👪</span> Familias</a>
@@ -704,7 +684,7 @@
       <a href="#sec-rsvp"          data-goto="sec-rsvp"><span class="icon">💌</span> Confirmación</a>
       <a href="#sec-colaborativa"  data-goto="sec-colaborativa"><span class="icon">🤳</span> Colaborativa</a>
       <a href="#sec-momento8"      data-goto="sec-momento8"><span class="icon">💚</span> Momento 8</a>
-      <a href="#sec-final"         data-goto="sec-final"><span class="icon">🌟</span> Buenos deseos</a>
+      <a href="#sec-final"         data-goto="sec-final"><span class="icon">🌟</span> Final</a>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
 
@@ -723,32 +703,14 @@
   </div>
 
   <script>
-    /* ======= Config ======= */
-    const RSVP_ENDPOINT  = 'https://script.google.com/macros/s/AKfycbxMDHjYXHV-BkLxgWNfB31jJSQ55JhjGBOTZCgHNQDliUpl34V-nkh67EW9CAfK0uwj/exec';
-    const WISH_ENDPOINT  = 'https://script.google.com/macros/s/AKfycbycwDsFO_s2MfNniVuunon9bJPkqIh5Ybg6rcfk5t61G-Ji2FJm0Ss8RKT8q7tVMKjK/exec';
-    const target = new Date('2025-12-28T14:00:00'); // 28 dic 2025 2:00 p.m.
-
-    /* ======= Orden de secciones ======= */
-    const order = [
+    /* ==================== Config / helpers ==================== */
+    const ORDER = [
       'sec-portada','sec-familias','sec-foto-verse','sec-itinerario',
-      'sec-galeria','sec-rsvp','sec-colaborativa','sec-momento8',
-      'sec-final','sec-fondo-final'
+      'sec-galeria','sec-rsvp','sec-colaborativa','sec-momento8','sec-final'
     ];
-    const sections = order.map(id => document.getElementById(id));
+    const sections = ORDER.map(id => document.getElementById(id));
     let current = 0, firstNavDone = false, wheelLock = false;
 
-    /* ======= DOM refs que se usan dentro de show()/markActiveInMenu() ======= */
-    const sideMenu   = document.getElementById('sideMenu');
-    const menuToggle = document.getElementById('menuToggle');
-
-    function markActiveInMenu(id){
-      if(!sideMenu) return;
-      sideMenu.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.getAttribute('data-goto')===id));
-    }
-    function closeMenuOnMobile(){ sideMenu.classList.remove('open'); }
-    menuToggle.addEventListener('click',()=> sideMenu.classList.toggle('open'));
-
-    /* ======= Libro vertical ======= */
     function setStates(idx){
       sections.forEach((s,i)=>{
         s.classList.remove('active','prev','next');
@@ -761,77 +723,77 @@
       if (i !== current && firstNavDone && playSound) playFlipSoundBook();
       setStates(i);
       current = i;
-      const hide = (order[i] === 'sec-portada');
+      const hide = (ORDER[i] === 'sec-portada');
       document.querySelectorAll('#navArrows button').forEach(b=>b.style.display = hide ? 'none':'block');
-      markActiveInMenu(order[i]);
-      if(order[i] === 'sec-itinerario'){
-        document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => { setTimeout(()=>it.classList.add('show'), idx*140); });
+      markActiveInMenu(ORDER[i]);
+      if(ORDER[i] === 'sec-itinerario'){
+        document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => { setTimeout(()=>it.classList.add('show'), idx*120); });
       }
       if (i!==0) firstNavDone = true;
     }
 
-    /* ======= Navegación de menú ======= */
+    /* ==================== Navegación y menú ==================== */
+    const sideMenu = document.getElementById('sideMenu');
+    const menuToggle = document.getElementById('menuToggle');
+
+    function markActiveInMenu(id){
+      sideMenu.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.getAttribute('data-goto')===id));
+    }
+    function closeMenu(){ sideMenu.classList.remove('open'); }
+    function openMenu(){ sideMenu.classList.add('open'); }
+
     sideMenu.querySelectorAll('a[data-goto]').forEach(a=>{
-      a.addEventListener('click', (e)=>{
+      a.addEventListener('click',(e)=>{
         e.preventDefault();
-        const id=a.getAttribute('data-goto');
-        const idx=order.indexOf(id);
-        if(idx>=0){ show(idx); closeMenuOnMobile(); }
+        const id = a.getAttribute('data-goto');
+        const idx = ORDER.indexOf(id);
+        if(idx>=0){ show(idx); closeMenu(); }
       });
     });
+    menuToggle.addEventListener('click',()=> sideMenu.classList.toggle('open'));
 
-    /* ======= Inicio ======= */
+    // Iniciar después de que sideMenu exista
     show(0,false);
 
-    /* ======= Scroll/Swipe/Keys ======= */
+    /* Rueda / swipe / teclas */
     function onWheel(e){
-      if(wheelLock) return;
-      wheelLock = true;
+      if(wheelLock) return; wheelLock = true;
       const dy = e.deltaY;
       if(Math.abs(dy) < 10){ wheelLock = false; return; }
-      if(dy > 0) show(current+1);
-      else show(current-1);
-      setTimeout(()=>wheelLock=false, 650);
+      if(dy > 0) show(current+1); else show(current-1);
+      setTimeout(()=>wheelLock=false, 600);
     }
     window.addEventListener('wheel', onWheel, {passive:true});
 
     document.getElementById('prevBtn').addEventListener('click',()=>show(current-1));
     document.getElementById('nextBtn').addEventListener('click',()=>show(current+1));
-
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown',(e)=>{
       if(e.key==='ArrowRight' || e.key==='PageDown') show(current+1);
       if(e.key==='ArrowLeft'  || e.key==='PageUp')   show(current-1);
       if(e.key==='Home') show(0);
-      if(e.key==='End')  show(order.length-1);
+      if(e.key==='End')  show(ORDER.length-1);
       if(e.key==='Escape' && lb.classList.contains('open')) closeLb();
     });
-
     let touchStartX=0, touchStartY=0;
-    document.addEventListener('touchstart', (e)=>{
+    document.addEventListener('touchstart',(e)=>{
       if(e.touches[0]){ touchStartX=e.touches[0].clientX; touchStartY=e.touches[0].clientY; }
-    }, {passive:true});
-    document.addEventListener('touchend', (e)=>{
-      const t = e.changedTouches[0];
-      if(!t) return;
-      const dx = t.clientX - touchStartX;
-      const dy = t.clientY - touchStartY;
-      if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx)>42){
-        if(dx<0) show(current+1); else show(current-1);
-      }else if(Math.abs(dy)>80){
-        if(dy<0) show(current+1); else show(current-1);
-      }
-    }, {passive:true});
+    },{passive:true});
+    document.addEventListener('touchend',(e)=>{
+      const t=e.changedTouches[0]; if(!t) return;
+      const dx=t.clientX - touchStartX, dy=t.clientY - touchStartY;
+      if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx)>42){ if(dx<0) show(current+1); else show(current-1); }
+      else if(Math.abs(dy)>80){ if(dy<0) show(current+1); else show(current-1); }
+    },{passive:true});
 
-    /* ======= Botones mágicos portada ======= */
+    // Botones mágicos portada
     document.querySelectorAll('.magicBtn[data-target]').forEach(btn=>{
       btn.addEventListener('click',()=>{
-        const tgt=btn.getAttribute('data-target');
-        const i=order.indexOf(tgt);
-        if(i>=0){ show(i); closeMenuOnMobile(); }
+        const tgt=btn.getAttribute('data-target'), i=ORDER.indexOf(tgt);
+        if(i>=0){ show(i); closeMenu(); }
       });
     });
 
-    /* ======= Audio & Portada ======= */
+    /* ==================== Audio / entrada ==================== */
     const marcha=document.getElementById('marcha');
     const eternamente=document.getElementById('eternamente');
     const musicRetry=document.getElementById('musicRetry');
@@ -840,87 +802,74 @@
 
     function playUnlocked(audio){
       try{
-        const p = audio.play();
+        const p=audio.play();
         if(p && typeof p.then==='function'){ return p.then(()=>true).catch(()=>false); }
         return Promise.resolve(true);
       }catch(_){ return Promise.resolve(false); }
     }
     async function startMarcha(){
       try{
-        marcha.currentTime = 0;
-        marcha.volume = 1;
-        const ok = await playUnlocked(marcha);
+        marcha.currentTime=0; marcha.volume=1;
+        const ok=await playUnlocked(marcha);
         if(!ok) musicRetry.setAttribute('aria-hidden','false');
-      }catch(_){
-        musicRetry.setAttribute('aria-hidden','false');
-      }
+      }catch(_){ musicRetry.setAttribute('aria-hidden','false'); }
     }
     function fadeAudio(audio, from, to, duration=2000){
       return new Promise(res=>{
-        const steps=40, dt=duration/steps;
-        let i=0;
+        const steps=40, dt=duration/steps; let i=0;
         audio.volume = Math.max(0, Math.min(1, from));
         const id=setInterval(()=>{
           i++;
           audio.volume = Math.max(0, Math.min(1, from + (to-from)*(i/steps)));
           if(i>=steps){ clearInterval(id); audio.volume = Math.max(0, Math.min(1, to)); res(); }
-        }, dt);
+        },dt);
       });
     }
     entryRing.addEventListener('click', async ()=>{
       await startMarcha();
       entryOverlay.classList.add('hide');
     });
-    document.getElementById('ringBtn').addEventListener('click', async ()=>{
-      try{
-        if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 2000); marcha.pause(); }
-      }catch(e){}
-      try{
-        eternamente.currentTime=0; eternamente.volume=0;
-        const ok = await playUnlocked(eternamente);
-        if(ok){ await fadeAudio(eternamente,0,1,2000); }
-        else { musicRetry.setAttribute('aria-hidden','true'); }
-      }catch(e){}
-      const idx = order.indexOf('sec-familias');
-      if(idx>=0) show(idx);
-      const ringBtn=document.getElementById('ringBtn');
-      ringBtn.classList.add('clicked'); setTimeout(()=>ringBtn.classList.remove('clicked'),900);
-    });
     musicRetry.addEventListener('click', async ()=>{
-      const ok = await playUnlocked(marcha);
-      if(ok){ musicRetry.setAttribute('aria-hidden','true'); }
+      const ok=await playUnlocked(marcha);
+      if(ok) musicRetry.setAttribute('aria-hidden','true');
     });
 
-    /* ======= SFX flip ======= */
+    document.getElementById('ringBtn').addEventListener('click', async ()=>{
+      try{ if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 2000); marcha.pause(); } }catch(e){}
+      try{
+        eternamente.currentTime=0; eternamente.volume=0;
+        const ok=await playUnlocked(eternamente);
+        if(ok){ await fadeAudio(eternamente,0,1,2000); }
+      }catch(e){}
+      const idx=ORDER.indexOf('sec-familias'); if(idx>=0) show(idx);
+      const ringBtn=document.getElementById('ringBtn'); ringBtn.classList.add('clicked'); setTimeout(()=>ringBtn.classList.remove('clicked'),900);
+    });
+
+    /* ==================== Sonido flip ==================== */
     function playFlipSoundBook(){
       try{
         const ctx = window._audioCtx || new (window.AudioContext||window.webkitAudioContext)();
         window._audioCtx = ctx;
         const t = ctx.currentTime;
-
         const o1 = ctx.createOscillator(), g1 = ctx.createGain();
-        o1.type='sawtooth'; o1.frequency.setValueAtTime(180, t);
-        o1.frequency.exponentialRampToValueAtTime(120, t+0.08);
-        g1.gain.setValueAtTime(0.0001, t);
-        g1.gain.exponentialRampToValueAtTime(0.18, t+0.02);
-        g1.gain.exponentialRampToValueAtTime(0.0001, t+0.14);
+        o1.type='sawtooth'; o1.frequency.setValueAtTime(180,t);
+        o1.frequency.exponentialRampToValueAtTime(120,t+0.08);
+        g1.gain.setValueAtTime(0.0001,t); g1.gain.exponentialRampToValueAtTime(0.18,t+0.02); g1.gain.exponentialRampToValueAtTime(0.0001,t+0.14);
         o1.connect(g1).connect(ctx.destination); o1.start(t); o1.stop(t+0.16);
-
         const o2 = ctx.createOscillator(), g2 = ctx.createGain();
-        o2.type='triangle'; o2.frequency.setValueAtTime(520, t+0.04);
-        o2.frequency.exponentialRampToValueAtTime(340, t+0.16);
-        g2.gain.setValueAtTime(0.0001, t);
-        g2.gain.exponentialRampToValueAtTime(0.20, t+0.06);
-        g2.gain.exponentialRampToValueAtTime(0.0001, t+0.22);
+        o2.type='triangle'; o2.frequency.setValueAtTime(520,t+0.04);
+        o2.frequency.exponentialRampToValueAtTime(340,t+0.16);
+        g2.gain.setValueAtTime(0.0001,t); g2.gain.exponentialRampToValueAtTime(0.20,t+0.06); g2.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
         o2.connect(g2).connect(ctx.destination); o2.start(t+0.02); o2.stop(t+0.24);
       }catch(e){}
     }
 
-    /* ======= Contadores ======= */
+    /* ==================== Contadores ==================== */
+    const target=new Date('2025-12-28T14:00:00'); // 28 dic 2025, 2:00 pm
     const pad=n=>String(n).padStart(2,'0');
 
     function animateMini(flipEl,newVal){
-      const top=flipEl.querySelector('.top'); const bot=flipEl.querySelector('.bottom');
+      const top=flipEl.querySelector('.top'), bot=flipEl.querySelector('.bottom');
       if(top.textContent===newVal) return;
       bot.textContent=newVal;
       flipEl.classList.remove('animate'); void flipEl.offsetWidth; flipEl.classList.add('animate');
@@ -957,7 +906,7 @@
     }
     setInterval(tickMain,1000);
 
-    /* ======= Lightbox ======= */
+    /* ==================== Lightbox / galería ==================== */
     const lb=document.getElementById('lightbox');
     const lbImg=document.getElementById('lbImg');
     const lbClose=document.getElementById('lbClose');
@@ -967,23 +916,23 @@
     const lbTargets=[...document.querySelectorAll('.lb-target')];
     const lbSrcs=lbTargets.map(t=>t.dataset.src||t.getAttribute('src'));
     let lbIndex=0;
-    lbTargets.forEach((t,i)=>t.addEventListener('click', ()=>openLb(i)));
+    lbTargets.forEach((t,i)=>t.addEventListener('click',()=>openLb(i)));
     function openLb(i){
       lbIndex=i; lbImg.style.opacity=0; lbImg.src=lbSrcs[lbIndex];
       lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
-      setTimeout(()=>{lbImg.style.transition='opacity .45s ease, transform .45s ease'; lbImg.style.opacity=1; lbImg.style.transform='scale(1)';},40);
+      setTimeout(()=>{ lbImg.style.transition='opacity .45s ease, transform .45s ease'; lbImg.style.opacity=1; lbImg.style.transform='scale(1)';},40);
     }
     function closeLb(){ lb.classList.remove('open'); lbImg.src=''; lb.setAttribute('aria-hidden','true'); }
     function lbShow(dir){
       lbIndex=(lbIndex+(dir>0?1:-1)+lbSrcs.length)%lbSrcs.length;
-      lbImg.style.opacity=0; setTimeout(()=>{ lbImg.src=lbSrcs[lbIndex]; lbImg.style.opacity=1; },260);
+      lbImg.style.opacity=0; setTimeout(()=>{ lbImg.src=lbSrcs[lbIndex]; lbImg.style.opacity=1; },220);
     }
-    lbClose.addEventListener('click', closeLb);
-    lbPrev.addEventListener('click', ()=>lbShow(-1));
-    lbNext.addEventListener('click', ()=>lbShow(1));
-    lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLb(); });
+    lbClose.addEventListener('click',closeLb);
+    lbPrev.addEventListener('click',()=>lbShow(-1));
+    lbNext.addEventListener('click',()=>lbShow(1));
+    lb.addEventListener('click',(e)=>{ if(e.target===lb) closeLb(); });
 
-    /* ======= Galería auto-focus ======= */
+    // Auto foco
     const galleryImgs=[...document.querySelectorAll('#galleryGrid img')];
     let gIdx=0;
     function paintGallery(){ galleryImgs.forEach((im,i)=>im.style.opacity=(i===gIdx?1:.46)); }
@@ -995,7 +944,7 @@
     document.getElementById('galleryGrid').addEventListener('mouseenter',()=>{ clearInterval(gAuto); gAuto=null; });
     document.getElementById('galleryGrid').addEventListener('mouseleave',()=>{ if(!gAuto) gAuto=setInterval(gNext,4200); });
 
-    /* ======= Calendario ======= */
+    /* ==================== Calendario ==================== */
     document.getElementById('addCalendar').addEventListener('click',(e)=>{
       e.preventDefault();
       const start='20251228T140000', end='20251228T230000';
@@ -1006,115 +955,119 @@
       window.open(url,'_blank','noopener');
     });
 
-    /* ======= Cursor mágico opción B ======= */
-    function heartEl(x,y){
-      const d=document.createElement('div');
-      d.className='magicHeart';
+    /* ==================== Formularios: RSVP & Deseos ==================== */
+    const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxMDHjYXHV-BkLxgWNfB31jJSQ55JhjGBOTZCgHNQDliUpl34V-nkh67EW9CAfK0uwj/exec';
+    const DESEOS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbycwDsFO_s2MfNniVuunon9bJPkqIh5Ybg6rcfk5t61G-Ji2FJm0Ss8RKT8q7tVMKjK/exec';
+
+    // RSVP
+    const rsvpForm=document.getElementById('rsvpForm');
+    const rsvpStatus=document.getElementById('rsvpStatus');
+    rsvpForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      rsvpStatus.textContent='Enviando...';
+      const fd = new FormData(rsvpForm);
+      try{
+        const resp = await fetch(RSVP_ENDPOINT, { method:'POST', mode:'no-cors', body: fd });
+        rsvpStatus.textContent='¡Gracias! Se registró tu confirmación.';
+        rsvpForm.reset();
+      }catch(err){
+        rsvpStatus.textContent='Ocurrió un problema al enviar. Intenta abrir el formulario en otra pestaña.';
+      }
+    });
+
+    // Buenos deseos: POST + GET para listar
+    const deseosForm=document.getElementById('deseosForm');
+    const deseosStatus=document.getElementById('deseosStatus');
+    const deseosList=document.getElementById('deseosList');
+
+    async function cargarDeseos(){
+      deseosList.innerHTML = '<div class="note">Cargando deseos...</div>';
+      try{
+        const resp = await fetch(DESEOS_ENDPOINT);
+        const data = await resp.json();
+        if(!Array.isArray(data)){ deseosList.innerHTML='<div class="note">No hay mensajes aún.</div>'; return; }
+        if(data.length===0){ deseosList.innerHTML='<div class="note">Sé el primero en dejar un buen deseo ✨</div>'; return; }
+        // Render estilo A (tarjeta romántica)
+        deseosList.innerHTML = data.map(d=>{
+          const nombre = (d.nombre||'Invitado');
+          const mensaje= (d.mensaje||d.deseo||'');
+          const fecha  = d.fecha ? new Date(d.fecha).toLocaleString() : '';
+          return `
+            <div class="wish-card">
+              <div class="wish-name">${nombre}</div>
+              <div class="wish-date">${fecha}</div>
+              <div class="wish-text">${mensaje.replace(/</g,'&lt;')}</div>
+            </div>`;
+        }).join('');
+      }catch(e){
+        deseosList.innerHTML = '<div class="note">No se pudieron cargar los deseos ahora.</div>';
+      }
+    }
+    deseosForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      deseosStatus.textContent='Enviando...';
+      const fd = new FormData(deseosForm);
+      try{
+        const resp = await fetch(DESEOS_ENDPOINT, { method:'POST', body: fd });
+        // Intentar parsear por si responde JSON; si es 204/empty igual continuamos
+        try{ await resp.json(); }catch(_){}
+        deseosStatus.textContent='¡Gracias por tu mensaje! 💖';
+        deseosForm.reset();
+        // Recargar lista
+        setTimeout(cargarDeseos, 400);
+      }catch(err){
+        deseosStatus.textContent='No pudimos enviar tu mensaje. Intenta de nuevo o usa el enlace externo.';
+      }
+    });
+
+    /* ==================== Cursor mágico ==================== */
+    function createHeartAt(x,y){
+      const heart=document.createElement('div');
+      heart.style.position='fixed'; heart.style.pointerEvents='none'; heart.style.zIndex='99999';
       const size=16 + Math.random()*14;
-      d.style.width = size+'px'; d.style.height= size+'px';
+      heart.style.width = size+'px'; heart.style.height= size+'px';
       const jitter=18;
-      d.style.left=(x + (Math.random()*jitter - jitter/2))+'px';
-      d.style.top =(y + (Math.random()*jitter - jitter/2))+'px';
+      heart.style.left=(x + (Math.random()*jitter - jitter/2))+'px';
+      heart.style.top =(y + (Math.random()*jitter - jitter/2))+'px';
       const r=Math.random();
-      d.style.background = r<0.25 ? 'var(--heart-white)' : (r<0.5 ? 'var(--heart-blue)' : (r<0.75 ? 'var(--heart-silver)' : 'var(--heart-green)'));
-      d.style.clipPath='polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
-      document.body.appendChild(d);
-      const life=1500 + Math.random()*400;
-      setTimeout(()=>d.remove(), life);
+      if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';      // blanco
+      else if(r<0.5)  heart.style.background='radial-gradient(circle,#a7d9ff,#eaf6ff)';      // azul celeste
+      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';      // plata
+      else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';      // verde
+      heart.style.clipPath='polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
+      heart.style.opacity='0.9'; heart.style.transform='translate(-50%,-50%) scale(1)';
+      heart.style.filter='drop-shadow(0 4px 10px rgba(0,0,0,.15))';
+      document.body.appendChild(heart);
+      const start=performance.now();
+      const duration=1500 + Math.random()*400;
+      function anim(t){
+        const p=Math.min(1,(t-start)/duration);
+        heart.style.opacity=String(1-p);
+        heart.style.transform=`translate(-50%,-${50+120*p}%) scale(${1-0.3*p})`;
+        if(p<1) requestAnimationFrame(anim); else heart.remove();
+      }
+      requestAnimationFrame(anim);
     }
     function spawnHearts(x,y,countMin=3,countMax=4){
       const n = Math.floor(countMin + Math.random()*(countMax-countMin+1));
-      for(let i=0;i<n;i++){ setTimeout(()=>heartEl(x,y), i*60); }
+      for(let i=0;i<n;i++){ setTimeout(()=>createHeartAt(x,y), i*60); }
     }
-    document.addEventListener('mousemove',(e)=>{ if(Math.random()>0.6) return; spawnHearts(e.clientX,e.clientY,3,4); });
+    document.addEventListener('mousemove',(e)=>{ if(Math.random()>0.65) return; spawnHearts(e.clientX,e.clientY,2,3); });
     document.addEventListener('click',(e)=>{ spawnHearts(e.clientX,e.clientY,3,4); });
     document.addEventListener('touchstart',(e)=>{ const t=e.touches[0]; if(!t) return; spawnHearts(t.clientX,t.clientY,3,4); },{passive:true});
-    document.addEventListener('touchmove',(e)=>{ const t=e.touches[0]; if(!t) return; if(Math.random()>0.6) return; spawnHearts(t.clientX,t.clientY,3,4); },{passive:true});
+    document.addEventListener('touchmove',(e)=>{ const t=e.touches[0]; if(!t) return; if(Math.random()>0.65) return; spawnHearts(t.clientX,t.clientY,2,3); },{passive:true});
 
-    /* ======= Formularios ======= */
-    const rsvpForm   = document.getElementById('rsvpForm');
-    const rsvpStatus = document.getElementById('rsvpStatus');
-
-    rsvpForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      rsvpStatus.textContent = 'Enviando…';
-      const fd = new FormData(rsvpForm);
-      const body = new URLSearchParams(fd);
-      try{
-        const res = await fetch(RSVP_ENDPOINT, { method:'POST', body });
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        rsvpStatus.textContent = '¡Gracias! Tu confirmación quedó registrada.';
-        rsvpForm.reset();
-      }catch(err){
-        rsvpStatus.textContent = 'Hubo un problema al enviar. Intenta de nuevo.';
-      }
-    });
-
-    /* Buenos deseos: form + feed */
-    const wishForm   = document.getElementById('wishForm');
-    const wishStatus = document.getElementById('wishStatus');
-    const wishList   = document.getElementById('wishList');
-    const wishEmpty  = document.getElementById('wishEmpty');
-
-    async function loadWishes(){
-      try{
-        const res = await fetch(WISH_ENDPOINT); // doGet debe devolver JSON
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        const data = await res.json(); // [{nombre, mensaje, fecha}]
-        renderWishes(data);
-      }catch(err){
-        // si falla, mantenemos silencio para no molestar al usuario en producción
-      }
-    }
-    function renderWishes(data){
-      wishList.innerHTML = '';
-      if(!data || !data.length){
-        wishEmpty.style.display = 'block';
-        return;
-      }
-      wishEmpty.style.display = 'none';
-      // Mostramos los más recientes primero (si vienen ordenados, puedes quitar reverse)
-      const items = data.slice().reverse();
-      items.forEach(d=>{
-        const card = document.createElement('div');
-        card.className = 'card-sm';
-        const fecha = d.fecha ? new Date(d.fecha).toLocaleString() : '';
-        card.innerHTML = `
-          <div class="who">${d.nombre || 'Anónimo'}</div>
-          <div class="msg">${(d.mensaje||'').replace(/\n/g,'<br>')}</div>
-          <div class="note" style="margin-top:6px">${fecha}</div>
-        `;
-        wishList.appendChild(card);
-      });
-    }
-
-    wishForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      wishStatus.textContent = 'Enviando…';
-      const fd = new FormData(wishForm);
-      const body = new URLSearchParams(fd);
-      try{
-        const res = await fetch(WISH_ENDPOINT, { method:'POST', body });
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        wishStatus.textContent = '¡Gracias por tu mensaje!';
-        wishForm.reset();
-        // Recargar lista
-        setTimeout(loadWishes, 400);
-      }catch(err){
-        wishStatus.textContent = 'No se pudo enviar. Intenta de nuevo.';
-      }
-    });
-
-    /* ======= Inicialización ======= */
-    function initPage(){
+    /* ==================== Inicios ==================== */
+    function initCounters(){
       tickMini(); tickMain();
-      loadWishes();
-      // Si recargan estando en itinerario, animar bloques:
-      if(order[current]==='sec-itinerario'){
-        document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => { setTimeout(()=>it.classList.add('show'), idx*140); });
+      if(ORDER[current]==='sec-itinerario'){
+        document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => { setTimeout(()=>it.classList.add('show'), idx*120); });
       }
     }
-    window.addEventListener('load', initPage);
+    window.addEventListener('load', ()=>{
+      initCounters();
+      cargarDeseos();
+    });
   </script>
 </body>
 </html>
